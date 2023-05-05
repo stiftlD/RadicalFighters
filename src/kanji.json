@@ -1,0 +1,722 @@
+[
+ {
+  "ID":34,
+  "Kanji":"一",
+  "Grades":1,
+  "# of Strokes":1,
+  "Kun-reading":"hito, hito(tsu)",
+  "Translation of Kun-reading":"one, a unit, the same, just, once",
+  "Name of Radical":"Ichi"
+ },
+ {
+  "ID":48,
+  "Kanji":"右",
+  "Grades":1,
+  "# of Strokes":5,
+  "Kun-reading":"migi",
+  "Translation of Kun-reading":"right",
+  "Name of Radical":"Kuchi"
+ },
+ {
+  "ID":51,
+  "Kanji":"雨",
+  "Grades":1,
+  "# of Strokes":8,
+  "Kun-reading":"ame, ama",
+  "Translation of Kun-reading":"rain, rainfall",
+  "Name of Radical":"Ame"
+ },
+ {
+  "ID":73,
+  "Kanji":"円",
+  "Grades":1,
+  "# of Strokes":4,
+  "Kun-reading":"maru(i)",
+  "Translation of Kun-reading":"round, circular, spherical",
+  "Name of Radical":"Dooamae"
+ },
+ {
+  "ID":88,
+  "Kanji":"王",
+  "Grades":1,
+  "# of Strokes":4,
+  "Kun-reading":"-",
+  "Translation of Kun-reading":"-",
+  "Name of Radical":"Oo"
+ },
+ {
+  "ID":106,
+  "Kanji":"音",
+  "Grades":1,
+  "# of Strokes":9,
+  "Kun-reading":"oto, ne",
+  "Translation of Kun-reading":"sound, noise, roar, fame, tone, voice",
+  "Name of Radical":"Oto"
+ },
+ {
+  "ID":110,
+  "Kanji":"下",
+  "Grades":1,
+  "# of Strokes":3,
+  "Kun-reading":"shita, shimo, moto, sa(geru), sa(garu), kuda(ru), kuda(su), kuda(saru), o(rosu), o(riru)",
+  "Translation of Kun-reading":"lower part, come down, give, let down, descent, take down, reduce (rank) ",
+  "Name of Radical":"Ichi"
+ },
+ {
+  "ID":112,
+  "Kanji":"火",
+  "Grades":1,
+  "# of Strokes":4,
+  "Kun-reading":"hi, ho",
+  "Translation of Kun-reading":"fire, flame, blaze",
+  "Name of Radical":"Hi"
+ },
+ {
+  "ID":117,
+  "Kanji":"花",
+  "Grades":1,
+  "# of Strokes":7,
+  "Kun-reading":"hana",
+  "Translation of Kun-reading":"flower, cherry blossoms, essence, best days, beautiful woman, flower arrangement",
+  "Name of Radical":"Kusakanmuri"
+ },
+ {
+  "ID":155,
+  "Kanji":"貝",
+  "Grades":1,
+  "# of Strokes":7,
+  "Kun-reading":"kai",
+  "Translation of Kun-reading":"shell, shellfish",
+  "Name of Radical":"Kai"
+ },
+ {
+  "ID":195,
+  "Kanji":"学",
+  "Grades":1,
+  "# of Strokes":8,
+  "Kun-reading":"mana(bu)",
+  "Translation of Kun-reading":"learn, study",
+  "Name of Radical":"Ko"
+ },
+ {
+  "ID":268,
+  "Kanji":"気",
+  "Grades":1,
+  "# of Strokes":6,
+  "Kun-reading":"-",
+  "Translation of Kun-reading":"-",
+  "Name of Radical":"Kigamae"
+ },
+ {
+  "ID":319,
+  "Kanji":"九",
+  "Grades":1,
+  "# of Strokes":2,
+  "Kun-reading":"kokono, kokono(tsu)",
+  "Translation of Kun-reading":"nine",
+  "Name of Radical":"Otsu, Otsunyoo"
+ },
+ {
+  "ID":325,
+  "Kanji":"休",
+  "Grades":1,
+  "# of Strokes":6,
+  "Kun-reading":"yasu(mu), yasu(maru), yasu(meru)",
+  "Translation of Kun-reading":"rest, take a day off, be absent, sleep, feel at ease, let idle",
+  "Name of Radical":"Ninben"
+ },
+ {
+  "ID":385,
+  "Kanji":"玉",
+  "Grades":1,
+  "# of Strokes":5,
+  "Kun-reading":"tama",
+  "Translation of Kun-reading":"ball, lens, gem, bullet",
+  "Name of Radical":"Tama"
+ },
+ {
+  "ID":389,
+  "Kanji":"金",
+  "Grades":1,
+  "# of Strokes":8,
+  "Kun-reading":"kane, kana",
+  "Translation of Kun-reading":"money, metal",
+  "Name of Radical":"Kane"
+ },
+ {
+  "ID":406,
+  "Kanji":"空",
+  "Grades":1,
+  "# of Strokes":8,
+  "Kun-reading":"sora, a(ku), a(keru), kara",
+  "Translation of Kun-reading":"sky, become empty, empty",
+  "Name of Radical":"Anakanmuri"
+ },
+ {
+  "ID":459,
+  "Kanji":"月",
+  "Grades":1,
+  "# of Strokes":4,
+  "Kun-reading":"tsuki",
+  "Translation of Kun-reading":"moon, month",
+  "Name of Radical":"Tsuki"
+ },
+ {
+  "ID":460,
+  "Kanji":"犬",
+  "Grades":1,
+  "# of Strokes":4,
+  "Kun-reading":"inu",
+  "Translation of Kun-reading":"dog, spy",
+  "Name of Radical":"Inu"
+ },
+ {
+  "ID":462,
+  "Kanji":"見",
+  "Grades":1,
+  "# of Strokes":7,
+  "Kun-reading":"mi(ru), mi(eru), mi(seru)",
+  "Translation of Kun-reading":"see, examine, seem, show",
+  "Name of Radical":"Miru"
+ },
+ {
+  "ID":515,
+  "Kanji":"五",
+  "Grades":1,
+  "# of Strokes":4,
+  "Kun-reading":"itsu, itsu(tsu)",
+  "Translation of Kun-reading":"five, five years old",
+  "Name of Radical":"Ni"
+ },
+ {
+  "ID":526,
+  "Kanji":"口",
+  "Grades":1,
+  "# of Strokes":3,
+  "Kun-reading":"kuchi",
+  "Translation of Kun-reading":"mouth, speech, one's taste, nozzle, door",
+  "Name of Radical":"Kuchi"
+ },
+ {
+  "ID":561,
+  "Kanji":"校",
+  "Grades":1,
+  "# of Strokes":10,
+  "Kun-reading":"-",
+  "Translation of Kun-reading":"-",
+  "Name of Radical":"Kihen"
+ },
+ {
+  "ID":613,
+  "Kanji":"左",
+  "Grades":1,
+  "# of Strokes":5,
+  "Kun-reading":"hidari",
+  "Translation of Kun-reading":"left",
+  "Name of Radical":"E"
+ },
+ {
+  "ID":667,
+  "Kanji":"三",
+  "Grades":1,
+  "# of Strokes":3,
+  "Kun-reading":"mi, mi(tsu), mit(tsu)",
+  "Translation of Kun-reading":"three",
+  "Name of Radical":"Ichi"
+ },
+ {
+  "ID":668,
+  "Kanji":"山",
+  "Grades":1,
+  "# of Strokes":3,
+  "Kun-reading":"yama",
+  "Translation of Kun-reading":"mountain, hill, climax",
+  "Name of Radical":"Yama"
+ },
+ {
+  "ID":682,
+  "Kanji":"子",
+  "Grades":1,
+  "# of Strokes":3,
+  "Kun-reading":"ko",
+  "Translation of Kun-reading":"child, offspring, the (young of animals)",
+  "Name of Radical":"Ko"
+ },
+ {
+  "ID":689,
+  "Kanji":"四",
+  "Grades":1,
+  "# of Strokes":5,
+  "Kun-reading":"yo, yo(tsu), yot(tsu), yon",
+  "Translation of Kun-reading":"four",
+  "Name of Radical":"Hakogamae"
+ },
+ {
+  "ID":694,
+  "Kanji":"糸",
+  "Grades":1,
+  "# of Strokes":6,
+  "Kun-reading":"ito",
+  "Translation of Kun-reading":"thread, gut, (fish) line",
+  "Name of Radical":"Ito"
+ },
+ {
+  "ID":727,
+  "Kanji":"字",
+  "Grades":1,
+  "# of Strokes":6,
+  "Kun-reading":"aza",
+  "Translation of Kun-reading":"section of a village",
+  "Name of Radical":"Ko"
+ },
+ {
+  "ID":730,
+  "Kanji":"耳",
+  "Grades":1,
+  "# of Strokes":6,
+  "Kun-reading":"mimi",
+  "Translation of Kun-reading":"ear, edge, loop, bread crusts",
+  "Name of Radical":"Mimi"
+ },
+ {
+  "ID":746,
+  "Kanji":"七",
+  "Grades":1,
+  "# of Strokes":2,
+  "Kun-reading":"nana, nana(tsu), nano",
+  "Translation of Kun-reading":"seven",
+  "Name of Radical":"Ichi"
+ },
+ {
+  "ID":758,
+  "Kanji":"車",
+  "Grades":1,
+  "# of Strokes":7,
+  "Kun-reading":"kuruma",
+  "Translation of Kun-reading":"wheel, vehicle, cart, automobile",
+  "Name of Radical":"Kuruma"
+ },
+ {
+  "ID":779,
+  "Kanji":"手",
+  "Grades":1,
+  "# of Strokes":4,
+  "Kun-reading":"te, ta",
+  "Translation of Kun-reading":"hand, arm, help, means, skill",
+  "Name of Radical":"Te"
+ },
+ {
+  "ID":818,
+  "Kanji":"十",
+  "Grades":1,
+  "# of Strokes":2,
+  "Kun-reading":"too, to",
+  "Translation of Kun-reading":"ten",
+  "Name of Radical":"Juu"
+ },
+ {
+  "ID":837,
+  "Kanji":"出",
+  "Grades":1,
+  "# of Strokes":5,
+  "Kun-reading":"de(ru), da(su)",
+  "Translation of Kun-reading":"appear, come out, put out, take out",
+  "Name of Radical":"Ukebako"
+ },
+ {
+  "ID":863,
+  "Kanji":"女",
+  "Grades":1,
+  "# of Strokes":3,
+  "Kun-reading":"onna, me",
+  "Translation of Kun-reading":"woman, fenale, sweetheart, girl",
+  "Name of Radical":"Onna"
+ },
+ {
+  "ID":870,
+  "Kanji":"小",
+  "Grades":1,
+  "# of Strokes":3,
+  "Kun-reading":"chii(sai), ko, o",
+  "Translation of Kun-reading":"small, short, pretty, trivial",
+  "Name of Radical":"Shoo"
+ },
+ {
+  "ID":919,
+  "Kanji":"上",
+  "Grades":1,
+  "# of Strokes":3,
+  "Kun-reading":"ue, uwa, kami, a(geru), a(garu), nobo(ru), nobo(seru), nobo(su)",
+  "Translation of Kun-reading":"up, top, raise, go up, best, upper part, government",
+  "Name of Radical":"Ichi"
+ },
+ {
+  "ID":968,
+  "Kanji":"森",
+  "Grades":1,
+  "# of Strokes":12,
+  "Kun-reading":"mori",
+  "Translation of Kun-reading":"woods, grove",
+  "Name of Radical":"Ki"
+ },
+ {
+  "ID":977,
+  "Kanji":"人",
+  "Grades":1,
+  "# of Strokes":2,
+  "Kun-reading":"hito",
+  "Translation of Kun-reading":"man, human being, character, other people",
+  "Name of Radical":"Hito"
+ },
+ {
+  "ID":986,
+  "Kanji":"水",
+  "Grades":1,
+  "# of Strokes":4,
+  "Kun-reading":"mizu",
+  "Translation of Kun-reading":"water",
+  "Name of Radical":"Mizu"
+ },
+ {
+  "ID":1012,
+  "Kanji":"正",
+  "Grades":1,
+  "# of Strokes":5,
+  "Kun-reading":"tada(shii), tada(su), masa",
+  "Translation of Kun-reading":"right, correct, honest, surely",
+  "Name of Radical":"Tomeru"
+ },
+ {
+  "ID":1013,
+  "Kanji":"生",
+  "Grades":1,
+  "# of Strokes":5,
+  "Kun-reading":"i(kiru), i(kasu), i(keru), u(mareru), u(mu), o(u), ha(eru), ha(yasu), ki, nama",
+  "Translation of Kun-reading":"live, revive, keep, be born, grow, raw, genuine",
+  "Name of Radical":"Umareru"
+ },
+ {
+  "ID":1022,
+  "Kanji":"青",
+  "Grades":1,
+  "# of Strokes":8,
+  "Kun-reading":"ao, ao(i)",
+  "Translation of Kun-reading":"blue, green, green light, pale, inexperienced",
+  "Name of Radical":"Ao"
+ },
+ {
+  "ID":1042,
+  "Kanji":"夕",
+  "Grades":1,
+  "# of Strokes":3,
+  "Kun-reading":"yuu",
+  "Translation of Kun-reading":"evening",
+  "Name of Radical":"Ta, Yuube"
+ },
+ {
+  "ID":1044,
+  "Kanji":"石",
+  "Grades":1,
+  "# of Strokes":5,
+  "Kun-reading":"ishi",
+  "Translation of Kun-reading":"stone, pebble",
+  "Name of Radical":"Ishi"
+ },
+ {
+  "ID":1045,
+  "Kanji":"赤",
+  "Grades":1,
+  "# of Strokes":7,
+  "Kun-reading":"aka, aka(i), aka(ramu), aka(rameru)",
+  "Translation of Kun-reading":"red, crimson, scarlet, Communist, become red, blush, complete",
+  "Name of Radical":"Aka"
+ },
+ {
+  "ID":1068,
+  "Kanji":"千",
+  "Grades":1,
+  "# of Strokes":3,
+  "Kun-reading":"chi",
+  "Translation of Kun-reading":"thousand, many",
+  "Name of Radical":"Juu"
+ },
+ {
+  "ID":1069,
+  "Kanji":"川",
+  "Grades":1,
+  "# of Strokes":3,
+  "Kun-reading":"kawa",
+  "Translation of Kun-reading":"river, stream, brook",
+  "Name of Radical":"Kawa"
+ },
+ {
+  "ID":1072,
+  "Kanji":"先",
+  "Grades":1,
+  "# of Strokes":6,
+  "Kun-reading":"saki",
+  "Translation of Kun-reading":"point, nozzle, the first priority, the future",
+  "Name of Radical":"Hitoashi, Ninnyoo"
+ },
+ {
+  "ID":1114,
+  "Kanji":"早",
+  "Grades":1,
+  "# of Strokes":6,
+  "Kun-reading":"haya(i), haya(maru), haya(meru)",
+  "Translation of Kun-reading":"quick, brisk, early, premature, be hasty, hasten",
+  "Name of Radical":"Hi"
+ },
+ {
+  "ID":1119,
+  "Kanji":"草",
+  "Grades":1,
+  "# of Strokes":9,
+  "Kun-reading":"kusa",
+  "Translation of Kun-reading":"grass, weeds, plants",
+  "Name of Radical":"Kusakanmuri"
+ },
+ {
+  "ID":1154,
+  "Kanji":"足",
+  "Grades":1,
+  "# of Strokes":7,
+  "Kun-reading":"ashi, ta(riru), ta(ru), ta(su)",
+  "Translation of Kun-reading":"foot, be sufficient, add to",
+  "Name of Radical":"Ashi"
+ },
+ {
+  "ID":1169,
+  "Kanji":"村",
+  "Grades":1,
+  "# of Strokes":7,
+  "Kun-reading":"mura",
+  "Translation of Kun-reading":"village, hamlet",
+  "Name of Radical":"Kihen"
+ },
+ {
+  "ID":1197,
+  "Kanji":"大",
+  "Grades":1,
+  "# of Strokes":3,
+  "Kun-reading":"oo, oo(kii), oo(ini)",
+  "Translation of Kun-reading":"large, many, great, severe, very",
+  "Name of Radical":"Dai"
+ },
+ {
+  "ID":1230,
+  "Kanji":"男",
+  "Grades":1,
+  "# of Strokes":7,
+  "Kun-reading":"otoko",
+  "Translation of Kun-reading":"man, male",
+  "Name of Radical":"Ta"
+ },
+ {
+  "ID":1248,
+  "Kanji":"竹",
+  "Grades":1,
+  "# of Strokes":6,
+  "Kun-reading":"take",
+  "Translation of Kun-reading":"bamboo",
+  "Name of Radical":"Take"
+ },
+ {
+  "ID":1258,
+  "Kanji":"中",
+  "Grades":1,
+  "# of Strokes":4,
+  "Kun-reading":"naka",
+  "Translation of Kun-reading":"center, middle, inside",
+  "Name of Radical":"Boo"
+ },
+ {
+  "ID":1260,
+  "Kanji":"虫",
+  "Grades":1,
+  "# of Strokes":6,
+  "Kun-reading":"mushi",
+  "Translation of Kun-reading":"worm, vermin, bug, insect, temper, nervousness",
+  "Name of Radical":"Mushi"
+ },
+ {
+  "ID":1276,
+  "Kanji":"町",
+  "Grades":1,
+  "# of Strokes":7,
+  "Kun-reading":"machi",
+  "Translation of Kun-reading":"town, quarters, street",
+  "Name of Radical":"Tahen"
+ },
+ {
+  "ID":1346,
+  "Kanji":"天",
+  "Grades":1,
+  "# of Strokes":4,
+  "Kun-reading":"ame,ama",
+  "Translation of Kun-reading":"sky, air, heavens, celestial sphere",
+  "Name of Radical":"Dai"
+ },
+ {
+  "ID":1353,
+  "Kanji":"田",
+  "Grades":1,
+  "# of Strokes":5,
+  "Kun-reading":"ta",
+  "Translation of Kun-reading":"rice field, paddy field",
+  "Name of Radical":"Ta"
+ },
+ {
+  "ID":1364,
+  "Kanji":"土",
+  "Grades":1,
+  "# of Strokes":3,
+  "Kun-reading":"tsuchi",
+  "Translation of Kun-reading":"earth, soil, ground",
+  "Name of Radical":"Tsuchi"
+ },
+ {
+  "ID":1437,
+  "Kanji":"二",
+  "Grades":1,
+  "# of Strokes":2,
+  "Kun-reading":"futa, futa(tsu)",
+  "Translation of Kun-reading":"two",
+  "Name of Radical":"Ni"
+ },
+ {
+  "ID":1441,
+  "Kanji":"日",
+  "Grades":1,
+  "# of Strokes":4,
+  "Kun-reading":"hi, ka",
+  "Translation of Kun-reading":"sun, time, day, date",
+  "Name of Radical":"Hi"
+ },
+ {
+  "ID":1442,
+  "Kanji":"入",
+  "Grades":1,
+  "# of Strokes":2,
+  "Kun-reading":"i(ru), i(reru), hai(ru)",
+  "Translation of Kun-reading":"go in, enter, put in, insert",
+  "Name of Radical":"Iru"
+ },
+ {
+  "ID":1451,
+  "Kanji":"年",
+  "Grades":1,
+  "# of Strokes":6,
+  "Kun-reading":"toshi",
+  "Translation of Kun-reading":"year, age, time of life",
+  "Name of Radical":"Ichijuu"
+ },
+ {
+  "ID":1486,
+  "Kanji":"白",
+  "Grades":1,
+  "# of Strokes":5,
+  "Kun-reading":"shiro, shira, shiro(i)",
+  "Translation of Kun-reading":"white, innocence",
+  "Name of Radical":"Shiro"
+ },
+ {
+  "ID":1501,
+  "Kanji":"八",
+  "Grades":1,
+  "# of Strokes":2,
+  "Kun-reading":"ya, ya(tsu), yat(tsu), yoo",
+  "Translation of Kun-reading":"eight",
+  "Name of Radical":"Hachi"
+ },
+ {
+  "ID":1563,
+  "Kanji":"百",
+  "Grades":1,
+  "# of Strokes":6,
+  "Kun-reading":"-",
+  "Translation of Kun-reading":"-",
+  "Name of Radical":"Shiro"
+ },
+ {
+  "ID":1631,
+  "Kanji":"文",
+  "Grades":1,
+  "# of Strokes":4,
+  "Kun-reading":"fumi",
+  "Translation of Kun-reading":"letter, note",
+  "Name of Radical":"Bun"
+ },
+ {
+  "ID":1714,
+  "Kanji":"木",
+  "Grades":1,
+  "# of Strokes":4,
+  "Kun-reading":"ki, ko",
+  "Translation of Kun-reading":"tree, wood, timber",
+  "Name of Radical":"Ki"
+ },
+ {
+  "ID":1722,
+  "Kanji":"本",
+  "Grades":1,
+  "# of Strokes":5,
+  "Kun-reading":"moto",
+  "Translation of Kun-reading":"origin, basis",
+  "Name of Radical":"Ki"
+ },
+ {
+  "ID":1759,
+  "Kanji":"名",
+  "Grades":1,
+  "# of Strokes":6,
+  "Kun-reading":"na",
+  "Translation of Kun-reading":"name, fame, reputation",
+  "Name of Radical":"Kuchi"
+ },
+ {
+  "ID":1778,
+  "Kanji":"目",
+  "Grades":1,
+  "# of Strokes":5,
+  "Kun-reading":"me, ma",
+  "Translation of Kun-reading":"eye, viewpoint, experience, texture",
+  "Name of Radical":"Me"
+ },
+ {
+  "ID":1864,
+  "Kanji":"立",
+  "Grades":1,
+  "# of Strokes":5,
+  "Kun-reading":"ta(tsu), ta(teru)",
+  "Translation of Kun-reading":"stand, rise, set up, establish",
+  "Name of Radical":"Tatsu"
+ },
+ {
+  "ID":1890,
+  "Kanji":"力",
+  "Grades":1,
+  "# of Strokes":2,
+  "Kun-reading":"chikara",
+  "Translation of Kun-reading":"strength, energy, force, power, influence",
+  "Name of Radical":"Chikara"
+ },
+ {
+  "ID":1892,
+  "Kanji":"林",
+  "Grades":1,
+  "# of Strokes":8,
+  "Kun-reading":"hayashi",
+  "Translation of Kun-reading":"forest",
+  "Name of Radical":"Kihen"
+ },
+ {
+  "ID":1936,
+  "Kanji":"六",
+  "Grades":1,
+  "# of Strokes":4,
+  "Kun-reading":"mu, mu(tsu), mut(tsu), mui",
+  "Translation of Kun-reading":"six",
+  "Name of Radical":"Hachi"
+ }
+]
