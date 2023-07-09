@@ -18,9 +18,9 @@ import java.util.stream.Collectors;
 
 public class KanjiDatabase {
 
-    private String sourceDir = System.getProperty("user.dir");
-    private String kanjiDBURL = "jdbc:sqlite:" + Path.of(sourceDir + "/../database/kanji.db").toString();
-    private Path kanjiPath = Path.of(sourceDir + "/main/java/data/kanjis.json");
+    private String rootDir = System.getProperty("user.dir"); //TODO config file for this
+    private String kanjiDBURL = "jdbc:sqlite:" + Path.of(rootDir + "/database/kanji.db").toString();
+    private Path kanjiPath = Path.of(rootDir + "/src/main/java/data/kanjis.json");
 
     //private String kanjidbURL = "jdbc:sqlite:C:/Users/david/projects/RadicalFighters/database/kanji.db";
     //private Path kanjiPath = Path.of("C:\\Users\\david\\projects\\kanji_data\\kanjiapi_full\\kanjis.json");
@@ -494,7 +494,7 @@ public class KanjiDatabase {
                         + "WHERE prof_rank == " + resultIndex;
 
                 ResultSet resultSet = statement.executeQuery(selectKanjiInProfInterval);
-
+                System.out.println(resultSet);
                 /*while (resultSet.next()) {
                     int id = resultSet.getInt("ID");
                     String kanji = resultSet.getString("Kanji");

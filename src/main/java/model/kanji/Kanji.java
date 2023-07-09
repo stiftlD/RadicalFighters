@@ -8,24 +8,28 @@ public class Kanji {
     private int id;
     private int proficiency;
     private String character;
-    private List<Integer> grades;
+    private int grade;
     private int strokes;
     private int power;
     private List<String> kunyomi;
+    private List<String> onyomi;
     private List<String> translations;
-    private String radicalName;
+    private String unicode;
+    private boolean encountered;
     private Map<String, Integer> radicals;
 
-    public Kanji(int id, String character, List<Integer> grades, int strokes, List<String> kunyomi, List<String> translations, String radicalName) {
+    public Kanji(int id, String character, int grade, int strokes, List<String> kunyomi, List<String> onyomi, List<String> translations, String unicode, int proficiency, boolean encountered) {
         this.id = id;
-        this.proficiency = 5;
+        this.proficiency = proficiency;
         this.character = character;
-        this.grades = grades;
+        this.grade = grade;
         this.strokes = strokes;
         this.power = 1 + (this.strokes % 10);
         this.kunyomi = kunyomi;
+        this.onyomi = onyomi;
         this.translations = translations;
-        this.radicalName = radicalName;
+        this.unicode = unicode;
+        this.encountered = encountered;
         this.radicals = new HashMap<>();
     }
 
@@ -41,8 +45,8 @@ public class Kanji {
         return character;
     }
 
-    public List<Integer> getGrades() {
-        return grades;
+    public int getGrade() {
+        return grade;
     }
 
     public int getStrokes() {
@@ -57,13 +61,17 @@ public class Kanji {
         return kunyomi;
     }
 
+    public List<String> getOnyomi() {return onyomi;}
+
     public List<String> getTranslations() {
         return translations;
     }
 
-    public String getRadicalName() {
-        return radicalName;
+    public String getUnicode() {
+        return unicode;
     }
+
+    public boolean getEncountered() {return encountered;}
 
     public Map<String, Integer> getRadicals() {
         return radicals;
