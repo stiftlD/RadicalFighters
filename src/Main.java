@@ -1,17 +1,18 @@
-import controller.KanjiBattle;
-import model.radicals.RadicalFighter;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
+import controller.Controller;
 
 public class Main {
     public static void main(String[] args) {
+
+
+        Controller controller = new Controller();
+        controller.start();
+
+
+
+
+
         // Mock fighters
-        RadicalFighter[] team1 = {new RadicalFighter("Kanji1", 50, 50), new RadicalFighter("Kanji2", 40, 60)};
+        /*RadicalFighter[] team1 = {new RadicalFighter("Kanji1", 50, 50), new RadicalFighter("Kanji2", 40, 60)};
         RadicalFighter[] team2 = {new RadicalFighter("Kanji3", 60, 40), new RadicalFighter("Kanji4", 30, 70)};
         // Create battle object
         KanjiBattle battle = new KanjiBattle(team1, team2);
@@ -19,10 +20,10 @@ public class Main {
         System.out.println("Initial Battle Info:");
         battle.printBattleState();
         // Perform attack
-        int damage = battle.showAttackResult(team1[0], team2[0]);
+        //int damage = battle.showAttackResult(team1[0], team2[0]);
         // Print battle info after attack
         System.out.println("\nBattle Info After Attack:");
-        battle.printBattleState();
+        battle.printBattleState();*/
 
 
         /*model.radicals.Radical radical = new model.radicals.Radical(1, "ichi", "一", "one", new model.RadicalBoost(1, 1));
@@ -35,6 +36,8 @@ public class Main {
         fighter.takeDamage(5);
         fighter.print();
         fighter.heal(3);
-        fighter.print();*/
+        fighter.print();
+
+         */
     }
 }

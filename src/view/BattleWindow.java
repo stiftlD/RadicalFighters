@@ -1,8 +1,13 @@
 package view;
 
 import controller.KanjiBattle;
+import utils.UpdateEvent;
+
+import model.radicals.RadicalFighter; //TODO only pass the hp etc values from kanjibattle
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -11,12 +16,14 @@ import java.util.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Flow.*;
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.*;
 
-public class BattleWindow extends JFrame implements Observer {
+public class BattleWindow extends JDialog implements Subscriber<UpdateEvent>, KeyListener {
+
+    private Subscription subscription;
 
     private JLabel opponentSpriteLabel;
     private JLabel opponentNameLabel;
@@ -25,15 +32,28 @@ public class BattleWindow extends JFrame implements Observer {
     private JLabel playerNameLabel;
     private JLabel playerHealthLabel;
     private JLabel outputLabel;
+    private JPanel bottomPanel;
 
-    public BattleWindow() {
+    private char userInput = '\0';
+    private JFrame parent;
 
+    private String selectedOption;
+
+    public BattleWindow(JFrame parent) {
+        super(parent, "Battle Window", Dialog.ModalityType.MODELESS);
+        this.parent = parent;
 
         setTitle("Battle Window");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(true);
+        // Add the KeyListener to the JFrame
+        addKeyListener(this);
+
+        // Set focus to the JFrame to ensure it receives keyboard events
+        setFocusable(true);
+        setFocusTraversalKeysEnabled(false);
 
         // Create layout manager and constraints
         GridBagLayout layout = new GridBagLayout();
@@ -47,7 +67,7 @@ public class BattleWindow extends JFrame implements Observer {
         // Load the opponent's sprite image
         Image opponentSprite = null;
         try {
-            opponentSprite = ImageIO.read(new File("C:\\Users\\David Stiftl\\git\\RadicalFighters\\RadicalFighters\\src\\images\\devil.png"));
+            opponentSprite = ImageIO.read(new File("C:\\Users\\david\\projects\\RadicalFighters\\src\\images\\devil.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -85,7 +105,7 @@ public class BattleWindow extends JFrame implements Observer {
         // Load the opponent's sprite image
         Image playerSprite = null;
         try {
-            playerSprite = ImageIO.read(new File("C:\\Users\\David Stiftl\\git\\RadicalFighters\\RadicalFighters\\src\\images\\penguin.png"));
+            playerSprite = ImageIO.read(new File("C:\\Users\\david\\projects\\RadicalFighters\\src\\images\\penguin.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -121,11 +141,18 @@ public class BattleWindow extends JFrame implements Observer {
         add(playerHealthLabel);
 
         // Add output label
+        bottomPanel = new JPanel();
         outputLabel = new JLabel("Output");
+        bottomPanel.add(outputLabel, BorderLayout.CENTER);
+        constraints.gridx = 0;
+        constraints.gridy = 4;
+        constraints.gridwidth = 4;
+        constraints.gridheight = 2;
+        layout.setConstraints(bottomPanel, constraints);
+        add(bottomPanel);
     }
 
-    public void run() {
-        EventQueue.invokeLater(() -> {
+    public void run() { EventQueue.invokeLater(() -> {
             try {
                 setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 pack();
@@ -137,7 +164,94 @@ public class BattleWindow extends JFrame implements Observer {
         });
     }
 
+    public String choose1OutOf4(String[] choices, String message, String title) {
+        if (choices.length != 4) return null;
+
+        String choice = (String) JOptionPane.showInputDialog(
+                this,
+                message,
+                title,
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                choices,
+                choices[0]
+        );
+
+        if (choice != null) {
+            writeToOutput("You chose " + choice);
+        } else {
+            writeToOutput("No choice was made.");
+        }
+
+        return choice;
+    }
+
+    private void handleOptionChosen(String option) {
+        selectedOption = option;
+        synchronized (this) {
+            notify(); // Notify waiting thread
+        }
+    }
+
     @Override
+    public void keyTyped(KeyEvent e) {
+        userInput = e.getKeyChar();
+        System.out.println("User input: " + userInput);
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        // This method is called when a key is pressed down
+        int keyCode = e.getKeyCode();
+        System.out.println("Key pressed: " + keyCode);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // This method is called when a key is released after being pressed
+        int keyCode = e.getKeyCode();
+        System.out.println("Key released: " + keyCode);
+    }
+
+    public char getUserInput() {
+        return userInput;
+    }
+
+    // have the user press ENTER once in order to advance
+    public void waitContinueCommand() {
+        CountDownLatch latch = new CountDownLatch(1);
+
+        // Create a separate thread to wait for Enter
+        Thread enterThread = new Thread(() -> {
+            Scanner scanner = new Scanner(System.in);
+            writeToOutput("Press Enter to continue...");
+
+            scanner.nextLine(); // wait for newline
+            latch.countDown();
+            scanner.close();
+        });
+
+        enterThread.start();
+
+        System.out.println("Thread waiting for Enter command has been started");
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        writeToOutput("Continuing...");
+
+        try {
+            enterThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /*@Override
     public void update(Observable o, Object arg) {
         if (o instanceof KanjiBattle) {
             KanjiBattle battle = (KanjiBattle) o;
@@ -147,6 +261,44 @@ public class BattleWindow extends JFrame implements Observer {
 
             // add more code here to update other parts of the UI as needed
         }
+    }*/
+
+    public void writeToOutput(String message) {
+        SwingUtilities.invokeLater(() -> {
+            outputLabel.setText(message);
+            parent.repaint();
+        });
+    }
+
+    @Override
+    public void onSubscribe(Subscription subscription) {
+        System.out.println(this.subscription);
+        this.subscription = subscription;
+        System.out.println(this.subscription);
+        subscription.request(1);
+    }
+    @Override
+    public void onNext(UpdateEvent event) {
+        System.out.println(this.subscription);
+        model.radicals.RadicalFighter[] fighters = (model.radicals.RadicalFighter[]) event.getData();
+        if (fighters == null) return;
+        // ... update labels etc
+        opponentHealthLabel.setText("Health: " + fighters[1].getHP());
+        playerHealthLabel.setText("Health: " + fighters[0].getHP());
+
+
+        if (subscription != null) subscription.request(1);
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+        throwable.printStackTrace();
+        System.out.println("Error in subscriber");
+    }
+
+    @Override
+    public void onComplete() {
+        System.out.println("Subscriber completed");
     }
 
 }

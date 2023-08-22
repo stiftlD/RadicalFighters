@@ -45,7 +45,7 @@ public class RadicalFighter {
             otherFighter.takeDamage(damage);
         }
         System.out.println(this.name + " attacked " + otherFighter.getName() + " for " + damage + " damage.");
-        System.out.println(otherFighter.name + " has " + otherFighter.getHp() + " HP remaining.");
+        System.out.println(otherFighter.name + " has " + otherFighter.getHP() + " HP remaining.");
     }
 
     public void takeDamage(int damage) {

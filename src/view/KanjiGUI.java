@@ -1,22 +1,25 @@
 package view;
 
+import controller.Controller;
+
 import javax.swing.*;
 import java.awt.*;
-import view.*;
 
 public class KanjiGUI {
+    private Controller controller;
     private JFrame frame;
     private JPanel taskPanel;
     private JPanel buttonPanel;
     private JButton nextButton;
     private JButton exitButton;
-    private view.BattleWindow battleWindow;
+    //private view.BattleWindow battleWindow;
     private boolean battling = false;
 
-    public KanjiGUI() {
+    public KanjiGUI(Controller controller) {
+        this.controller = controller;
         frame = new JFrame();
         frame.setSize(500, 500);
-        frame.setTitle("model.kanji.Kanji Battle");
+        frame.setTitle("Kanji Battle");
 
         // Create task and button panels
         // Create the top panel and add a BattleWindow to it
@@ -47,8 +50,7 @@ public class KanjiGUI {
             }
             battling = true;
             // Start battle
-            BattleWindow battleWindow = new BattleWindow();
-            battleWindow.run();
+            showBattleWindow();
             battling = false;
         });
 
@@ -63,6 +65,20 @@ public class KanjiGUI {
 
         exitButton.addActionListener(e -> {
             System.exit(0);
+        });
+    }
+
+    private void showBattleWindow() {
+        SwingUtilities.invokeLater(() -> {
+            // Create a new BattleWindow instance
+            BattleWindow battleWindow = new BattleWindow(frame);
+            battleWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            battleWindow.pack();
+
+            // Display the BattleWindow as a modal dialog
+            //battleWindow.setModalityType(Dialog.ModalityType.MODELESS);
+            controller.startBattle(battleWindow);
+            //battleWindow.setVisible(true);
         });
     }
 }
