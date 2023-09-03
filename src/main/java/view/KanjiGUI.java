@@ -1,6 +1,7 @@
 package view;
 
 import controller.Controller;
+import view.BattleWindow;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,6 +13,7 @@ public class KanjiGUI {
     private JPanel buttonPanel;
     private JButton nextButton;
     private JButton exitButton;
+
     //private view.BattleWindow battleWindow;
     private boolean battling = false;
 

@@ -4,15 +4,20 @@ import view.BattleWindow;
 import view.KanjiGUI;
 import model.radicals.RadicalFighter;
 import model.radicals.Radical;
+import model.kanji.KanjiScheduler;
+import controller.KanjiBattle;
+import data.KanjiDatabase;
 
 public class Controller {
     private KanjiGUI view;
-    //private KanjiScheduler kanjiScheduler;
+    private KanjiScheduler kanjiScheduler;
+    private KanjiDatabase db;
     //private KanjiBattle kanjiBattle;
 
     public Controller() {
         this.view = new KanjiGUI(this);
-        //this.kanjiScheduler = new KanjiScheduler();
+        this.db = new KanjiDatabase();
+        this.kanjiScheduler = new KanjiScheduler(db);
         //this.kanjiBattle = new KanjiBattle();
     }
 
@@ -35,11 +40,8 @@ public class Controller {
                 50,
                 50
         );
-        KanjiBattle battle = new KanjiBattle(window, new RadicalFighter[]{playerFighter}, new RadicalFighter[]{opponentFighter});
+        KanjiBattle battle = new KanjiBattle(window, kanjiScheduler, new RadicalFighter[]{playerFighter}, new RadicalFighter[]{opponentFighter});
         battle.start();
-        /*model.radicals.RadicalFighter player = kanjiScheduler.getNextFighter();
-        model.radicals.RadicalFighter enemy = kanjiScheduler.getNextFighter();
-        kanjiBattle.startBattle(player, enemy);
-        view.showBattleWindow(player, enemy);*/
+
     }
 }

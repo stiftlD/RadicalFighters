@@ -3,9 +3,13 @@ package controller;
 import java.util.*;
 import java.util.concurrent.Flow.*;
 import java.util.concurrent.Flow.Publisher;
+import java.util.stream.Collectors;
 
 
+import model.kanji.Kanji;
+import model.kanji.KanjiScheduler;
 import model.radicals.RadicalFighter;
+import model.battleaction.*;
 
 import utils.UpdateEvent;
 import view.BattleWindow; //TODO access via controllerx
@@ -31,14 +35,16 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent> {
     private int currentTurn;
 
     private BattleWindow battleWindow;
+    private KanjiScheduler kanjiScheduler;
 
     private List<Subscriber<FighterUpdateEvent>> subscribers;
 
-    public KanjiBattle(BattleWindow battleWindow, RadicalFighter[] team1, RadicalFighter[] team2) {
+    public KanjiBattle(BattleWindow battleWindow, KanjiScheduler kanjiScheduler, RadicalFighter[] team1, RadicalFighter[] team2) {
         this.team1 = team1;
         this.team2 = team2;
         this.currentTurn = 0;
         this.battleWindow = battleWindow;
+        this.kanjiScheduler = kanjiScheduler;
         this.subscribers = new ArrayList<Subscriber<FighterUpdateEvent>>();
     }
 
@@ -49,6 +55,7 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent> {
         //System.out.println(observers);
         //performTurn();
         while (!isBattleOver()) {
+            //notifyObservers();
             System.out.println("----- Turn " + (currentTurn + 1) + " -----");
             battleWindow.writeToOutput(("----- Turn " + (currentTurn + 1) + " -----"));
 
@@ -68,15 +75,26 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent> {
 
     private void performTurn() {
         System.out.println(subscribers.size());
-        String[] proficientKanji;
-        proficientKanji = new String[]{"1", "2", "3", "4"};
-        String[] inproficientKanji;
-        inproficientKanji = new String[]{"10", "9", "8", "7"};
+        // select 4 players the player is proficient with as possible attacks and 4 they are not proficient with as enemy attacks
+        List<Kanji> proficientKanji = new ArrayList<Kanji>();
+        List<Kanji> inproficientKanji = new ArrayList<Kanji>();
+        for (int i = 0; i < 4; i++) {
+            proficientKanji.add(kanjiScheduler.getProficientKanji());
+            inproficientKanji.add(kanjiScheduler.getProficientKanji());
+        }
 
-        String chosenAttackKanji = battleWindow.choose1OutOf4(proficientKanji, "Choose a kanji action:", "Attack selection");
+        // TODO implement different tasks in view, have them scheduled here and pass them what they need
+        // TODO prepare kanji/radical/action data to display to the player
+        // TODO for example query kanji based on different criteria as wrong answers
+
+        // have player choose a kanji as attack, set task and then perform attack with updated dmg
+        int rightAnswer = (int) (Math.random() * 4.0); // select random kanji to be the right one
+        String chosenAttackKanji = battleWindow.choose1OutOf4((String[]) proficientKanji.stream().map(Kanji::getCharacter).toArray(String[]::new), "Choose a kanji action:", "Attack selection");
         //battleWindow.waitContinueCommand();
-        String expectedMeaning = "who knows";
-        String answer = battleWindow.choose1OutOf4(new String[]{"who knows", "42", "saa", "idgaf"}, "What is the meaning of " + chosenAttackKanji, "Kanji Task");
+        String[] meanings = proficientKanji.stream().map(k -> String.join(",", k.getTranslations())).toArray(String[]::new);
+        String expectedMeaning = meanings[rightAnswer];
+        Collections.shuffle(Arrays.asList(meanings));
+        String answer = battleWindow.choose1OutOf4(meanings, "What is the meaning of " + chosenAttackKanji, "Kanji Attack");
         boolean attackSuccessful = expectedMeaning.equals(answer);
         battleWindow.writeToOutput(attackSuccessful ? "That's right!" : "Wrong, it's " + expectedMeaning);
         int damage = 30;
@@ -86,10 +104,14 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent> {
         //battleWindow.waitContinueCommand();
 
         System.out.println(chosenAttackKanji);
-        String chosenDefenseKanji = battleWindow.choose1OutOf4(inproficientKanji, "Choose a kanji action:", "Defense selection");
+
+        rightAnswer = (int) (Math.random() * 4.0);
+        String chosenDefenseKanji = battleWindow.choose1OutOf4(inproficientKanji.stream().map(Kanji::getCharacter).toArray(String[]::new), "Choose a kanji action:", "Defense selection");
         //battleWindow.waitContinueCommand();
-        expectedMeaning = "ich weiss dass ich nichts weiss";
-        answer = battleWindow.choose1OutOf4(new String[]{"ich weiss dass ich nichts weiss", "25", "fuu", "omgrly"}, "What is the meaning of " + chosenAttackKanji, "Kanji Task");
+        meanings = inproficientKanji.stream().map(k -> String.join(",", k.getTranslations())).toArray(String[]::new);
+        expectedMeaning = meanings[rightAnswer];
+        Collections.shuffle(Arrays.asList(meanings));
+        answer = battleWindow.choose1OutOf4(meanings, "What is the meaning of " + chosenDefenseKanji, "Kanji Defense");
         boolean defenseSuccessful = expectedMeaning.equals(answer);
         damage = 30;
         if (defenseSuccessful) damage /= 2;
@@ -162,27 +184,6 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent> {
         }
         return false;
     }
-
-    // Implementation of Observable interface
-
-    //@Override
-    /*public void registerObserver(Observer observer) {
-        observers.add(observer);
-    }
-
-    //@Override
-    public void unregisterObserver(Observer observer) {
-        observers.remove(observer);
-    }
-
-    @Override
-    public void notifyObservers() {
-        if (observers == null) return;
-        for (Observer observer : observers) {
-            observer.update(this, null);
-        }
-    }*/
-
 
     public int getOpponentHealth() {
         return team1[0].getHP();

@@ -1,15 +1,23 @@
 import controller.Controller;
+import controller.KanjiBattle;
+import model.radicals.RadicalFighter;
+import controller.*;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+import data.KanjiDatabase;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
-
+        KanjiDatabase db = new KanjiDatabase();
+        db.initialize(); //TODO static init?
         Controller controller = new Controller();
         controller.start();
-
-
-
-
 
         // Mock fighters
         /*RadicalFighter[] team1 = {new RadicalFighter("Kanji1", 50, 50), new RadicalFighter("Kanji2", 40, 60)};
