@@ -7,6 +7,8 @@ import pandas as pd
 import numpy as np
 
 
+//TODO apparently we are writing every radical twice :)
+
 """
 headers = {}
 with open('headers.txt', 'r') as file:
