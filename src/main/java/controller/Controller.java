@@ -40,8 +40,13 @@ public class Controller {
                 50,
                 50
         );
-        KanjiBattle battle = new KanjiBattle(window, kanjiScheduler, new RadicalFighter[]{playerFighter}, new RadicalFighter[]{opponentFighter});
+        KanjiBattle battle = new KanjiBattle(window, this, kanjiScheduler, new RadicalFighter[]{playerFighter}, new RadicalFighter[]{opponentFighter});
         battle.start();
 
+    }
+
+    // not sure we should do it this way
+    public KanjiDatabase getDB() {
+        return db;
     }
 }

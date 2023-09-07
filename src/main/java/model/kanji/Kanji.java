@@ -24,7 +24,7 @@ public class Kanji {
         this.character = character;
         this.grade = grade;
         this.strokes = strokes;
-        this.power = 1 + (this.strokes % 10);
+        this.power = 1 + (this.strokes / 10);
         this.kunyomi = kunyomi;
         this.onyomi = onyomi;
         this.translations = translations;

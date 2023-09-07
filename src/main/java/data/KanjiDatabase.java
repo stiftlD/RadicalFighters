@@ -3,6 +3,7 @@ package data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.kanji.Kanji;
+import model.radicals.Radical;
 import org.apache.commons.io.IOUtils;
 import org.sqlite.SQLiteException;
 
@@ -12,9 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class KanjiDatabase {
@@ -68,8 +67,10 @@ public class KanjiDatabase {
         }
 
         try (Connection connection = DriverManager.getConnection(kanjiDBURL)) {
-            initializeKanjiTable(connection);
+            // TODO right now we HAVE to init radicals first
             initializeRadicalTable(connection);
+            initializeKanjiTable(connection);
+
             //initializeKanjiComponentRelationsTable(connection);
 
             connection.close();
@@ -142,8 +143,123 @@ public class KanjiDatabase {
             return null;
         }
 
+        return null;
+    }
+
+    public Kanji getKanjiByID(int kanjiID) {
+        String selectKanjiWithID =
+                "SELECT * FROM kanji " +
+                "WHERE kanji.id == " + kanjiID;
+
+        try (Connection connection = DriverManager.getConnection(kanjiDBURL)) {
+            try (Statement statement = connection.createStatement()) {
+
+                Kanji result = null;
+                ResultSet resultSet = statement.executeQuery(selectKanjiWithID);
+
+                if (resultSet == null) return result;
+                else {
+                    result = dataToKanji(resultSet).get(0);
+                }
+                connection.close();
+                return result;
+            } catch (SQLiteException e) {
+                e.printStackTrace();
+            }
+
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         return null;
+    }
+
+    public List<Radical> getRadicalComponents(int kanjiID) {
+        List<Radical> result = new ArrayList<Radical>();
+
+        String selectComponentsOfKanjiSQL =
+                "SELECT r.* FROM radicals r, kanji k " +
+                        "WHERE k.id == " + kanjiID + " AND EXISTS (" +
+                        "SELECT * from component_relations rel " +
+                        "WHERE rel.radical_id == r.id AND k.id == rel.kanji_id" +
+                        ")";
+
+        try (Connection connection = DriverManager.getConnection(kanjiDBURL)) {
+            try (Statement statement = connection.createStatement()) {
+
+                //System.out.println(selectComponentsOfKanjiSQL);
+                ResultSet resultSet = statement.executeQuery(selectComponentsOfKanjiSQL);
+                if (resultSet == null) return null;
+
+                result = dataToRadical(resultSet);
+                connection.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    // return IDs of this kanji's components
+    // TODO component data is not complete yet, have to scrape some more
+    public List<Integer> getComponentIDs(int kanjiID) throws SQLException {
+        List<Integer> result = new ArrayList<Integer>();
+
+        String selectComponentsOfKanjiSQL =
+                "SELECT r.id FROM radicals r, kanji k" +
+                "WHERE k.id == " + kanjiID + " AND EXISTS (" +
+                    "SELECT * from component_relations rel" +
+                    "WHERE rel.radical_id == r.id AND k.id == rel.kanji_id" +
+                    ")";
+
+        try (Connection connection = DriverManager.getConnection(kanjiDBURL)) {
+            try (Statement statement = connection.createStatement()) {
+
+                ResultSet resultSet = statement.executeQuery(selectComponentsOfKanjiSQL);
+
+                while (resultSet != null && resultSet.next()) {
+                    result.add(resultSet.getInt("ID"));
+                }
+
+                connection.close();
+                return result;
+            } catch (SQLiteException e) {
+                e.printStackTrace();
+            }
+
+            connection.close();
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    private List<Radical> dataToRadical(ResultSet resultSet) {
+        List<Radical> result = new ArrayList<Radical>();
+        try {
+            System.out.println(resultSet);
+            while (resultSet.next()) {
+                Radical radical = new Radical(
+                        resultSet.getInt("ID"),
+                        resultSet.getString("Character"),
+                        resultSet.getString("Character"),
+                        resultSet.getString("Meaning"),
+                        null
+                );
+                result.add(radical);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
     private List<Kanji> dataToKanji(ResultSet resultSet) throws SQLException {
@@ -171,20 +287,6 @@ public class KanjiDatabase {
 
         return result;
     }
-
-    private class JsonComponentRelation {
-        //@Expose
-        private String kanji;
-        private String[] radicals;
-
-        public JsonComponentRelation(String kanji, String[] radicals) {
-            this.kanji = kanji;
-            this.radicals = radicals;
-        }
-
-        public String getKanji() {return kanji;}
-        public String[] getRadicals() {return radicals;}
-    };
 
     private class JsonRadical {
         //@Expose
@@ -231,10 +333,11 @@ public class KanjiDatabase {
         private int jlpt;
         private String unicode;
         private String heisig_en;
+        private List<String> components;
 
         public JsonKanji(String kanji, int grade, int stroke_count, List<String> meanings,
                          List<String> kun_readings, List<String> on_readings, List<String> name_readings,
-                         int jlpt, String unicode, String heisig_en) {
+                         int jlpt, String unicode, String heisig_en, List<String> components) {
             this.kanji = kanji;
             this.grade = grade;
             this.stroke_count = stroke_count;
@@ -245,6 +348,7 @@ public class KanjiDatabase {
             this.jlpt = jlpt;
             this.unicode = unicode;
             this.heisig_en = heisig_en;
+            this.components = components;
         }
 
         public String getCharacter() {
@@ -274,6 +378,8 @@ public class KanjiDatabase {
         public List<String> getNameReadings() {
             return this.name_readings;
         }
+
+        public List<String> getComponents() { return this.components; }
 
         public int getJLPT() {
             return this.jlpt;
@@ -368,6 +474,13 @@ public class KanjiDatabase {
                 + " ?,"
                 + "?);";
 
+        String insertComponentRelationSQL = "INSERT INTO component_relations ("
+                + "Kanji_id,"
+                + "Radical_id"
+                + ") VALUES ("
+                + "?, "
+                + "?);";
+
         JsonKanji[] kanjiArray = {};
         //parse json data
         try {
@@ -385,9 +498,13 @@ public class KanjiDatabase {
             // insert parsed kanji into into  kanjiDB
             Arrays.asList(kanjiArray).stream().forEach(kanji -> {
                         if (kanji.getGrade() < 1 || kanji.getGrade() > 5) return; //TODO just so we have less data for now
+
+                        int kanjiID = generateKanjiID();
+
+                        // intialize kanji table
                         try (PreparedStatement statement = connection.prepareStatement(insertDataSql)) {
 
-                            statement.setInt(1, generateKanjiID());
+                            statement.setInt(1, kanjiID);
                             statement.setString(2, kanji.getCharacter());
 
                             // parse and set grades
@@ -436,11 +553,56 @@ public class KanjiDatabase {
                             statement.setBoolean(13, false);
 
                             statement.executeUpdate();
-                        } catch (SQLiteException e) {
-                            e.printStackTrace();
                         } catch (SQLException throwables) {
                             throwables.printStackTrace();
                         }
+
+                        if (kanji.getComponents() == null) return;
+                        // get the ids of the radicals that are components of this kanji
+                        // TODO this assumes radical table to exist
+                        // TODO also way better ways to do this probably
+                        Map<String, Integer> radToIdMap = new HashMap<String, Integer>();
+                        kanji.getComponents().stream().forEach( component -> {
+
+                            ResultSet resultSet = null;
+                            int radicalID = 0;
+                            if (radToIdMap.get(component) == null) {
+                                try (Statement statement = connection.createStatement()) {
+                                    String query = "SELECT ID FROM radicals "
+                                            + "WHERE character == '" + component + "';";
+
+                                    resultSet = statement.executeQuery(query);
+                                    if (resultSet != null) {
+                                        radicalID = resultSet.getInt("ID");
+                                        radToIdMap.put(component, radicalID);
+                                    } else System.out.println("Radical not in table");
+                                } catch (SQLException throwables) {
+                                    throwables.printStackTrace();
+                                }
+                            } else {
+                                    radicalID = radToIdMap.get(component);
+                            }
+
+                            //System.out.println("Radical: " + component);
+                            //System.out.println("ID: " + radicalID);
+
+                            // ... print other columns
+
+                            //System.out.println("--------------------");
+
+                            // initialize component_relations table
+                            // TODO write probably the nicest test yet
+                            try (PreparedStatement component_relation_statement = connection.prepareStatement(insertComponentRelationSQL)) {
+
+                                component_relation_statement.setInt(1, kanjiID);
+                                component_relation_statement.setInt(2, radicalID);
+
+                                component_relation_statement.executeUpdate();
+                            } catch (SQLException throwables) {
+                                throwables.printStackTrace();
+                            }
+                        });
+
                     }
             );
         }  catch (FileNotFoundException e) {
@@ -474,7 +636,7 @@ public class KanjiDatabase {
         String createRadicalTableSql = "CREATE TABLE IF NOT EXISTS radicals ("
                 //+ "Name TEXT,"
                 + "ID INTEGER PRIMARY KEY,"
-                + "Unicode TEXT,"
+                + "Character TEXT,"
                 //+ "Boost TEXT,"
                 + "Meaning TEXT"
                 //+ "Description TEXT"
@@ -520,7 +682,7 @@ public class KanjiDatabase {
         // TODO extract these as setters
         String insertRadicalDataSql = "INSERT INTO radicals ("
                 + "ID,"
-                + "Unicode,"
+                + "Character,"
                 + "Meaning"
                 + ") VALUES ("
                 + "?,"
@@ -552,7 +714,7 @@ public class KanjiDatabase {
             ResultSet resultSet = statement.executeQuery(query);
 
             while (resultSet.next()) {
-                String character = resultSet.getString("Unicode");
+                String character = resultSet.getString("Character");
                 String meaning = resultSet.getString("Meaning");
                 // ... retrieve other columns as needed
 
