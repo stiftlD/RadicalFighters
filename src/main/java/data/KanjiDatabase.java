@@ -44,7 +44,7 @@ public class KanjiDatabase {
 
     // setup the kanji database from kanji.json if it doesn't exist
     // TODO obviously refactor. call different table creation methods and then set the data on them
-    public void initialize() throws SQLException {
+    public static void initialize() throws SQLException {
 
         try (Connection connection = DriverManager.getConnection(kanjiDBURL)) {
             createKanjiTable(connection);
@@ -52,16 +52,6 @@ public class KanjiDatabase {
             createKanjiComponentRelationsTable(connection);
 
             connection.close();
-
-
-                String insertComponentRelationsDataSql = "INSERT INTO component_relations ("
-                        + "Kanji_ID,"
-                        + "Radical_id"
-                        + ") VALUES ("
-                        + "?,"
-                        + "?);";
-
-                connection.close();
         } catch (SQLiteException e) {
                 e.printStackTrace();
         }
@@ -70,8 +60,6 @@ public class KanjiDatabase {
             // TODO right now we HAVE to init radicals first
             initializeRadicalTable(connection);
             initializeKanjiTable(connection);
-
-            //initializeKanjiComponentRelationsTable(connection);
 
             connection.close();
         } catch (SQLiteException e) {
@@ -422,10 +410,33 @@ public class KanjiDatabase {
             }
             System.out.println("Kanji Table created");
 
+            // small table to track player data, as sqlite doesn't have variables
+            // could have stuff like previous experience, study goals etc
+            String createPlayerTableSQL =
+                    "CREATE TABLE IF NOT EXISTS player_details ("
+                    + "ID INTEGER PRIMARY KEY,"
+                    + "Grade INTEGER,"
+                    + "Name TEXT,"
+                    + "Level INTEGER"
+                    + ");";
+
+            try (Statement statement = connection.createStatement()) {
+                // create viable Kanji view
+                try {
+                    statement.execute(createPlayerTableSQL);
+                    statement.execute("INSERT INTO player_details VALUES(0, 3, \"TestPlayer\", 1);"); //TODO set these from controller after init
+                } catch (SQLiteException e) {
+                    e.printStackTrace();
+                    System.out.println("table player_details not created");
+                }
+            } catch (SQLiteException e) {
+                e.printStackTrace();
+            }
+
             String createViableKanjiView =
                     "CREATE VIEW viable_kanji AS "
-                            + "SELECT *, ROW_NUMBER() OVER (ORDER BY Proficiency DESC) as prof_rank FROM kanji "
-                            + "WHERE Grade > 0 AND Grade <= " + 3 + " " // TODO update this based on player level
+                            + "SELECT k.*, ROW_NUMBER() OVER (ORDER BY Proficiency DESC) as prof_rank FROM kanji k, player_details p "
+                            + "WHERE k.Grade > 0 AND k.Grade <= p.Grade "
                             + "ORDER BY Proficiency DESC;";
 
             try (Statement statement = connection.createStatement()) {
