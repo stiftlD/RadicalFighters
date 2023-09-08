@@ -44,7 +44,7 @@ public class KanjiDatabase {
 
     // setup the kanji database from kanji.json if it doesn't exist
     // TODO obviously refactor. call different table creation methods and then set the data on them
-    public static void initialize() throws SQLException {
+    public void initialize() throws SQLException {
 
         try (Connection connection = DriverManager.getConnection(kanjiDBURL)) {
             createKanjiTable(connection);
