@@ -1,5 +1,7 @@
 package controller;
 
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.Flow.*;
 import java.util.concurrent.Flow.Publisher;
@@ -13,7 +15,7 @@ import model.radicals.RadicalFighter;
 import model.battleaction.*;
 
 import utils.UpdateEvent;
-import view.BattleWindow; //TODO access via controllerx
+import view.BattleWindow; //TODO access via controller
 
 
 class FighterUpdateEvent implements UpdateEvent<RadicalFighter[]> {
@@ -72,12 +74,11 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent> {
         }
     }
 
-    // TODO use actual kanji
     // TODO inject progress data gathering
     // TODO extract Task logic and write different tasks
 
     private void performTurn() {
-        System.out.println(subscribers.size());
+        //System.out.println(subscribers.size());
         // select 4 players the player is proficient with as possible attacks and 4 they are not proficient with as enemy attacks
         List<Kanji> proficientKanji = new ArrayList<Kanji>();
         List<Kanji> inproficientKanji = new ArrayList<Kanji>();
@@ -122,12 +123,13 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent> {
         }
 
         // have player choose a kanji as attack, set task and then perform attack with updated dmg
-        int rightAnswer = (int) (Math.random() * 4.0); // select random kanji to be the right one
-        // TODO choose1 should probably just return the index
+        //int rightAnswer = (int) (Math.random() * 4.0); // select random kanji to be the right one
+        // choose1 just returns the index
         //String chosenAttackKanji = battleWindow.choose1OutOf4((String[]) proficientKanji.stream().map(Kanji::getCharacter).toArray(String[]::new), "Choose a kanji action:", "Attack selection");
-        String chosenAttackEffect = battleWindow.choose1OutOf4(radicalEffects, "Choose a kanji action:", "Attack selection");
+        int chosenIndex = battleWindow.choose1OutOf4(radicalEffects, "Choose a kanji action:", "Attack selection");
+        String chosenAttackEffect = radicalEffects[chosenIndex];
         // find chosen index
-        Kanji chosenAttackKanji = null;
+        /*Kanji chosenAttackKanji = null;
         List<Radical> chosenRadicals = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             if (radicalEffects[i].equals(chosenAttackEffect)) {
@@ -135,15 +137,34 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent> {
                 chosenRadicals = radicals.get(i);
                 break;
             }
-        }
+        }*/
+        Kanji chosenAttackKanji = proficientKanji.get(chosenIndex);
+        System.out.println("Chose: " + chosenAttackKanji.getCharacter());
+        for (int i = 0; i < chosenAttackKanji.getTranslations().size(); i++) System.out.println(chosenAttackKanji.getTranslations().get(i));
+        List<Radical> chosenRadicals = radicals.get(chosenIndex);
 
         //battleWindow.waitContinueCommand();
         String[] meanings = proficientKanji.stream().map(k -> String.join(",", k.getTranslations())).toArray(String[]::new);
-        String expectedMeaning = meanings[rightAnswer];
+        String expectedMeaning = meanings[chosenIndex];
+        //System.out.println("Expected answer: " + expectedMeaning);
         Collections.shuffle(Arrays.asList(meanings));
-        String answer = battleWindow.choose1OutOf4(meanings, "What is the meaning of " + chosenAttackKanji.getCharacter(), "Kanji Attack");
+
+        Timestamp start_time = Timestamp.from(Instant.now());
+        chosenIndex = battleWindow.choose1OutOf4(meanings, "What is the meaning of " + chosenAttackKanji.getCharacter(), "Kanji Attack");
+        Timestamp finish_time = Timestamp.from(Instant.now());
+        System.out.println("chosenIndex: " + chosenIndex);
+        System.out.print("Meanings: ");
+        for (int i = 0; i < 4; i++) System.out.println(meanings[i]);
+        String answer = meanings[chosenIndex];
+        //System.out.println("Choices afterwards: ");
+        /*for (int i = 0; i < 4; i++) {
+            System.out.println(meanings[i]);
+        }*/
+        //System.out.println("Answer given: " + answer);
+
         boolean attackSuccessful = expectedMeaning.equals(answer);
         battleWindow.writeToOutput(attackSuccessful ? "That's right!" : "Wrong, it's " + expectedMeaning);
+        //System.out.println(attackSuccessful ? "That's right!" : "Wrong, it's " + expectedMeaning);
         int damage = chosenAttackKanji.getPower() * 10;
         // apply radicals effects on attack
         for (int i = 0; i < chosenRadicals.size(); i++) {
@@ -151,10 +172,12 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent> {
         }
         if (attackSuccessful) damage *= 2;
         team2[0].takeDamage(damage);
+        // log task result in DB
+        parent.getDB().appendStudyLog(chosenAttackKanji.getId(), "ABCD", "Meaning", start_time, finish_time, attackSuccessful);
 
         //battleWindow.waitContinueCommand();
 
-        System.out.println(chosenAttackKanji);
+        //System.out.println(chosenAttackKanji);
         // TODO code is duplicated from above, refactor
         // honestly just do querying kanji etc in function with parameter bool attack|defense
         radicals = (List<List<Radical>>) inproficientKanji.stream().map(k -> {
@@ -186,10 +209,14 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent> {
             radicalEffects[i] = Integer.toString(inproficientKanji.get(i).getPower()) + "\n" + radicalEffects[i];
         }
 
-        rightAnswer = (int) (Math.random() * 4.0);
+        //rightAnswer = (int) (Math.random() * 4.0);
         //String chosenDefenseKanji = battleWindow.choose1OutOf4(inproficientKanji.stream().map(Kanji::getCharacter).toArray(String[]::new), "Choose a kanji action:", "Defense selection");
-        String chosenDefenseEffect = battleWindow.choose1OutOf4(radicalEffects, "Choose a kanji action:", "Defense selection");
-        Kanji chosenDefenseKanji = null;
+        chosenIndex = battleWindow.choose1OutOf4(radicalEffects, "Choose a kanji action:", "Defense selection");
+
+        String chosenDefenseEffect = radicalEffects[chosenIndex];
+        Kanji chosenDefenseKanji = inproficientKanji.get(chosenIndex);
+        chosenRadicals = radicals.get(chosenIndex);
+        /*Kanji chosenDefenseKanji = null;
         chosenRadicals = new ArrayList<>();
         for (int i = 0; i < 4; i++) {
             if (radicalEffects[i].equals(chosenDefenseEffect)) {
@@ -197,13 +224,17 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent> {
                 chosenRadicals = radicals.get(i);
                 break;
             }
-        }
+        }*/
 
         //battleWindow.waitContinueCommand();
         meanings = inproficientKanji.stream().map(k -> String.join(",", k.getTranslations())).toArray(String[]::new);
-        expectedMeaning = meanings[rightAnswer];
+        expectedMeaning = meanings[chosenIndex];
         Collections.shuffle(Arrays.asList(meanings));
-        answer = battleWindow.choose1OutOf4(meanings, "What is the meaning of " + chosenDefenseKanji.getCharacter(), "Kanji Defense");
+        start_time = Timestamp.from(Instant.now());
+        chosenIndex = battleWindow.choose1OutOf4(meanings, "What is the meaning of " + chosenDefenseKanji.getCharacter(), "Kanji Defense");
+        answer = meanings[chosenIndex];
+
+        finish_time = Timestamp.from(Instant.now());
         boolean defenseSuccessful = expectedMeaning.equals(answer);
         damage = chosenDefenseKanji.getPower() * 10;
         if (defenseSuccessful) damage /= 2;
@@ -213,6 +244,8 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent> {
             damage = Math.max(0, damage);
         }
         team1[0].takeDamage(damage);
+        // log task results in db
+        parent.getDB().appendStudyLog(chosenDefenseKanji.getId(), "ABCD", "Meaning", start_time, finish_time, defenseSuccessful);
 
         publish(new FighterUpdateEvent(team1[0], team2[0]));
 

@@ -7,6 +7,7 @@ import model.radicals.Radical;
 import org.apache.commons.io.IOUtils;
 import org.sqlite.SQLiteException;
 
+import java.sql.Timestamp;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -41,7 +42,6 @@ public class KanjiDatabase {
     }
 
 
-
     // setup the kanji database from kanji.json if it doesn't exist
     // TODO obviously refactor. call different table creation methods and then set the data on them
     public void initialize() throws SQLException {
@@ -50,6 +50,7 @@ public class KanjiDatabase {
             createKanjiTable(connection);
             createRadicalTable(connection);
             createKanjiComponentRelationsTable(connection);
+            createStudyLogTable(connection);
 
             connection.close();
         } catch (SQLiteException e) {
@@ -96,14 +97,14 @@ public class KanjiDatabase {
 
                 double randIndex = Math.random() * (stopIndex - startIndex);
                 int resultIndex = startIndex + (int) randIndex;
-                System.out.println("random was " + randIndex + ", result is " + resultIndex + " out of " + count);
+                //System.out.println("random was " + randIndex + ", result is " + resultIndex + " out of " + count);
 
                 String selectKanjiInProfInterval =
                         "SELECT * FROM viable_kanji "
                                 + "WHERE prof_rank == " + resultIndex;
 
                 ResultSet resultSet = statement.executeQuery(selectKanjiInProfInterval);
-                System.out.println(resultSet);
+                //System.out.println(resultSet);
                 /*while (resultSet.next()) {
                     int id = resultSet.getInt("ID");
                     String kanji = resultSet.getString("Kanji");
@@ -232,7 +233,7 @@ public class KanjiDatabase {
     private List<Radical> dataToRadical(ResultSet resultSet) {
         List<Radical> result = new ArrayList<Radical>();
         try {
-            System.out.println(resultSet);
+            //System.out.println(resultSet);
             while (resultSet.next()) {
                 Radical radical = new Radical(
                         resultSet.getInt("ID"),
@@ -267,7 +268,7 @@ public class KanjiDatabase {
                         resultSet.getBoolean("encountered")
                 );
                 result.add(kanji);
-                System.out.println(kanji.getCharacter() + kanji.getId());
+                //System.out.println(kanji.getCharacter() + kanji.getId());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -710,8 +711,6 @@ public class KanjiDatabase {
                         statement.setString(3, rad.getMeaning());
 
                         statement.executeUpdate();
-                    } catch (SQLiteException e) {
-                        e.printStackTrace();
                     } catch (SQLException throwables) {
                         throwables.printStackTrace();
                     }
@@ -759,5 +758,65 @@ public class KanjiDatabase {
             e.printStackTrace();
         }
         System.out.println("Component relations Table created");
+    }
+
+    // table where we save the results of completed tasks and we build statistics from
+    public void createStudyLogTable(Connection connection) throws SQLException {
+        String createStudyLogTableSQL = "CREATE TABLE IF NOT EXISTS study_log ("
+                + "kanji_id INTEGER, "
+                + "type TEXT, " // probably enum for task type or other proficiency checks
+                + "subject TEXT, " // e.g. meaning, reading etc
+                + "start_time DATETIME, "
+                + "finish_time DATETIME DEFAULT CURRENT_TIMESTAMP, "
+                + "result BOOLEAN," // whether task was success
+                + "FOREIGN KEY (kanji_id) REFERENCES kanji(ID) "
+                + ");";
+
+        // create radical table
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(createStudyLogTableSQL);
+        } catch (SQLiteException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Study Log Table created");
+    }
+
+    public void appendStudyLog(int kanji_id, String type, String subject, Timestamp start_time, Timestamp finish_time, boolean result) {
+        String insertStudyLogSQL = "INSERT INTO study_log ("
+                + "kanji_id,"
+                + "type,"
+                + "subject,"
+                + "start_time,"
+                + "finish_time,"
+                + "result"
+                + ") VALUES ("
+                + "?, "
+                + "?, "
+                + "?, "
+                + "?, "
+                + "?, "
+                + "?);";
+
+        try (Connection connection = DriverManager.getConnection(kanjiDBURL)) {
+            try (PreparedStatement statement = connection.prepareStatement(insertStudyLogSQL)) {
+
+                statement.setInt(1, kanji_id);
+                statement.setString(2, type);
+                statement.setString(3, subject);
+                statement.setTimestamp(4, start_time);
+                statement.setTimestamp(5, finish_time);
+                statement.setBoolean(6, result);
+
+                statement.executeUpdate();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+                return;
+            }
+
+            connection.close();
+        }  catch (SQLException throwables) {
+            throwables.printStackTrace();
+            return;
+        }
     }
 }

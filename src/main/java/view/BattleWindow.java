@@ -164,8 +164,13 @@ public class BattleWindow extends JDialog implements Subscriber<UpdateEvent>, Ke
         });
     }
 
-    public String choose1OutOf4(String[] choices, String message, String title) {
-        if (choices.length != 4) return null;
+    public int choose1OutOf4(String[] choices, String message, String title) {
+        if (choices.length != 4) return -1;
+
+        String[] prefixes = {"A: ", "B: ", "C: ", "D: "};
+        for (int i = 0; i < 4; i++) {
+            choices[i] = prefixes[i] + choices[i];
+        }
 
         String choice = (String) JOptionPane.showInputDialog(
                 this,
@@ -179,11 +184,21 @@ public class BattleWindow extends JDialog implements Subscriber<UpdateEvent>, Ke
 
         if (choice != null) {
             writeToOutput("You chose " + choice);
+            // thanks to prefix we can find the actual choice
+            for (int i = 0; i < 4; i++) {
+                if (choices[i].equals(choice)) {
+                    // remove prefixes again
+                    for (int j = 0; j < 4; j++) {
+                        choices[j] = choices[j].substring(3);
+                    }
+                    return i;
+                }
+            }
         } else {
             writeToOutput("No choice was made.");
         }
 
-        return choice;
+        return -1;
     }
 
     private void handleOptionChosen(String option) {
@@ -272,14 +287,14 @@ public class BattleWindow extends JDialog implements Subscriber<UpdateEvent>, Ke
 
     @Override
     public void onSubscribe(Subscription subscription) {
-        System.out.println(this.subscription);
+        //System.out.println(this.subscription);
         this.subscription = subscription;
-        System.out.println(this.subscription);
+        //System.out.println(this.subscription);
         subscription.request(1);
     }
     @Override
     public void onNext(UpdateEvent event) {
-        System.out.println(this.subscription);
+        //System.out.println(this.subscription);
         model.radicals.RadicalFighter[] fighters = (model.radicals.RadicalFighter[]) event.getData();
         if (fighters == null) return;
         // ... update labels etc
