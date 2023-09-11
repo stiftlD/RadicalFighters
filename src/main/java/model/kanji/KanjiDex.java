@@ -5,27 +5,28 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import controller.Controller;
 
 public class KanjiDex {
-   /* private List<model.kanji.Kanji> kanjiList;
+    private Controller controller;
+    private List<Kanji> rankedKanjiList;
 
-    public model.kanji.KanjiDex() {
-        //Gson gson = new GsonBuilder().registerTypeAdapter(model.kanji.Kanji.class, new CustomKanjiDecoder()).create();
-
-        try (FileReader reader = new FileReader("kanji.json")) {
-            //model.kanji.Kanji[] kanjiArray = gson.fromJson(reader, model.kanji.Kanji[].class);
-            kanjiList = new ArrayList<>(List.of(kanjiArray));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public KanjiDex(Controller controller) {
+        rankedKanjiList = new ArrayList<Kanji>();
     }
 
-    public model.kanji.Kanji getRandomKanji() {
-        Random rand = new Random();
-        return kanjiList.get(rand.nextInt(kanjiList.size()));
+    public void setRankedKanjiList(List<Kanji> rankedKanjiList) {
+        this.rankedKanjiList = rankedKanjiList;
     }
 
-    public List<model.kanji.Kanji> getKanji() {
-        return kanjiList;
-    }*/
+    public void printRankedKanjiList() {
+        System.out.println("Studied Kanji ranked by proficiency (total " + rankedKanjiList.size() + "): ");
+        rankedKanjiList.stream().forEach(k -> {
+            System.out.print(k.getCharacter() + " ");
+        });
+        System.out.print("\n");
+    }
+
+    public List<Kanji> getRankedKanjiList() { return this.rankedKanjiList; }
+
 }

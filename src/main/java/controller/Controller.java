@@ -5,19 +5,29 @@ import view.KanjiGUI;
 import model.radicals.RadicalFighter;
 import model.radicals.Radical;
 import model.kanji.KanjiScheduler;
+import model.kanji.Kanji;
+import model.kanji.KanjiDex;
+
+import java.util.List;
+import java.util.List.*;
 import controller.KanjiBattle;
 import data.KanjiDatabase;
+import data.StudyService;
 
 public class Controller {
     private KanjiGUI view;
     private KanjiScheduler kanjiScheduler;
     private KanjiDatabase db;
+    private StudyService studyService;
+    private KanjiDex kanjiDex;
     //private KanjiBattle kanjiBattle;
 
     public Controller() {
         this.view = new KanjiGUI(this);
         this.db = new KanjiDatabase();
         this.kanjiScheduler = new KanjiScheduler(db);
+        this.studyService = new StudyService();
+        this.kanjiDex = new KanjiDex(this);
         //this.kanjiBattle = new KanjiBattle();
     }
 
@@ -45,8 +55,16 @@ public class Controller {
 
     }
 
+    public void updateKanjiDex() {
+
+        // Pass the ranked kanji list to the KanjiDex
+        kanjiDex.setRankedKanjiList(studyService.getKanjiRankedByProficiency());
+    }
+
     // not sure we should do it this way
     public KanjiDatabase getDB() {
         return db;
     }
+
+    public KanjiDex getKanjiDex() { return kanjiDex; }
 }

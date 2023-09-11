@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import model.kanji.Kanji;
 import model.radicals.Radical;
 import org.apache.commons.io.IOUtils;
-import org.sqlite.SQLiteException;
+import java.sql.SQLException;
 
 import java.sql.Timestamp;
 import java.io.File;
@@ -23,9 +23,6 @@ public class KanjiDatabase {
     private String kanjiDBURL = "jdbc:sqlite:" + Path.of(rootDir + "/database/kanji.db").toString();
     private Path kanjiPath = Path.of(rootDir + "/src/main/java/data/kanjis.json");
 
-    //private String kanjidbURL = "jdbc:sqlite:C:/Users/david/projects/RadicalFighters/database/kanji.db";
-    //private Path kanjiPath = Path.of("C:\\Users\\david\\projects\\kanji_data\\kanjiapi_full\\kanjis.json");
-
     int currRadID = 0;
 
     private int generateRadID() {
@@ -39,6 +36,7 @@ public class KanjiDatabase {
     }
 
     public KanjiDatabase() {
+
     }
 
 
@@ -46,37 +44,32 @@ public class KanjiDatabase {
     // TODO obviously refactor. call different table creation methods and then set the data on them
     public void initialize() throws SQLException {
 
-        try (Connection connection = DriverManager.getConnection(kanjiDBURL)) {
+        try (Connection connection = SqliteHelper.getConn()) {
             createKanjiTable(connection);
             createRadicalTable(connection);
             createKanjiComponentRelationsTable(connection);
             createStudyLogTable(connection);
 
             connection.close();
-        } catch (SQLiteException e) {
-                e.printStackTrace();
-        }
+        } catch (SQLException e) { e.printStackTrace(); }
 
-        try (Connection connection = DriverManager.getConnection(kanjiDBURL)) {
+        try (Connection connection = SqliteHelper.getConn()) {
             // TODO right now we HAVE to init radicals first
             initializeRadicalTable(connection);
             initializeKanjiTable(connection);
 
             connection.close();
-        } catch (SQLiteException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    // TODO move some of these specific query methods to studyhelper etc.
 
     public List<Kanji> getRandomKanjiInProfInterval(int maxGrade, double start, double end) throws SQLException, IllegalArgumentException {
         if (maxGrade < 0 || start < 0.0 || end > 1.0 || start > end)
             throw new IllegalArgumentException("start and end within [0, 1]");
 
-        /*String queryNumViableKanji =
-                "SELECT count() FROM kanji WHERE "
-                + "Grade > 0 AND Grade <= " + maxGrade
-                + ";";*/
         String queryNumViableKanji =
                 "SELECT count() from viable_kanji;";
 
@@ -85,7 +78,7 @@ public class KanjiDatabase {
                         + "WHERE Grade > 0 AND Grade <= " + maxGrade + " "
                         + "ORDER BY Proficiency DESC";
 
-        try (Connection connection = DriverManager.getConnection(kanjiDBURL)) {
+        try (Connection connection = SqliteHelper.getConn()) {
             try (Statement statement = connection.createStatement()) {
 
                 ResultSet countResult = statement.executeQuery(queryNumViableKanji);
@@ -120,27 +113,18 @@ public class KanjiDatabase {
                 List<Kanji> result = dataToKanji(resultSet);
                 connection.close();
                 return result;
-            } catch (SQLiteException e) {
-                e.printStackTrace();
-
-                //return null;
-            }
-
-            connection.close();
-        } catch (SQLiteException e) {
-            e.printStackTrace();
-            return null;
-        }
+            } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { e.printStackTrace(); }
 
         return null;
     }
 
-    public Kanji getKanjiByID(int kanjiID) {
+    public Kanji getKanjiByID(int kanjiID){
         String selectKanjiWithID =
                 "SELECT * FROM kanji " +
-                "WHERE kanji.id == " + kanjiID;
+                        "WHERE kanji.id == " + kanjiID;
 
-        try (Connection connection = DriverManager.getConnection(kanjiDBURL)) {
+        try (Connection connection = SqliteHelper.getConn()) {
             try (Statement statement = connection.createStatement()) {
 
                 Kanji result = null;
@@ -152,19 +136,12 @@ public class KanjiDatabase {
                 }
                 connection.close();
                 return result;
-            } catch (SQLiteException e) {
-                e.printStackTrace();
-            }
-
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+            } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { e.printStackTrace(); }
         return null;
     }
 
-    public List<Radical> getRadicalComponents(int kanjiID) {
+    public List<Radical> getRadicalComponents (int kanjiID) {
         List<Radical> result = new ArrayList<Radical>();
 
         String selectComponentsOfKanjiSQL =
@@ -174,7 +151,7 @@ public class KanjiDatabase {
                         "WHERE rel.radical_id == r.id AND k.id == rel.kanji_id" +
                         ")";
 
-        try (Connection connection = DriverManager.getConnection(kanjiDBURL)) {
+        try (Connection connection = SqliteHelper.getConn()) {
             try (Statement statement = connection.createStatement()) {
 
                 //System.out.println(selectComponentsOfKanjiSQL);
@@ -183,31 +160,26 @@ public class KanjiDatabase {
 
                 result = dataToRadical(resultSet);
                 connection.close();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+            } catch (SQLException e) { e.printStackTrace(); }
+        connection.close();
+        } catch (SQLException e) { e.printStackTrace(); }
 
         return result;
     }
 
     // return IDs of this kanji's components
     // TODO component data is not complete yet, have to scrape some more
-    public List<Integer> getComponentIDs(int kanjiID) throws SQLException {
+    public List<Integer> getComponentIDs(int kanjiID) {
         List<Integer> result = new ArrayList<Integer>();
 
         String selectComponentsOfKanjiSQL =
                 "SELECT r.id FROM radicals r, kanji k" +
                 "WHERE k.id == " + kanjiID + " AND EXISTS (" +
-                    "SELECT * from component_relations rel" +
-                    "WHERE rel.radical_id == r.id AND k.id == rel.kanji_id" +
-                    ")";
+                "SELECT * from component_relations rel" +
+                "WHERE rel.radical_id == r.id AND k.id == rel.kanji_id" +
+                ")";
 
-        try (Connection connection = DriverManager.getConnection(kanjiDBURL)) {
+        try (Connection connection = SqliteHelper.getConn()) {
             try (Statement statement = connection.createStatement()) {
 
                 ResultSet resultSet = statement.executeQuery(selectComponentsOfKanjiSQL);
@@ -215,20 +187,14 @@ public class KanjiDatabase {
                 while (resultSet != null && resultSet.next()) {
                     result.add(resultSet.getInt("ID"));
                 }
-
                 connection.close();
                 return result;
-            } catch (SQLiteException e) {
-                e.printStackTrace();
-            }
-
-            connection.close();
-        } catch (SQLiteException e) {
-            e.printStackTrace();
-        }
+            } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { e.printStackTrace(); }
 
         return result;
     }
+
 
     private List<Radical> dataToRadical(ResultSet resultSet) {
         List<Radical> result = new ArrayList<Radical>();
@@ -251,7 +217,7 @@ public class KanjiDatabase {
         return result;
     }
 
-    private List<Kanji> dataToKanji(ResultSet resultSet) throws SQLException {
+    private List<Kanji> dataToKanji(ResultSet resultSet) {
         List<Kanji> result = new ArrayList<Kanji>();
         try {
             while (resultSet.next()) {
@@ -383,7 +349,7 @@ public class KanjiDatabase {
         }
     }
 
-    private void createKanjiTable(Connection connection) throws SQLException {
+    private void createKanjiTable(Connection connection) {
         String createTableSql = "CREATE TABLE IF NOT EXISTS kanji ("
                 + "ID INTEGER PRIMARY KEY,"
                 + "Kanji TEXT,"
@@ -406,7 +372,7 @@ public class KanjiDatabase {
             // create kanji table
             try (Statement statement = connection.createStatement()) {
                 statement.execute(createTableSql);
-            } catch (SQLiteException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
             System.out.println("Kanji Table created");
@@ -426,11 +392,11 @@ public class KanjiDatabase {
                 try {
                     statement.execute(createPlayerTableSQL);
                     statement.execute("INSERT INTO player_details VALUES(0, 3, \"TestPlayer\", 1);"); //TODO set these from controller after init
-                } catch (SQLiteException e) {
+                } catch (SQLException e) {
                     e.printStackTrace();
                     System.out.println("table player_details not created");
                 }
-            } catch (SQLiteException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
 
@@ -444,11 +410,11 @@ public class KanjiDatabase {
                 // create viable Kanji view
                 try {
                     statement.execute(createViableKanjiView);
-                } catch (SQLiteException e) {
+                } catch (SQLException e) {
                     e.printStackTrace();
                     System.out.println("no new view created");
                 }
-            } catch (SQLiteException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         } else {
@@ -456,7 +422,7 @@ public class KanjiDatabase {
         }
     }
 
-    public void initializeKanjiTable(Connection connection) throws SQLException {
+    public void initializeKanjiTable(Connection connection) {
         String insertDataSql = "INSERT INTO kanji ("
                 + "ID,"
                 + "Kanji,"
@@ -505,8 +471,8 @@ public class KanjiDatabase {
             //System.out.println(jsonString);
             Gson gson = new GsonBuilder().serializeNulls().create();
             kanjiArray = gson.fromJson(jsonString, JsonKanji[].class);
-            System.out.println("read kanjiArray");
-            System.out.println("read " + kanjiArray.length + " kanji");
+            //System.out.println("read kanjiArray");
+            //System.out.println("read " + kanjiArray.length + " kanji");
             // insert parsed kanji into into  kanjiDB
             Arrays.asList(kanjiArray).stream().forEach(kanji -> {
                         if (kanji.getGrade() < 1 || kanji.getGrade() > 5) return; //TODO just so we have less data for now
@@ -610,9 +576,7 @@ public class KanjiDatabase {
                                 component_relation_statement.setInt(2, radicalID);
 
                                 component_relation_statement.executeUpdate();
-                            } catch (SQLException throwables) {
-                                throwables.printStackTrace();
-                            }
+                            } catch (SQLException e) { e.printStackTrace(); }
                         });
 
                     }
@@ -639,12 +603,10 @@ public class KanjiDatabase {
 
                 System.out.println("--------------------");
             }
-        } catch (SQLiteException e) {
-            e.printStackTrace();
-        }
+        } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    public void createRadicalTable(Connection connection) throws SQLException {
+    public void createRadicalTable(Connection connection) {
         String createRadicalTableSql = "CREATE TABLE IF NOT EXISTS radicals ("
                 //+ "Name TEXT,"
                 + "ID INTEGER PRIMARY KEY,"
@@ -657,9 +619,7 @@ public class KanjiDatabase {
         // create radical table
         try (Statement statement = connection.createStatement()) {
             statement.execute(createRadicalTableSql);
-        } catch (SQLiteException e) {
-            e.printStackTrace();
-        }
+        } catch (SQLException e) { e.printStackTrace(); }
         System.out.println("Radical Table created");
     }
 
@@ -715,7 +675,6 @@ public class KanjiDatabase {
                         throwables.printStackTrace();
                     }
                 }
-
         );
 
         // to test print all rads
@@ -734,7 +693,7 @@ public class KanjiDatabase {
 
                 System.out.println("--------------------");
             }
-        } catch (SQLiteException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -754,7 +713,7 @@ public class KanjiDatabase {
         // create radical table
         try (Statement statement = connection.createStatement()) {
             statement.execute(createComponentRelationsTableSql);
-        } catch (SQLiteException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         System.out.println("Component relations Table created");
@@ -775,7 +734,7 @@ public class KanjiDatabase {
         // create radical table
         try (Statement statement = connection.createStatement()) {
             statement.execute(createStudyLogTableSQL);
-        } catch (SQLiteException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         System.out.println("Study Log Table created");
@@ -797,7 +756,7 @@ public class KanjiDatabase {
                 + "?, "
                 + "?);";
 
-        try (Connection connection = DriverManager.getConnection(kanjiDBURL)) {
+        try (Connection connection = SqliteHelper.getConn()) {
             try (PreparedStatement statement = connection.prepareStatement(insertStudyLogSQL)) {
 
                 statement.setInt(1, kanji_id);
@@ -808,15 +767,10 @@ public class KanjiDatabase {
                 statement.setBoolean(6, result);
 
                 statement.executeUpdate();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-                return;
-            }
+                connection.close();
+            } catch (SQLException e) { e.printStackTrace(); }
 
-            connection.close();
-        }  catch (SQLException throwables) {
-            throwables.printStackTrace();
-            return;
-        }
+        } catch (SQLException e) { e.printStackTrace(); }
     }
+
 }
