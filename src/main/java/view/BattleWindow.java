@@ -21,7 +21,7 @@ import java.util.concurrent.Flow.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class BattleWindow extends JDialog implements Subscriber<UpdateEvent>, KeyListener {
+public class BattleWindow extends JPanel implements Subscriber<UpdateEvent>, KeyListener {
 
     private Subscription subscription;
 
@@ -40,14 +40,15 @@ public class BattleWindow extends JDialog implements Subscriber<UpdateEvent>, Ke
     private String selectedOption;
 
     public BattleWindow(JFrame parent) {
-        super(parent, "Battle Window", Dialog.ModalityType.MODELESS);
+        //super(parent, "Battle Window", Dialog.ModalityType.MODELESS);
+        super();
         this.parent = parent;
 
-        setTitle("Battle Window");
+        //setTitle("Battle Window");
         setSize(800, 600);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setResizable(true);
+        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        //setLocationRelativeTo(null);
+        //setResizable(true);
         // Add the KeyListener to the JFrame
         addKeyListener(this);
 
@@ -152,7 +153,7 @@ public class BattleWindow extends JDialog implements Subscriber<UpdateEvent>, Ke
         add(bottomPanel);
     }
 
-    public void run() { EventQueue.invokeLater(() -> {
+    /*public void run() { EventQueue.invokeLater(() -> {
             try {
                 setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 pack();
@@ -162,7 +163,7 @@ public class BattleWindow extends JDialog implements Subscriber<UpdateEvent>, Ke
                 e.printStackTrace();
             }
         });
-    }
+    }*/
 
     public int choose1OutOf4(String[] choices, String message, String title) {
         if (choices.length != 4) return -1;

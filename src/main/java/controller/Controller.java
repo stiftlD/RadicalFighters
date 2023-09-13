@@ -67,4 +67,8 @@ public class Controller {
     }
 
     public KanjiDex getKanjiDex() { return kanjiDex; }
+
+    public void endBattle() {
+        view.closeBattleWindow();
+    }
 }

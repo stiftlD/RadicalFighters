@@ -11,10 +11,11 @@ public class KanjiGUI {
     private JFrame frame;
     private JPanel taskPanel;
     private JPanel buttonPanel;
+    private JPanel topPanel;
     private JButton nextButton;
     private JButton exitButton;
 
-    //private view.BattleWindow battleWindow;
+    private BattleWindow battleWindow;
     private boolean battling = false;
 
     public KanjiGUI(Controller controller) {
@@ -25,7 +26,7 @@ public class KanjiGUI {
 
         // Create task and button panels
         // Create the top panel and add a BattleWindow to it
-        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel = new JPanel(new BorderLayout());
         //battleWindow = new BattleWindow();
         //topPanel.add(battleWindow, BorderLayout.CENTER);
 
@@ -70,7 +71,7 @@ public class KanjiGUI {
         });
     }
 
-    private void showBattleWindow() {
+    /*private void showBattleWindow() {
         SwingUtilities.invokeLater(() -> {
             // Create a new BattleWindow instance
             BattleWindow battleWindow = new BattleWindow(frame);
@@ -82,5 +83,22 @@ public class KanjiGUI {
             controller.startBattle(battleWindow);
             //battleWindow.setVisible(true);
         });
+    }*/
+    private void showBattleWindow() {
+        SwingUtilities.invokeLater(() -> {
+            battleWindow = new BattleWindow(frame); // Pass the parent frame.
+            topPanel.add(battleWindow, BorderLayout.CENTER); // Add BattleWindow to the top panel.
+            frame.revalidate(); // Refresh the layout.
+            controller.startBattle(battleWindow);
+        });
+    }
+
+    public void closeBattleWindow() {
+        if (battleWindow != null) {
+            topPanel.remove(battleWindow);
+            topPanel.revalidate();
+            topPanel.repaint();
+            battleWindow = null; // Set the reference to null to release resources.
+        }
     }
 }

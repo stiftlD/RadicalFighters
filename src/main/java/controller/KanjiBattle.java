@@ -55,7 +55,7 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent> {
 
     public void start() {
         subscribe(battleWindow);
-        battleWindow.run();
+        //battleWindow.run();
 
         //System.out.println(observers);
         //performTurn();
@@ -269,6 +269,7 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent> {
                 }
                 if (allAlliesDefeated) {
                     System.out.println("Team 1 wins!");
+                    parent.endBattle();
                     return true;
                 } else {
                     break;
@@ -286,6 +287,7 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent> {
                 }
                 if (allOpponentsDefeated) {
                     System.out.println("Team 2 wins!");
+                    parent.endBattle();
                     return true;
                 } else {
                     break;
