@@ -10,14 +10,18 @@ public class KanjiGUI {
     private Controller controller;
     private JFrame frame;
     private JPanel taskPanel;
-    private JPanel buttonPanel;
+    private ButtonPanel buttonPanel;
     private JPanel topPanel;
     private JButton nextButton;
     private JButton exitButton;
+    private JButton toggleDexButton;
+    private boolean showingDex = false;
 
     private BattleWindow battleWindow;
+    private DexWindow dexWindow;
     private boolean battling = false;
 
+    // TODO this could be Runnable
     public KanjiGUI(Controller controller) {
         this.controller = controller;
         frame = new JFrame();
@@ -30,22 +34,10 @@ public class KanjiGUI {
         //battleWindow = new BattleWindow();
         //topPanel.add(battleWindow, BorderLayout.CENTER);
 
-        buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout());
+        buttonPanel = new ButtonPanel(frame);
 
-        // Create and add next and exit buttons to button panel
+        // Create and add buttons to button panel
         nextButton = new JButton("Next Battle");
-        exitButton = new JButton("Exit");
-        buttonPanel.add(nextButton);
-        buttonPanel.add(exitButton);
-
-        // Add task and button panels to frame
-        frame.add(topPanel, BorderLayout.CENTER);
-        frame.add(buttonPanel, BorderLayout.SOUTH);
-
-        // Exit button action
-        exitButton.addActionListener(e -> System.exit(0));
-
         // Next button action
         nextButton.addActionListener(e -> {
             if (battling) {
@@ -56,6 +48,21 @@ public class KanjiGUI {
             showBattleWindow();
             battling = false;
         });
+        buttonPanel.addButton(nextButton);
+
+        // toggle Dex view on or world/battle window
+        toggleDexButton = new JButton("Dex");
+        toggleDexButton.addActionListener(e -> toggleDex());
+        buttonPanel.addButton(toggleDexButton);
+
+        exitButton = new JButton("Exit");
+        // Exit button action
+        exitButton.addActionListener(e -> System.exit(0));
+        buttonPanel.addButton(exitButton);
+
+        // Add task and button panels to frame
+        frame.add(topPanel, BorderLayout.CENTER);
+        frame.add(buttonPanel, BorderLayout.SOUTH);
 
         // Show frame
         frame.setVisible(true);
@@ -84,11 +91,36 @@ public class KanjiGUI {
             //battleWindow.setVisible(true);
         });
     }*/
+
+    public void toggleDex() {
+        if (!showingDex) {
+            showingDex = !showingDex;
+            showDexWindow();
+        } else {
+            showingDex = !showingDex;
+            topPanel.remove(dexWindow);
+            topPanel.add(battleWindow);
+            frame.revalidate();
+            frame.repaint();
+        }
+    }
+    private void showDexWindow() {
+        SwingUtilities.invokeLater(() -> {
+            if (battleWindow != null) topPanel.remove(battleWindow);
+            if (dexWindow == null) dexWindow = new DexWindow(frame); // Pass the parent frame.
+            topPanel.add(dexWindow, BorderLayout.CENTER); // Add BattleWindow to the top panel.
+            frame.revalidate(); // Refresh the layout.
+            frame.repaint();
+            //controller.startBattle(battleWindow);
+        });
+    }
+
     private void showBattleWindow() {
         SwingUtilities.invokeLater(() -> {
             battleWindow = new BattleWindow(frame); // Pass the parent frame.
             topPanel.add(battleWindow, BorderLayout.CENTER); // Add BattleWindow to the top panel.
             frame.revalidate(); // Refresh the layout.
+            frame.repaint();
             controller.startBattle(battleWindow);
         });
     }

@@ -51,7 +51,8 @@ public class Controller {
                 50
         );
         KanjiBattle battle = new KanjiBattle(window, this, kanjiScheduler, new RadicalFighter[]{playerFighter}, new RadicalFighter[]{opponentFighter});
-        battle.start();
+        Thread battleThread = new Thread(battle);
+        battleThread.start();
 
     }
 
