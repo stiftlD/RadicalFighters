@@ -79,6 +79,8 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent>, Runnable {
     // TODO extract Task logic and write different tasks
 
     private void performTurn() {
+
+        parent.updateKanjiDex();
         //System.out.println(subscribers.size());
         // select 4 players the player is proficient with as possible attacks and 4 they are not proficient with as enemy attacks
         List<Kanji> proficientKanji = new ArrayList<Kanji>();

@@ -1,6 +1,7 @@
 package controller;
 
 import view.BattleWindow;
+import view.DexWindow;
 import view.KanjiGUI;
 import model.radicals.RadicalFighter;
 import model.radicals.Radical;
@@ -60,6 +61,7 @@ public class Controller {
 
         // Pass the ranked kanji list to the KanjiDex
         kanjiDex.setRankedKanjiList(studyService.getKanjiRankedByProficiency());
+        kanjiDex.updateKanjiListAndNotify(studyService.getKanjiRankedByProficiency());
     }
 
     // not sure we should do it this way
@@ -71,5 +73,9 @@ public class Controller {
 
     public void endBattle() {
         view.closeBattleWindow();
+    }
+
+    public void subscribeToDex(DexWindow dexWindow) {
+        kanjiDex.subscribe(dexWindow);
     }
 }

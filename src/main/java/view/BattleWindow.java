@@ -51,9 +51,6 @@ public class BattleWindow extends JPanel implements Subscriber<UpdateEvent>, Key
 
         //setTitle("Battle Window");
         setSize(800, 600);
-        //setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        //setLocationRelativeTo(null);
-        //setResizable(true);
         // Add the KeyListener to the JFrame
         addKeyListener(this);
 
@@ -161,6 +158,7 @@ public class BattleWindow extends JPanel implements Subscriber<UpdateEvent>, Key
         // Add output label
         bottomPanel = new JPanel();
         outputLabel = new JLabel("Output");
+        outputLabel.setFont(new Font("Gothic", Font.PLAIN , 20));
         bottomPanel.add(outputLabel, BorderLayout.CENTER);
         //bottomPanel.add(buttonPanel);
         constraints.gridx = 0;
@@ -171,18 +169,6 @@ public class BattleWindow extends JPanel implements Subscriber<UpdateEvent>, Key
         add(bottomPanel);
 
     }
-
-    /*public void run() { EventQueue.invokeLater(() -> {
-            try {
-                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                pack();
-                setLocationRelativeTo(null);
-                setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }*/
 
     public int choose1OutOf4(String[] choices, String message) {
         if (choices.length != 4) return -1;

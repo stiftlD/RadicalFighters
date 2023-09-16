@@ -78,20 +78,6 @@ public class KanjiGUI {
         });
     }
 
-    /*private void showBattleWindow() {
-        SwingUtilities.invokeLater(() -> {
-            // Create a new BattleWindow instance
-            BattleWindow battleWindow = new BattleWindow(frame);
-            battleWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            battleWindow.pack();
-
-            // Display the BattleWindow as a modal dialog
-            //battleWindow.setModalityType(Dialog.ModalityType.MODELESS);
-            controller.startBattle(battleWindow);
-            //battleWindow.setVisible(true);
-        });
-    }*/
-
     public void toggleDex() {
         if (!showingDex) {
             showingDex = !showingDex;
@@ -99,7 +85,7 @@ public class KanjiGUI {
         } else {
             showingDex = !showingDex;
             topPanel.remove(dexWindow);
-            topPanel.add(battleWindow);
+            if (battleWindow != null) topPanel.add(battleWindow);
             frame.revalidate();
             frame.repaint();
         }
@@ -111,7 +97,7 @@ public class KanjiGUI {
             topPanel.add(dexWindow, BorderLayout.CENTER); // Add BattleWindow to the top panel.
             frame.revalidate(); // Refresh the layout.
             frame.repaint();
-            //controller.startBattle(battleWindow);
+            controller.subscribeToDex(dexWindow);
         });
     }
 
