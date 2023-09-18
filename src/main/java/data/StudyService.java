@@ -21,8 +21,19 @@ public class StudyService {
         createStudyPerformanceView();
     }
 
-    public List<Kanji> getKanjiRankedByProficiency() {
-        List<Kanji> resultList = new ArrayList<Kanji>();
+    public static class Tuple<X, Y> {
+        public final X x;
+        public final Y y;
+        public Tuple(X x, Y y) {
+            this.x = x;
+            this.y = y;
+        }
+        public X getX() {return x;}
+        public Y getY() {return y;}
+    }
+
+    public List<Tuple<Kanji, Double>> getKanjiRankedByProficiency() {
+        List<Tuple<Kanji, Double>> resultList = new ArrayList<Tuple<Kanji, Double>>();
 
         // This SQL query retrieves a list of kanji along with their proficiency statistics,
         // sorted by success rate and study duration.
@@ -41,7 +52,8 @@ public class StudyService {
                 // turn our query results into kanji objects to be used within the model
                 // TODO we should do this conversion in bulk, also right now we do not keep the statistics data
                 while (resultSet.next()) {
-                    resultList.add(kanjiDatabase.getKanjiByID(resultSet.getInt("id")));
+                    resultList.add(new Tuple(kanjiDatabase.getKanjiByID(resultSet.getInt("id"))
+                            , resultSet.getDouble("success_rate")));
                 }
             } catch (SQLException e) { e.printStackTrace(); }
         } catch (SQLException e) { e.printStackTrace(); }

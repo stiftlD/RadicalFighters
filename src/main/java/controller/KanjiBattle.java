@@ -217,12 +217,12 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent>, Runnable {
         finish_time = Timestamp.from(Instant.now());
         boolean defenseSuccessful = expectedMeaning.equals(answer);
         damage = chosenDefenseKanji.getPower() * 10;
-        if (defenseSuccessful) damage /= 2;
         // apply radicals effects on defense
         for (int i = 0; i < chosenRadicals.size(); i++) {
             damage -= chosenRadicals.get(i).getBoost().getAttack();
             damage = Math.max(0, damage);
         }
+        if (defenseSuccessful) damage /= 2;
         team1[0].takeDamage(damage);
         // log task results in db
         parent.getDB().appendStudyLog(chosenDefenseKanji.getId(), "ABCD", "Meaning", start_time, finish_time, defenseSuccessful);

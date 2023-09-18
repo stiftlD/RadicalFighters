@@ -93,11 +93,13 @@ public class KanjiGUI {
     private void showDexWindow() {
         SwingUtilities.invokeLater(() -> {
             if (battleWindow != null) topPanel.remove(battleWindow);
-            if (dexWindow == null) dexWindow = new DexWindow(frame); // Pass the parent frame.
+            if (dexWindow == null) {
+                dexWindow = new DexWindow(frame); // Pass the parent frame.
+                controller.subscribeToDex(dexWindow);
+            }
             topPanel.add(dexWindow, BorderLayout.CENTER); // Add BattleWindow to the top panel.
             frame.revalidate(); // Refresh the layout.
             frame.repaint();
-            controller.subscribeToDex(dexWindow);
         });
     }
 

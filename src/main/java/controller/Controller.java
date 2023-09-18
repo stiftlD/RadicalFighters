@@ -11,6 +11,8 @@ import model.kanji.KanjiDex;
 
 import java.util.List;
 import java.util.List.*;
+import java.util.stream.Collectors;
+
 import controller.KanjiBattle;
 import data.KanjiDatabase;
 import data.StudyService;
@@ -60,8 +62,9 @@ public class Controller {
     public void updateKanjiDex() {
 
         // Pass the ranked kanji list to the KanjiDex
-        kanjiDex.setRankedKanjiList(studyService.getKanjiRankedByProficiency());
-        kanjiDex.updateKanjiListAndNotify(studyService.getKanjiRankedByProficiency());
+        System.out.println("updating");
+        kanjiDex.updateKanjiListAndNotify(
+                studyService.getKanjiRankedByProficiency().stream().collect(Collectors.toList()));
     }
 
     // not sure we should do it this way
@@ -76,6 +79,8 @@ public class Controller {
     }
 
     public void subscribeToDex(DexWindow dexWindow) {
+        System.out.println("subbing");
+        updateKanjiDex();
         kanjiDex.subscribe(dexWindow);
     }
 }
