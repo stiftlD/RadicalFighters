@@ -7,8 +7,9 @@ import java.util.List;
 import javax.swing.*;
 import java.awt.*;
 import java.util.concurrent.Flow.*;
+import model.kanji.DexData;
 
-public class DexWindow extends JPanel implements Subscriber<UpdateEvent>  {
+public class DexWindow extends JPanel implements Subscriber<DexData>  {
     // Add the necessary components and logic for displaying dex information.
     // You can include JLabels, JTextAreas, or any other components you need.
     // Implement the constructor and methods as per your requirements.
@@ -66,10 +67,10 @@ public class DexWindow extends JPanel implements Subscriber<UpdateEvent>  {
     }
 
     @Override
-    public void onNext(UpdateEvent item) {
+    public void onNext(DexData item) {
         System.out.println("updating list");
         listModel.removeAllElements();
-         for (Tuple<String, Double> tuple : (List<Tuple<String, Double>>) item.getData()) {
+         for (Tuple<String, Double> tuple : (List<Tuple<String, Double>>) item.getKanjiEntries()) {
              JPanel listElementPanel = new JPanel();
              JLabel characterLabel = new JLabel();
              characterLabel.setText(tuple.getX());

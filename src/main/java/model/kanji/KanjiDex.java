@@ -1,29 +1,26 @@
 package model.kanji;
 
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.Flow.*;
-import java.util.concurrent.SubmissionPublisher;
 import java.util.stream.Collectors;
 
 import controller.Controller;
-import utils.UpdateEvent;
+import data.StudyService.Tuple;
 
-public class KanjiDex implements Publisher<DexUpdateEvent> {
+public class KanjiDex implements Publisher<DexData> {
     private Controller controller;
     private List<Kanji> rankedKanjiList;
-    private List<Subscriber<? super DexUpdateEvent>> subscribers;
+    private List<Subscriber<? super DexData>> subscribers;
+    // TODO maybe do sth with ListDataEvents
 
     public KanjiDex(Controller controller) {
         rankedKanjiList = new ArrayList<Kanji>();
-        subscribers = new ArrayList<Subscriber<? super DexUpdateEvent>>();
+        subscribers = new ArrayList<Subscriber<? super DexData>>();
     }
 
-    public void setRankedKanjiList(List<Kanji> rankedKanjiList) {
-        this.rankedKanjiList = rankedKanjiList;
+    public void setRankedKanjiList(List<Tuple<Kanji, Double>> rankedKanjiList) {
+        this.rankedKanjiList = rankedKanjiList.stream().map(t -> t.getX()).collect(Collectors.toList());
         updateKanjiListAndNotify(rankedKanjiList);
     }
 
@@ -38,47 +35,28 @@ public class KanjiDex implements Publisher<DexUpdateEvent> {
     public List<Kanji> getRankedKanjiList() { return this.rankedKanjiList; }
 
     @Override
-    public void subscribe(Subscriber<? super DexUpdateEvent> subscriber) {
+    public void subscribe(Subscriber<? super DexData> subscriber) {
 
         subscribers.add(subscriber);
 
     }
 
     // Add a method to update the Kanji list and deliver the update event.
-    public void updateKanjiListAndNotify(List<Kanji> newKanjiEntries) {
-        List<String> eventData = rankedKanjiList.stream().map(k -> k.getCharacter()).collect(Collectors.toList());
-        DexUpdateEvent updateEvent = new DexUpdateEvent(eventData);
+    public void updateKanjiListAndNotify(List<Tuple<Kanji, Double>> newKanjiEntries) {
+        //setRankedKanjiList(newKanjiEntries.stream().map(t -> t.getX()).collect(Collectors.toList()));
+        List<Tuple<String, Double>> eventData = newKanjiEntries.stream().map(t -> new Tuple<String, Double>(t.getX().getCharacter(), t.getY())).collect(Collectors.toList());
+        DexData data = new DexData();
+        data.setKanjiEntries(eventData);
 
+        System.out.println("publishing " + eventData.size());
         // Deliver the update event to subscribers.
-        publish(updateEvent);
+        publish(data);
     }
 
-    public void publish(DexUpdateEvent event) {
-        subscribers.forEach(subscriber -> subscriber.onNext(event));
+    public void publish(DexData data) {
+        System.out.println("publishing to " + subscribers.size());
+        subscribers.forEach(subscriber -> subscriber.onNext(data));
     }
 
 }
-// TODO write some layer in controler model to access and prepare all data the view needs
-// TODO replace list with a smart class containing data references
-class DexUpdateEvent implements UpdateEvent<List<String>> {
-    private ArrayList<String> kanjiEntries;
-    // Add other fields and references as needed.
-
-    public DexUpdateEvent(List<String> kanjiEntries) {
-        this.kanjiEntries = (ArrayList<String>) kanjiEntries;
-        // Initialize other fields and references as needed.
-    }
-
-    public void setKanjiEntries(List<String> kanjiEntries) {
-        this.kanjiEntries = (ArrayList<String>) kanjiEntries;
-    }
-
-    @Override
-    public List<String> getData() {
-        return kanjiEntries;
-    }
-
-    // Add getters and setters for other fields and references.
-}
-
 
