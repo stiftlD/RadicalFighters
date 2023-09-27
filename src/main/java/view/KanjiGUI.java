@@ -121,4 +121,9 @@ public class KanjiGUI {
             battleWindow = null; // Set the reference to null to release resources.
         }
     }
+
+    public BattleWindow getBattleWindow() { return battleWindow; }
+
+    public DexWindow getDexWindow() { return dexWindow; }
+
 }

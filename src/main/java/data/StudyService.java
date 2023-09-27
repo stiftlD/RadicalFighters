@@ -9,6 +9,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static data.KanjiDatabase.dataToKanji;
+
 // this class maintains views on study/player performance data for usage by e.g. scheduler and stat-dashboard
 public class StudyService {
 
@@ -19,6 +21,7 @@ public class StudyService {
         kanjiDatabase = new KanjiDatabase();
         createOverAllPerformanceView();
         createStudyPerformanceView();
+        createViableKanjiView();
     }
 
     public static class Tuple<X, Y> {
@@ -32,8 +35,57 @@ public class StudyService {
         public Y getY() {return y;}
     }
 
-    public List<Tuple<Kanji, Double>> getKanjiRankedByProficiency() {
-        List<Tuple<Kanji, Double>> resultList = new ArrayList<Tuple<Kanji, Double>>();
+    public List<Kanji> getRandomKanjiInProfInterval(int maxGrade, double start, double end) throws SQLException, IllegalArgumentException {
+        if (maxGrade < 0 || start < 0.0 || end > 1.0 || start > end)
+            throw new IllegalArgumentException("start and end within [0, 1]");
+
+        String queryNumViableKanji =
+                "SELECT count() from viable_kanji;";
+
+        try (Connection connection = SqliteHelper.getConn()) {
+            try (Statement statement = connection.createStatement()) {
+
+                ResultSet countResult = statement.executeQuery(queryNumViableKanji);
+                int count = countResult.getInt("count()");
+                int startIndex = (int) (count * start);
+                int stopIndex = (int) (count * end);
+
+                //System.out.println("count: " + count + ", startI: " + startIndex + ", stopI: " + stopIndex);
+
+                double randIndex = Math.random() * (stopIndex - startIndex);
+                int resultIndex = startIndex + (int) randIndex;
+                //System.out.println("random was " + randIndex + ", result is " + resultIndex + " out of " + count);
+
+                String selectKanjiInProfInterval =
+                        "SELECT * FROM viable_kanji "
+                                + "WHERE prof_rank == " + resultIndex;
+
+                ResultSet resultSet = statement.executeQuery(selectKanjiInProfInterval);
+                //System.out.println(resultSet);
+                /*while (resultSet.next()) {
+                    int id = resultSet.getInt("ID");
+                    String kanji = resultSet.getString("Kanji");
+                    // ... retrieve other columns as needed
+
+                    System.out.println("ID: " + id);
+                    System.out.println("Kanji: " + kanji);
+                    System.out.println("row: " + resultSet.getInt("prof_rank"));
+                    // ... print other columns
+
+                    System.out.println("--------------------");
+                }*/
+                List<Kanji> result = dataToKanji(resultSet);
+                connection.close();
+                return result;
+            } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) { e.printStackTrace(); }
+
+        return null;
+    }
+
+
+    public List<Kanji> getKanjiRankedByProficiency() {
+        List<Kanji> resultList = new ArrayList<Kanji>();
 
         // This SQL query retrieves a list of kanji along with their proficiency statistics,
         // sorted by success rate and study duration.
@@ -52,8 +104,9 @@ public class StudyService {
                 // turn our query results into kanji objects to be used within the model
                 // TODO we should do this conversion in bulk, also right now we do not keep the statistics data
                 while (resultSet.next()) {
-                    resultList.add(new Tuple(kanjiDatabase.getKanjiByID(resultSet.getInt("id"))
-                            , resultSet.getDouble("success_rate")));
+                    Kanji kanji = kanjiDatabase.getKanjiByID(resultSet.getInt("id"));
+                    kanji.setProficiency((int) (resultSet.getDouble("success_rate") * 100.0));
+                    resultList.add(kanji);
                 }
             } catch (SQLException e) { e.printStackTrace(); }
         } catch (SQLException e) { e.printStackTrace(); }
@@ -93,6 +146,35 @@ public class StudyService {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
+    // this view holds all kanji appropriate for the players current grade and ranks them by success rate
+    private void createViableKanjiView() {
+        try (Connection connection = SqliteHelper.getConn()) {
+            String createViableKanjiView =
+                    "CREATE VIEW IF NOT EXISTS viable_kanji AS \n" +
+                            /*
+                            TODO use a derived proficiency value instead of success_rate and then DESC
+                            also probably do secondary ordering by #encounters or sth
+                             */
+                            "SELECT k.*, sp.success_rate, ROW_NUMBER() OVER (ORDER BY success_rate DESC, grade ASC) as prof_rank\n" +
+                            "FROM kanji k LEFT OUTER JOIN study_performance sp ON k.id == sp.kanji_id, player_details p\n" +
+                            "WHERE k.Grade > 0 AND k.Grade <= p.Grade;";
+
+            try (Statement statement = connection.createStatement()) {
+                // create viable Kanji view
+                try {
+                    statement.execute(createViableKanjiView);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    System.out.println("no new view created");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     // This view can provide detailed information about
     // the user's study performance for each kanji, including statistics
     // such as average study duration and success rate.
@@ -100,7 +182,7 @@ public class StudyService {
         String createStudyPerformanceViewSQL =
                 "CREATE VIEW IF NOT EXISTS study_performance AS\n" +
                 "SELECT kanji_id,\n" +
-                "       AVG(strftime('%s', finish_time) - strftime('%s', start_time)) AS avg_study_duration_seconds,\n" +
+                "       AVG(datetime('%f', finish_time - start_time, \"unixepoch\")) AS avg_study_duration_seconds,\n" +
                 "       (SUM(result) * 1.0 / COUNT(*)) AS success_rate\n" +
                 "FROM study_log\n" +
                 "GROUP BY kanji_id;\n";

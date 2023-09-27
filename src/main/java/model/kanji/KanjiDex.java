@@ -9,30 +9,33 @@ import controller.Controller;
 import data.StudyService.Tuple;
 
 public class KanjiDex implements Publisher<DexData> {
+    // TODO we need maps here that monitor the db a little better
     private Controller controller;
-    private List<Kanji> rankedKanjiList;
-    private List<Subscriber<? super DexData>> subscribers;
+    private List<Kanji> kanjiRanking;
     // TODO maybe do sth with ListDataEvents
+    private List<Subscriber<? super DexData>> subscribers;
 
     public KanjiDex(Controller controller) {
-        rankedKanjiList = new ArrayList<Kanji>();
+        kanjiRanking = new ArrayList<Kanji>();
         subscribers = new ArrayList<Subscriber<? super DexData>>();
     }
 
-    public void setRankedKanjiList(List<Tuple<Kanji, Double>> rankedKanjiList) {
-        this.rankedKanjiList = rankedKanjiList.stream().map(t -> t.getX()).collect(Collectors.toList());
-        updateKanjiListAndNotify(rankedKanjiList);
+    public void setKanjiRanking(List<Kanji> kanjiRanking) {
+        this.kanjiRanking = kanjiRanking;
+        //updateKanjiListAndNotify(this.kanjiRanking);
+        //rankedKanjiList.stream().map(t -> t.getX()).collect(Collectors.toList());
+        //updateKanjiListAndNotify(rankedKanjiList);
     }
 
     public void printRankedKanjiList() {
-        System.out.println("Studied Kanji ranked by proficiency (total " + rankedKanjiList.size() + "): ");
-        rankedKanjiList.stream().forEach(k -> {
+        System.out.println("Studied Kanji ranked by proficiency (total " + kanjiRanking.size() + "): ");
+        kanjiRanking.stream().forEach(k -> {
             System.out.print(k.getCharacter() + " ");
         });
         System.out.print("\n");
     }
 
-    public List<Kanji> getRankedKanjiList() { return this.rankedKanjiList; }
+    public List<Kanji> getKanjiRanking() { return this.kanjiRanking; }
 
     @Override
     public void subscribe(Subscriber<? super DexData> subscriber) {
@@ -42,13 +45,12 @@ public class KanjiDex implements Publisher<DexData> {
     }
 
     // Add a method to update the Kanji list and deliver the update event.
-    public void updateKanjiListAndNotify(List<Tuple<Kanji, Double>> newKanjiEntries) {
-        //setRankedKanjiList(newKanjiEntries.stream().map(t -> t.getX()).collect(Collectors.toList()));
-        List<Tuple<String, Double>> eventData = newKanjiEntries.stream().map(t -> new Tuple<String, Double>(t.getX().getCharacter(), t.getY())).collect(Collectors.toList());
+    public void updateKanjiListAndNotify(List<Kanji> newKanjiEntries) {
+        setKanjiRanking(newKanjiEntries.stream().collect(Collectors.toList()));
         DexData data = new DexData();
-        data.setKanjiEntries(eventData);
+        data.setKanjiEntries(newKanjiEntries);
 
-        System.out.println("publishing " + eventData.size());
+        System.out.println("publishing " + newKanjiEntries.size());
         // Deliver the update event to subscribers.
         publish(data);
     }

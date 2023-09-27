@@ -23,14 +23,16 @@ public class Controller {
     private KanjiDatabase db;
     private StudyService studyService;
     private KanjiDex kanjiDex;
+    private DexHandler dexHandler;
     //private KanjiBattle kanjiBattle;
 
     public Controller() {
         this.view = new KanjiGUI(this);
         this.db = new KanjiDatabase();
-        this.kanjiScheduler = new KanjiScheduler(db);
         this.studyService = new StudyService();
+        this.kanjiScheduler = new KanjiScheduler(studyService); // TODO access through controller
         this.kanjiDex = new KanjiDex(this);
+        this.dexHandler = new DexHandler(this);
         //this.kanjiBattle = new KanjiBattle();
     }
 
@@ -73,6 +75,8 @@ public class Controller {
     }
 
     public KanjiDex getKanjiDex() { return kanjiDex; }
+
+    public DexHandler getDexHandler() { return dexHandler; }
 
     public void endBattle() {
         view.closeBattleWindow();

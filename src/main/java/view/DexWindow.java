@@ -24,7 +24,7 @@ public class DexWindow extends JPanel implements Subscriber<DexData>  {
         initializeUI();
     }
 
-    // TODO do something similar in battlewindow during refacture
+    // TODO do something similar in battlewindow during refactor
     private void initializeUI() {
         // Create a DefaultListModel to store the Kanji entries
         listModel = new DefaultListModel<JPanel>();
@@ -48,7 +48,7 @@ public class DexWindow extends JPanel implements Subscriber<DexData>  {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    // You can add methods to update the list with Kanji data.
+    // add methods to update the list with Kanji data.
     /*public void updateKanjiList(List<String> kanjiEntries) {
         // Clear the current entries
         listModel.clear();
@@ -70,7 +70,7 @@ public class DexWindow extends JPanel implements Subscriber<DexData>  {
     public void onNext(DexData item) {
         System.out.println("updating list");
         listModel.removeAllElements();
-         for (Tuple<String, Double> tuple : (List<Tuple<String, Double>>) item.getKanjiEntries()) {
+         for (Tuple<String, Double> tuple : (List<Tuple<String, Double>>) item.getKanjiProfRanking()) {
              JPanel listElementPanel = new JPanel();
              JLabel characterLabel = new JLabel();
              characterLabel.setText(tuple.getX());
@@ -130,5 +130,11 @@ public class DexWindow extends JPanel implements Subscriber<DexData>  {
 
             return this;
         }
+    }
+
+    public void showKanjiEntry(String character, String on_reading,
+                               String meaning, int grade, int strokes,
+                               double proficiency) {
+        System.out.println(character + "\t" + on_reading + "\t" + meaning + "\t" + grade + "\t" + strokes + "\t" + proficiency);
     }
 }

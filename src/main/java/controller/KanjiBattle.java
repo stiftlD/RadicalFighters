@@ -231,7 +231,6 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent>, Runnable {
 
         // to test at the end of every round update kanjidex and then print current stats
         parent.updateKanjiDex();
-        parent.getKanjiDex().printRankedKanjiList();
 
         //battleWindow.waitContinueCommand();
     }
