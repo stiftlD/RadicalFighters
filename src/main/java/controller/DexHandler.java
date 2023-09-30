@@ -10,18 +10,30 @@ import java.util.stream.Collectors;
 // as well as displaying kanji data from the dex in dexwindow
 public class DexHandler {
     private Controller parent;
+    private DexWindow window;
+    private KanjiDex dex;
 
     public DexHandler(Controller parent) {
         this.parent = parent;
     }
 
-    // select a kanji by id, get info from dex and display in dexwindow
-    public void displayKanjiDexEntry(DexWindow window, KanjiDex dex, int id) {
+    public void setDex(KanjiDex dex) {
+        if (this.dex != null) return;
+        this.dex = dex;
+    }
+
+    public void setWindow(DexWindow window) {
+        if (this.window != null) return;
+        this.window = window;
+    }
+
+    // select a kanji by index in dex list, get info from dex and display in dexwindow
+    public void displayKanjiDexEntry(int id) {
         // TODO need to implement and use other methods in dex
         System.out.println("list length: " + dex.getKanjiRanking().size());
         dex.printRankedKanjiList();
-        Kanji k = dex.getKanjiRanking().get(id);
-        window.showKanjiEntry(k.getCharacter(), k.getOnyomi().get(0), k.getTranslations().get(0),
+        Kanji k = parent.getDB().getKanjiByID(id); //TODO look it up in the dex who already has that data instead
+        window.showKanjiEntry(k.getCharacter(), k.getOnyomi().get(0), k.getKunyomi().get(0), k.getTranslations().get(0),
                 k.getGrade(), k.getStrokes(), k.getProficiency());
     }
 }

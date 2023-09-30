@@ -95,7 +95,7 @@ public class KanjiGUI {
             if (battleWindow != null) topPanel.remove(battleWindow);
             if (dexWindow == null) {
                 dexWindow = new DexWindow(frame); // Pass the parent frame.
-                controller.subscribeToDex(dexWindow);
+                controller.addDexWindow(dexWindow);
             }
             topPanel.add(dexWindow, BorderLayout.CENTER); // Add BattleWindow to the top panel.
             frame.revalidate(); // Refresh the layout.

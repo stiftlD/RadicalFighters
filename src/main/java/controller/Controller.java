@@ -33,6 +33,7 @@ public class Controller {
         this.kanjiScheduler = new KanjiScheduler(studyService); // TODO access through controller
         this.kanjiDex = new KanjiDex(this);
         this.dexHandler = new DexHandler(this);
+        dexHandler.setDex(kanjiDex);
         //this.kanjiBattle = new KanjiBattle();
     }
 
@@ -62,14 +63,24 @@ public class Controller {
     }
 
     public void updateKanjiDex() {
-
         // Pass the ranked kanji list to the KanjiDex
         System.out.println("updating");
+        studyService.updateKanjiProficiency();
         kanjiDex.updateKanjiListAndNotify(
                 studyService.getKanjiRankedByProficiency().stream().collect(Collectors.toList()));
     }
 
-    // not sure we should do it this way
+    public void addDexWindowToHandler(DexWindow window) {
+        dexHandler.setWindow(window);
+        window.setDexHandler(dexHandler);
+    }
+
+    public void addDexWindow(DexWindow window) {
+        addDexWindowToHandler(window);
+        subscribeToDex(window);
+    }
+
+    // TODO these should be injected
     public KanjiDatabase getDB() {
         return db;
     }

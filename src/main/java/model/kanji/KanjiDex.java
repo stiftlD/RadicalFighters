@@ -9,7 +9,7 @@ import controller.Controller;
 import data.StudyService.Tuple;
 
 public class KanjiDex implements Publisher<DexData> {
-    // TODO we need maps here that monitor the db a little better
+    // TODO we need structures of arrays here that monitor the db a little better
     private Controller controller;
     private List<Kanji> kanjiRanking;
     // TODO maybe do sth with ListDataEvents

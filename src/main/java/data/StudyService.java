@@ -182,10 +182,11 @@ public class StudyService {
         String createStudyPerformanceViewSQL =
                 "CREATE VIEW IF NOT EXISTS study_performance AS\n" +
                 "SELECT kanji_id,\n" +
-                "       AVG(datetime('%f', finish_time - start_time, \"unixepoch\")) AS avg_study_duration_seconds,\n" +
-                "       (SUM(result) * 1.0 / COUNT(*)) AS success_rate\n" +
-                "FROM study_log\n" +
-                "GROUP BY kanji_id;\n";
+                        "AVG(datetime('%f', finish_time - start_time, \"unixepoch\")) AS avg_study_duration_seconds\n" +
+                        ",(SUM(result) * 1.0 / COUNT(*)) AS success_rate\n" +
+                        ",(SUM(result) - (COUNT(*) - SUM(result))) AS success_delta\n" +
+                        "FROM study_log\n" +
+                        "GROUP BY kanji_id;\n";
 
         try (Connection connection = SqliteHelper.getConn()) {
 
@@ -194,7 +195,33 @@ public class StudyService {
             } catch (SQLException e) { e.printStackTrace(); } finally {
                 if (connection != null) {
                     try {
-                        connection.close(); // <-- This is important
+                        connection.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+
+    }
+
+
+    // when the proficiency views are updated for a kanji, we also update some of the proficiency values in the kanji table
+    public void updateKanjiProficiency() {
+        String updateKanjiProficiencySQL =
+                "UPDATE kanji SET proficiency = \n" +
+                        "(SELECT sp.success_delta * 5\n" +
+                        "FROM study_performance sp \n" +
+                        "WHERE proficiency != sp.success_delta AND sp.kanji_id == id)"; // TODO get some more stats
+
+        try (Connection connection = SqliteHelper.getConn()) {
+
+            try (Statement statement = connection.createStatement()) {
+                statement.execute(updateKanjiProficiencySQL);
+            } catch (SQLException e) { e.printStackTrace(); } finally {
+                if (connection != null) {
+                    try {
+                        connection.close();
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }

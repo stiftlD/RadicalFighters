@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 // TODO write some layer in controller model to access and prepare all data the view needs
 // TODO this could be an interface as well
-// TODO most importantly update proficiency in database whenever there is a change with kanji
 public class DexData {
     private List<Kanji> kanjiEntries;
     // Add other fields and references as needed.
