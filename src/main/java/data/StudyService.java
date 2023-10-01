@@ -7,7 +7,9 @@ import javax.xml.transform.Result;
 import java.nio.file.Path;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static data.KanjiDatabase.dataToKanji;
 
@@ -22,6 +24,34 @@ public class StudyService {
         createOverAllPerformanceView();
         createStudyPerformanceView();
         createViableKanjiView();
+    }
+
+    public Map<Integer, Double> getAverageProficencyByGrade() {
+        String getAverageProficiencyByGradeSQL =
+                "select AVG(Proficiency) as avg_proficiency, grade\n" +
+                        "from viable_kanji\n" +
+                        "group by grade";
+
+        try (Connection connection = SqliteHelper.getConn()) {
+
+            try (Statement statement = connection.createStatement()) {
+                ResultSet resultSet = statement.executeQuery(getAverageProficiencyByGradeSQL);
+                Map<Integer, Double> resultMap = new HashMap<Integer, Double>();
+                while(resultSet.next()) {
+                    resultMap.put(resultSet.getInt("grade"), resultSet.getDouble("avg_proficiency"));
+                }
+                return resultMap;
+            } catch (SQLException e) { e.printStackTrace(); } finally {
+                if (connection != null) {
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (SQLException e) { e.printStackTrace(); }
+        return null;
     }
 
     public static class Tuple<X, Y> {

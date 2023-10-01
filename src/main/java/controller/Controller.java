@@ -68,6 +68,7 @@ public class Controller {
         studyService.updateKanjiProficiency();
         kanjiDex.updateKanjiListAndNotify(
                 studyService.getKanjiRankedByProficiency().stream().collect(Collectors.toList()));
+        dexHandler.displayStudyStatisticChart();
     }
 
     public void addDexWindowToHandler(DexWindow window) {
@@ -97,5 +98,9 @@ public class Controller {
         System.out.println("subbing");
         updateKanjiDex();
         kanjiDex.subscribe(dexWindow);
+    }
+
+    public StudyService getStudyService() {
+        return this.studyService;
     }
 }

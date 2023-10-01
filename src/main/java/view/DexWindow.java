@@ -4,6 +4,9 @@ import controller.DexHandler;
 import data.StudyService.Tuple;
 import utils.UpdateEvent;
 
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+
 import java.util.HashMap;
 import java.util.List;
 import javax.swing.*;
@@ -14,12 +17,20 @@ import java.util.Map;
 import java.util.concurrent.Flow.*;
 import model.kanji.DexData;
 
+// for plots
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+
 public class DexWindow extends JPanel implements Subscriber<DexData>  {
     private JFrame parent;
     // TODO mb by using sth more versatile than a list like SoAs so we can reduce data traffic
     private JList<JPanel> kanjiRiderList;
     private DefaultListModel<JPanel> listModel;
     private KanjiInfoPanel kanjiInfoPanel;
+    private JPanel plotPanel;
     private DexHandler dexHandler;
     // TODO dexhandler should probably be subscriber instead of this class
     private Subscription subscription;
@@ -66,16 +77,19 @@ public class DexWindow extends JPanel implements Subscriber<DexData>  {
         JScrollPane scrollPane = new JScrollPane(kanjiRiderList);
         scrollPane.setWheelScrollingEnabled(true);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-
-        // Add the scroll pane to the dex view
         add(scrollPane, BorderLayout.WEST);
 
         // Create a panel next to the kanji list that displays one selected kanji
         kanjiInfoPanel = new KanjiInfoPanel(parent);
         //kanjiInfoPanel.setBackground(new Color(0x3838A1));
-
-        // Add the info panel to the dex view
         add(kanjiInfoPanel, BorderLayout.CENTER);
+
+        // create a panel to display plots
+        plotPanel = new JPanel();
+        plotPanel.setPreferredSize(new Dimension(parent.getWidth(), parent.getHeight() / 5));
+        plotPanel.setBackground(new Color(0x37BD42));
+        add(plotPanel, BorderLayout.SOUTH);
+
     }
 
     @Override
@@ -85,6 +99,7 @@ public class DexWindow extends JPanel implements Subscriber<DexData>  {
         subscription.request(1);
     }
 
+    // TODO since we already set a lot of stuff from the dexhandler let them be subscriber and call this as setters
     @Override
     public void onNext(DexData item) {
         System.out.println("updating list");
@@ -172,6 +187,46 @@ public class DexWindow extends JPanel implements Subscriber<DexData>  {
 
         parent.revalidate();
         parent.repaint();
+    }
+
+    // displays a barplot of passed values in bottom panel
+    public void setBarPlot(String title, List<Integer> xValues, List<Double> yValues,
+                           String xName, String yName) {
+        if (xValues.size() != yValues.size()) {
+            System.out.println("lists must have same size");
+            return;
+        }
+        plotPanel.removeAll();
+
+        XYSeries dataset = new XYSeries("");
+        for (int i = 0; i < xValues.size(); i++) {
+            dataset.add(xValues.get(i), yValues.get(i));
+        }
+
+        XYSeriesCollection datasetCollection = new XYSeriesCollection(dataset);
+
+
+        /*DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+
+        dataset.addValue(10, "Category 1", "Item 1");
+        dataset.addValue(15, "Category 1", "Item 2");
+        dataset.addValue(7, "Category 2", "Item 1");
+        dataset.addValue(9, "Category 2", "Item 2");*/
+
+        JFreeChart barChart = ChartFactory.createHistogram(
+                "Proficiency per grade",
+                "Kanji grade",
+                "Avg proficiency",
+                datasetCollection,
+                PlotOrientation.VERTICAL,
+                true,
+                true,
+                false
+        );
+
+        ChartPanel chartPanel = new ChartPanel(barChart);
+        chartPanel.setPreferredSize(new java.awt.Dimension((int) (plotPanel.getWidth() /4.0 * 3.0), (int) (plotPanel.getHeight())));
+        plotPanel.add(chartPanel);
     }
 
     public void setDexHandler(DexHandler dexHandler) {this.dexHandler = dexHandler;}
