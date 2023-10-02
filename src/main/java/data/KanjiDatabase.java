@@ -364,7 +364,7 @@ public class KanjiDatabase {
         //parse json data
         try {
             //Read JSON file
-            //Path jsonPath = Path.of("C:\\Users\\david\\projects\\RadicalFighters\\src\\main\\java\\data\\kanji.json");
+            //Path jsonPath = Path.of(rootDir + "\\src\\main\\java\\data\\kanj.json");
             Path jsonPath = kanjiPath;
             //System.out.println(jsonPath);
             FileInputStream fis = new FileInputStream(jsonPath.toString());
@@ -531,8 +531,8 @@ public class KanjiDatabase {
         // parse json data
         try {
             //Read JSON file
-            //Path jsonPath = Path.of("C:\\Users\\david\\projects\\RadicalFighters\\src\\main\\java\\data\\radicals.json");
-            Path jsonPath = Path.of("C:\\Users\\david\\projects\\kanji_data\\radicals.json");
+            //Path jsonPath = Path.of(rootDir + "src\\main\\java\\data\\radicals.json");
+            Path jsonPath = Path.of(rootDir + "/src/java/main/data/radicals.json");
             System.out.println(jsonPath);
             FileInputStream fis = new FileInputStream(jsonPath.toString());
             String jsonString = IOUtils.toString(fis, "UTF-8");

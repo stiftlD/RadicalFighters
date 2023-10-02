@@ -40,6 +40,9 @@ public class BattleWindow extends JPanel implements Subscriber<UpdateEvent>, Key
 
     private String selectedOption;
 
+    private String rootDir = System.getProperty("user.dir"); //TODO config file for this
+    private String imageDir = rootDir + "/src/images/";
+
     // for use during battle, TODO move to task
     private int chosenIndex = -1;
     private CountDownLatch latch = new CountDownLatch(1);
@@ -70,7 +73,7 @@ public class BattleWindow extends JPanel implements Subscriber<UpdateEvent>, Key
         // Load the opponent's sprite image
         Image opponentSprite = null;
         try {
-            opponentSprite = ImageIO.read(new File("C:\\Users\\david\\projects\\RadicalFighters\\src\\images\\devil.png"));
+            opponentSprite = ImageIO.read(new File(imageDir + "devil.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -108,7 +111,7 @@ public class BattleWindow extends JPanel implements Subscriber<UpdateEvent>, Key
         // Load the opponent's sprite image
         Image playerSprite = null;
         try {
-            playerSprite = ImageIO.read(new File("C:\\Users\\david\\projects\\RadicalFighters\\src\\images\\penguin.png"));
+            playerSprite = ImageIO.read(new File(imageDir + "penguin.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
