@@ -21,7 +21,7 @@ import java.util.concurrent.Flow.*;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class BattleWindow extends JDialog implements Subscriber<UpdateEvent>, KeyListener {
+public class BattleWindow extends JPanel implements Subscriber<UpdateEvent>, KeyListener {
 
     private Subscription subscription;
 
@@ -33,21 +33,27 @@ public class BattleWindow extends JDialog implements Subscriber<UpdateEvent>, Ke
     private JLabel playerHealthLabel;
     private JLabel outputLabel;
     private JPanel bottomPanel;
+    private ButtonPanel buttonPanel;
 
     private char userInput = '\0';
     private JFrame parent;
 
     private String selectedOption;
 
+    private String rootDir = System.getProperty("user.dir"); //TODO config file for this
+    private String imageDir = rootDir + "/src/images/";
+
+    // for use during battle, TODO move to task
+    private int chosenIndex = -1;
+    private CountDownLatch latch = new CountDownLatch(1);
+
     public BattleWindow(JFrame parent) {
-        super(parent, "Battle Window", Dialog.ModalityType.MODELESS);
+        //super(parent, "Battle Window", Dialog.ModalityType.MODELESS);
+        super();
         this.parent = parent;
 
-        setTitle("Battle Window");
+        //setTitle("Battle Window");
         setSize(800, 600);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setResizable(true);
         // Add the KeyListener to the JFrame
         addKeyListener(this);
 
@@ -67,7 +73,7 @@ public class BattleWindow extends JDialog implements Subscriber<UpdateEvent>, Ke
         // Load the opponent's sprite image
         Image opponentSprite = null;
         try {
-            opponentSprite = ImageIO.read(new File("C:\\Users\\david\\projects\\RadicalFighters\\src\\images\\devil.png"));
+            opponentSprite = ImageIO.read(new File(imageDir + "devil.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -105,7 +111,7 @@ public class BattleWindow extends JDialog implements Subscriber<UpdateEvent>, Ke
         // Load the opponent's sprite image
         Image playerSprite = null;
         try {
-            playerSprite = ImageIO.read(new File("C:\\Users\\david\\projects\\RadicalFighters\\src\\images\\penguin.png"));
+            playerSprite = ImageIO.read(new File(imageDir + "penguin.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -140,62 +146,54 @@ public class BattleWindow extends JDialog implements Subscriber<UpdateEvent>, Ke
         layout.setConstraints(playerHealthLabel, constraints);
         add(playerHealthLabel);
 
+        // Add button panel for when we need it in task
+        buttonPanel = new ButtonPanel(parent);
+        constraints.gridx = 0;
+        constraints.gridy = 4; // Place it below the bottomPanel
+        constraints.gridwidth = 4;
+        constraints.gridheight = 1;
+        constraints.fill = GridBagConstraints.BOTH; // Fill both horizontally and vertically
+        constraints.weightx = 1.0; // Make it expand horizontally
+        constraints.weighty = 1.0; // Make it expand vertically
+        layout.setConstraints(buttonPanel, constraints);
+        add(buttonPanel);
+
         // Add output label
         bottomPanel = new JPanel();
         outputLabel = new JLabel("Output");
+        outputLabel.setFont(new Font("Gothic", Font.PLAIN , 20));
         bottomPanel.add(outputLabel, BorderLayout.CENTER);
+        //bottomPanel.add(buttonPanel);
         constraints.gridx = 0;
-        constraints.gridy = 4;
+        constraints.gridy = 5;
         constraints.gridwidth = 4;
         constraints.gridheight = 2;
         layout.setConstraints(bottomPanel, constraints);
         add(bottomPanel);
+
     }
 
-    public void run() { EventQueue.invokeLater(() -> {
-            try {
-                setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                pack();
-                setLocationRelativeTo(null);
-                setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    public int choose1OutOf4(String[] choices, String message, String title) {
+    public int choose1OutOf4(String[] choices, String message) {
         if (choices.length != 4) return -1;
 
-        String[] prefixes = {"A: ", "B: ", "C: ", "D: "};
+        latch = new CountDownLatch(1);
+        writeToOutput(message);
         for (int i = 0; i < 4; i++) {
-            choices[i] = prefixes[i] + choices[i];
+            UniqueButton button = new UniqueButton(i);
+            button.setText(choices[i]);
+            button.addActionListener(e -> {
+                latch.countDown();
+                writeToOutput("You chose " + choices[button.getId()]);
+                chosenIndex = button.getId();
+            });
+            buttonPanel.addButton(button);
         }
-
-        String choice = (String) JOptionPane.showInputDialog(
-                this,
-                message,
-                title,
-                JOptionPane.PLAIN_MESSAGE,
-                null,
-                choices,
-                choices[0]
-        );
-
-        if (choice != null) {
-            writeToOutput("You chose " + choice);
-            // thanks to prefix we can find the actual choice
-            for (int i = 0; i < 4; i++) {
-                if (choices[i].equals(choice)) {
-                    // remove prefixes again
-                    for (int j = 0; j < 4; j++) {
-                        choices[j] = choices[j].substring(3);
-                    }
-                    return i;
-                }
-            }
-        } else {
-            writeToOutput("No choice was made.");
+        try {
+            latch.await();
+            buttonPanel.removeAll();
+            return chosenIndex;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
         return -1;
@@ -266,18 +264,6 @@ public class BattleWindow extends JDialog implements Subscriber<UpdateEvent>, Ke
 
     }
 
-    /*@Override
-    public void update(Observable o, Object arg) {
-        if (o instanceof KanjiBattle) {
-            KanjiBattle battle = (KanjiBattle) o;
-
-            opponentHealthLabel.setText("Health: " + battle.getOpponentHealth());
-            playerHealthLabel.setText("Health: " + battle.getPlayerHealth());
-
-            // add more code here to update other parts of the UI as needed
-        }
-    }*/
-
     public void writeToOutput(String message) {
         SwingUtilities.invokeLater(() -> {
             outputLabel.setText(message);
@@ -314,6 +300,14 @@ public class BattleWindow extends JDialog implements Subscriber<UpdateEvent>, Ke
     @Override
     public void onComplete() {
         System.out.println("Subscriber completed");
+    }
+
+    private class UniqueButton extends JButton {
+        private int id;
+
+        public UniqueButton(int id) {this.id = id;}
+
+        public int getId() {return this.id;}
     }
 
 }

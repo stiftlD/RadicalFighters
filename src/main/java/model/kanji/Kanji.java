@@ -87,6 +87,9 @@ public class Kanji {
         proficiency = (Math.max(proficiency - 1, 0)) % 100;
     }
 
+    // TODO remove this! and only get proficiency info from studyservice if possible
+    public void setProficiency(int prof) {proficiency = prof;}
+
     public boolean equals(Object obj) {
         if (obj == null || getClass() != obj.getClass()) {
             return false;

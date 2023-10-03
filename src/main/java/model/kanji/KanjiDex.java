@@ -1,32 +1,64 @@
 package model.kanji;
 
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import controller.Controller;
+import java.util.concurrent.Flow.*;
+import java.util.stream.Collectors;
 
-public class KanjiDex {
+import controller.Controller;
+import data.StudyService.Tuple;
+
+public class KanjiDex implements Publisher<DexData> {
+    // TODO we need structures of arrays here that monitor the db a little better
     private Controller controller;
-    private List<Kanji> rankedKanjiList;
+    private List<Kanji> kanjiRanking;
+    // TODO maybe do sth with ListDataEvents
+    private List<Subscriber<? super DexData>> subscribers;
 
     public KanjiDex(Controller controller) {
-        rankedKanjiList = new ArrayList<Kanji>();
+        kanjiRanking = new ArrayList<Kanji>();
+        subscribers = new ArrayList<Subscriber<? super DexData>>();
     }
 
-    public void setRankedKanjiList(List<Kanji> rankedKanjiList) {
-        this.rankedKanjiList = rankedKanjiList;
+    public void setKanjiRanking(List<Kanji> kanjiRanking) {
+        this.kanjiRanking = kanjiRanking;
+        //updateKanjiListAndNotify(this.kanjiRanking);
+        //rankedKanjiList.stream().map(t -> t.getX()).collect(Collectors.toList());
+        //updateKanjiListAndNotify(rankedKanjiList);
     }
 
     public void printRankedKanjiList() {
-        System.out.println("Studied Kanji ranked by proficiency (total " + rankedKanjiList.size() + "): ");
-        rankedKanjiList.stream().forEach(k -> {
+        System.out.println("Studied Kanji ranked by proficiency (total " + kanjiRanking.size() + "): ");
+        kanjiRanking.stream().forEach(k -> {
             System.out.print(k.getCharacter() + " ");
         });
         System.out.print("\n");
     }
 
-    public List<Kanji> getRankedKanjiList() { return this.rankedKanjiList; }
+    public List<Kanji> getKanjiRanking() { return this.kanjiRanking; }
+
+    @Override
+    public void subscribe(Subscriber<? super DexData> subscriber) {
+
+        subscribers.add(subscriber);
+
+    }
+
+    // Add a method to update the Kanji list and deliver the update event.
+    public void updateKanjiListAndNotify(List<Kanji> newKanjiEntries) {
+        setKanjiRanking(newKanjiEntries.stream().collect(Collectors.toList()));
+        DexData data = new DexData();
+        data.setKanjiEntries(newKanjiEntries);
+
+        System.out.println("publishing " + newKanjiEntries.size());
+        // Deliver the update event to subscribers.
+        publish(data);
+    }
+
+    public void publish(DexData data) {
+        System.out.println("publishing to " + subscribers.size());
+        subscribers.forEach(subscriber -> subscriber.onNext(data));
+    }
 
 }
+

@@ -5,13 +5,11 @@ import com.google.gson.GsonBuilder;
 import model.kanji.Kanji;
 import model.radicals.Radical;
 import org.apache.commons.io.IOUtils;
+
+import java.io.*;
 import java.sql.SQLException;
 
 import java.sql.Timestamp;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.sql.*;
 import java.util.*;
@@ -65,59 +63,6 @@ public class KanjiDatabase {
     }
 
     // TODO move some of these specific query methods to studyhelper etc.
-
-    public List<Kanji> getRandomKanjiInProfInterval(int maxGrade, double start, double end) throws SQLException, IllegalArgumentException {
-        if (maxGrade < 0 || start < 0.0 || end > 1.0 || start > end)
-            throw new IllegalArgumentException("start and end within [0, 1]");
-
-        String queryNumViableKanji =
-                "SELECT count() from viable_kanji;";
-
-        String selectViableKanjiString =
-                "SELECT * FROM kanji "
-                        + "WHERE Grade > 0 AND Grade <= " + maxGrade + " "
-                        + "ORDER BY Proficiency DESC";
-
-        try (Connection connection = SqliteHelper.getConn()) {
-            try (Statement statement = connection.createStatement()) {
-
-                ResultSet countResult = statement.executeQuery(queryNumViableKanji);
-                int count = countResult.getInt("count()");
-                int startIndex = (int) (count * start);
-                int stopIndex = (int) (count * end);
-
-                //System.out.println("count: " + count + ", startI: " + startIndex + ", stopI: " + stopIndex);
-
-                double randIndex = Math.random() * (stopIndex - startIndex);
-                int resultIndex = startIndex + (int) randIndex;
-                //System.out.println("random was " + randIndex + ", result is " + resultIndex + " out of " + count);
-
-                String selectKanjiInProfInterval =
-                        "SELECT * FROM viable_kanji "
-                                + "WHERE prof_rank == " + resultIndex;
-
-                ResultSet resultSet = statement.executeQuery(selectKanjiInProfInterval);
-                //System.out.println(resultSet);
-                /*while (resultSet.next()) {
-                    int id = resultSet.getInt("ID");
-                    String kanji = resultSet.getString("Kanji");
-                    // ... retrieve other columns as needed
-
-                    System.out.println("ID: " + id);
-                    System.out.println("Kanji: " + kanji);
-                    System.out.println("row: " + resultSet.getInt("prof_rank"));
-                    // ... print other columns
-
-                    System.out.println("--------------------");
-                }*/
-                List<Kanji> result = dataToKanji(resultSet);
-                connection.close();
-                return result;
-            } catch (SQLException e) { e.printStackTrace(); }
-        } catch (SQLException e) { e.printStackTrace(); }
-
-        return null;
-    }
 
     public Kanji getKanjiByID(int kanjiID){
         String selectKanjiWithID =
@@ -209,32 +154,6 @@ public class KanjiDatabase {
                         null
                 );
                 result.add(radical);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return result;
-    }
-
-    private List<Kanji> dataToKanji(ResultSet resultSet) {
-        List<Kanji> result = new ArrayList<Kanji>();
-        try {
-            while (resultSet.next()) {
-                Kanji kanji = new Kanji(
-                        resultSet.getInt("ID"),
-                        resultSet.getString("Kanji"),
-                        resultSet.getInt("Grade"),
-                        resultSet.getInt("stroke_count"),
-                        List.of(resultSet.getString("Kun_readings")),
-                        List.of(resultSet.getString("On_readings")),
-                        List.of(resultSet.getString("meanings")),
-                        resultSet.getString("Unicode"),
-                        resultSet.getInt("Proficiency"),
-                        resultSet.getBoolean("encountered")
-                );
-                result.add(kanji);
-                //System.out.println(kanji.getCharacter() + kanji.getId());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -388,7 +307,6 @@ public class KanjiDatabase {
                     + ");";
 
             try (Statement statement = connection.createStatement()) {
-                // create viable Kanji view
                 try {
                     statement.execute(createPlayerTableSQL);
                     statement.execute("INSERT INTO player_details VALUES(0, 3, \"TestPlayer\", 1);"); //TODO set these from controller after init
@@ -400,23 +318,6 @@ public class KanjiDatabase {
                 e.printStackTrace();
             }
 
-            String createViableKanjiView =
-                    "CREATE VIEW viable_kanji AS "
-                            + "SELECT k.*, ROW_NUMBER() OVER (ORDER BY Proficiency DESC) as prof_rank FROM kanji k, player_details p "
-                            + "WHERE k.Grade > 0 AND k.Grade <= p.Grade "
-                            + "ORDER BY Proficiency DESC;";
-
-            try (Statement statement = connection.createStatement()) {
-                // create viable Kanji view
-                try {
-                    statement.execute(createViableKanjiView);
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                    System.out.println("no new view created");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         } else {
             System.out.println(kanjiDBURL + " exists.");
         }
@@ -463,7 +364,7 @@ public class KanjiDatabase {
         //parse json data
         try {
             //Read JSON file
-            //Path jsonPath = Path.of("C:\\Users\\david\\projects\\RadicalFighters\\src\\main\\java\\data\\kanji.json");
+            //Path jsonPath = Path.of(rootDir + "\\src\\main\\java\\data\\kanj.json");
             Path jsonPath = kanjiPath;
             //System.out.println(jsonPath);
             FileInputStream fis = new FileInputStream(jsonPath.toString());
@@ -475,7 +376,7 @@ public class KanjiDatabase {
             //System.out.println("read " + kanjiArray.length + " kanji");
             // insert parsed kanji into into  kanjiDB
             Arrays.asList(kanjiArray).stream().forEach(kanji -> {
-                        if (kanji.getGrade() < 1 || kanji.getGrade() > 5) return; //TODO just so we have less data for now
+                        //if (kanji.getGrade() < 1 || kanji.getGrade() > 5) return; //TODO just so we have less data for now
 
                         int kanjiID = generateKanjiID();
 
@@ -630,8 +531,8 @@ public class KanjiDatabase {
         // parse json data
         try {
             //Read JSON file
-            //Path jsonPath = Path.of("C:\\Users\\david\\projects\\RadicalFighters\\src\\main\\java\\data\\radicals.json");
-            Path jsonPath = Path.of("C:\\Users\\david\\projects\\kanji_data\\radicals.json");
+            //Path jsonPath = Path.of(rootDir + "src\\main\\java\\data\\radicals.json");
+            Path jsonPath = Path.of(rootDir + "/src/java/main/data/radicals.json");
             System.out.println(jsonPath);
             FileInputStream fis = new FileInputStream(jsonPath.toString());
             String jsonString = IOUtils.toString(fis, "UTF-8");
@@ -771,6 +672,95 @@ public class KanjiDatabase {
             } catch (SQLException e) { e.printStackTrace(); }
 
         } catch (SQLException e) { e.printStackTrace(); }
+    }
+
+    public void saveStudyLog(String fileName) {
+        Path outputPath = Path.of(fileName);
+        File outputFile = new File(fileName);
+        if (outputFile.exists()) {
+            System.out.println("study log already exists at location " + fileName);
+            // TODO maybe append new entries or sth instead
+            return;
+        }
+        /*
+        try {
+
+            //Path jsonPath = Path.of("C:\\Users\\david\\projects\\RadicalFighters\\src\\main\\java\\data\\radicals.json");
+            Path jsonPath = Path.of("C:\\Users\\david\\projects\\kanji_data\\radicals.json");
+            System.out.println(jsonPath);
+            FileInputStream fis = new FileInputStream(jsonPath.toString());
+            String jsonString = IOUtils.toString(fis, "UTF-8");
+            System.out.println(jsonString);
+            //System.out.println(jsonString);
+            Gson gson = new GsonBuilder().serializeNulls().create();
+            radicalArray = gson.fromJson(jsonString, JsonRadical[].class);
+            System.out.println("found " + radicalArray.length + " rads");
+            for (int i = 0; i < radicalArray.length; i++) {
+                JsonRadical rad = radicalArray[i];
+                System.out.println(rad.getCharacter() + rad.getMeaning());
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // get data and write to file
+        try (Connection connection = SqliteHelper.getConn()) {
+            outputFile.createNewFile();
+
+            FileOutputStream output = new FileOutputStream(outputFile);
+
+            try (Statement statement = connection.createStatement()) {
+                String query =
+                        "SELECT * FROM study_log ";
+                ResultSet resultSet = statement.executeQuery(query);
+
+                while (resultSet.next()) {
+                    int id = resultSet.getInt("ID");
+                    String kanji = resultSet.getString("Kanji");
+                    // ... retrieve other columns as needed
+
+                    System.out.println("ID: " + id);
+                    System.out.println("Kanji: " + kanji);
+                    // ... print other columns
+
+                    System.out.println("--------------------");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }*/
+    }
+
+    public static List<Kanji> dataToKanji(ResultSet resultSet) {
+        List<Kanji> result = new ArrayList<Kanji>();
+        try {
+            while (resultSet.next()) {
+                Kanji kanji = new Kanji(
+                        resultSet.getInt("ID"),
+                        resultSet.getString("Kanji"),
+                        resultSet.getInt("Grade"),
+                        resultSet.getInt("stroke_count"),
+                        List.of(resultSet.getString("Kun_readings")),
+                        List.of(resultSet.getString("On_readings")),
+                        List.of(resultSet.getString("meanings")),
+                        resultSet.getString("Unicode"),
+                        resultSet.getInt("Proficiency"),
+                        resultSet.getBoolean("encountered")
+                );
+                result.add(kanji);
+                //System.out.println(kanji.getCharacter() + kanji.getId());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
 }
