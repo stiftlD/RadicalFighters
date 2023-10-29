@@ -7,6 +7,7 @@ from threading import Thread, Event
 
 kanji_data_path = f"{os.getcwd()}/kanjis.json"
 radical_data_path = f"{os.getcwd()}/radicals.json"
+heisig_relation_data_path = ""
 
 # this script goes through kanjis and radical json and writes a new file
 # with ways of breaking down each kanji into kanji/radical components given by user
@@ -29,6 +30,12 @@ class HeisigComponent:
     def get_character(self):
         return self.character
     
+    def to_dict(self):
+        return {
+            'is_radical': self.is_radical,
+            'character': self.get_character()
+        }
+    
 class HeisigComposition:
 
     def __init__(self):
@@ -39,6 +46,11 @@ class HeisigComposition:
     
     def add_component(self, comp):
         self.components.append(comp)
+
+    def to_dict(self):
+        return {
+            'components': [c.to_dict() for c in self.get_components()]
+        }
 
 class HeisigRelation:
 
@@ -55,6 +67,13 @@ class HeisigRelation:
         return self.compositions 
     def add_composition(self, comp):
         self.compositions.append(comp)
+
+    def to_dict(self):
+        return {
+            'kanji': self.kanji,
+            'kanji_id': self.kanji_id,
+            'compositions': [c.to_dict() for c in self.get_compositions()]
+        }
 
 # A window to display the kanji in large font for the user and take text from user (hopefully that way you can type kanji in)
 class HeisigRelationsWindow(Tk):
@@ -80,18 +99,24 @@ class HeisigRelationsWindow(Tk):
         self.instruction_label = Label(self, text=user_instruction, font=("Arial", 10))
         self.instruction_label.pack()
 
-        self.label = Label(self, text=self.relation.get_kanji(), font=("Arial", 90))
+        self.label = Label(self, text=self.relation.get_kanji(), font=("Arial", 90, ))
         self.label.pack()
-        
-        self.components_label = Label(self, text="", font=("Gothic", 10))
+
+        self.compositions_label = Label(self, text="", font=("Gothic bold", 10))
+        self.compositions_label.pack()
+
+        self.components_label = Label(self, text="", font=("Gothic bold", 10))
         self.components_label.pack(pady=20)
 
         self.radical_check = Checkbutton(self, text='Radical',variable=self.is_radical, onvalue=1, offvalue=0, )
         self.radical_check.pack()
 
-        # 2 buttons, to add compositions and to save the relation
+        # 3 buttons, to add compositions, save current composition and to save the relation
         self.add_comp_button = Button(self, text="Add composition", command=self.add_composition)
         self.add_comp_button.pack()
+
+        self.save_comp_button = Button(self, text="Save composition", command=self.save_composition)
+        self.save_comp_button.pack()
 
         self.save_relation_button = Button(self, text="Save heisig relation for this kanji", command=self.save_relation)
         self.save_relation_button.pack()
@@ -107,22 +132,44 @@ class HeisigRelationsWindow(Tk):
             print("saving composition")
             # we are currently working on a composition, complete it by adding to relation
             self.relation.add_composition(self.current_composition)
-            return
+
         self.current_composition = HeisigComposition()
         self.display_components()
         return
+    
+    def save_composition(self):
+        if self.current_composition is None:
+            return
+        self.relation.add_composition(self.current_composition)
+        self.current_composition = None
+        
+        self.display_compositions()
+        self.display_components
 
     def save_relation(self):
+        print("saving relation")
+        relations_data.append(self.relation.to_dict())
+        print("gui: " + str(self.relation.get_compositions()))
+        self.destroy()
         return
 
     def display_character(self):
         self.label.config(text=self.relation.get_kanji())
 
+    # TODO extract this parsing logic
     def display_components(self):
         print("comp")
         self.components_label.config(text='Current components: ' +
             '\t'.join([f"{c.get_character()}; Radical : {str(c.is_radical)}" for c in self.current_composition.get_components()])                                           
         )
+
+    def display_compositions(self):
+        s = "Current compositions:\n"
+        for composition in self.relation.get_compositions():
+            for c in composition.get_components():
+                s = s + f"{c.get_character()}; Radical : {str(c.is_radical)}" + ','
+            s = s + '\n'
+        self.compositions_label.config(text=s)
 
     # push a dict with user input to the script
     def publish_user_input(self, event=None):
@@ -170,6 +217,7 @@ class HeisigRelationsWindow(Tk):
         # show the updated components
         self.display_components()
 
+        print(str(relations_data))
 
         #print(f"size in gui: {self.queue.qsize()}")
         #self.queue.put(user_input)
@@ -181,6 +229,8 @@ class HeisigRelationsWindow(Tk):
     
     def is_radical(self):
         return self.is_radical.get() is True
+
+
 
 #def main():
 parser = argparse.ArgumentParser(
@@ -202,14 +252,17 @@ if not os.path.exists(heisig_relation_data_path):
 #    print(f"no such file as {heisig_composition_data_path}")
 
 print("reading data")
-with open(heisig_relation_data_path, "r") as compositions_file:
-    relations_data = json.load(compositions_file)
+with open(heisig_relation_data_path, "r") as relations_file:
+    try:
+        relations_data = json.load(relations_file)
+    except:
+        relations_data = []
     #print("relation data: " + str(relations_data))
 with open(kanji_data_path, "r", encoding='utf-8') as kanji_file:
     kanji_data = json.load(kanji_file)
     # discard kanji we already have relations for
     kanji_data = [kanji for kanji in kanji_data if not [r for r in relations_data if r['kanji'] == kanji['kanji']]]
-
+    print(str([k for k in kanji_data if "Asia" in k['meanings']]))
     # for now we only use the kanji from jlpt 5,4,3
     kanji_data = [kanji for kanji in kanji_data if kanji['jlpt'] is not None and kanji['jlpt'] > 2]
     #print("kanji data:" + str(kanji_data))
@@ -238,11 +291,17 @@ for kanji in kanji_data:
     #def gui_thread():
     #    relation_window.mainloop()
         
-    relation_window_thread = Thread(target=relation_window.mainloop)#, args=(update_queue,))
-    relation_window_thread.daemon = True
-    relation_window_thread.start()
-    
+    #relation_window_thread = Thread(target=relation_window.mainloop)#, args=(update_queue,))
+    #relation_window_thread.daemon = True
+    #relation_window_thread.start()
+
     # ask the user to add compositions as long as they see more
+    relation_window.mainloop()
+    print("main: " + str(heisig_relation.get_compositions()))
+
+    with open(heisig_relation_data_path, "w") as relations_file:
+        json.dump(relations_data, relations_file)
+    """
     # TODO give the user the option to add compositions, remove compositions, or save relations.
     while True:
         print(f"Current possible decompositions for {kanji_char}:")
@@ -270,18 +329,7 @@ for kanji in kanji_data:
                 exit_flag = False
                 print(f"size in main: {update_queue.qsize()}")
                 input_available.wait()
-                """
-                while True:
-                    try:
-                        user_input = update_queue.get_nowait()
-                        if user_input is not None:
-                            exit_flag = True
-                    except:
-                        time.sleep(1)
-                        pass
-                print(str(user_input))
-                """
-                print("exited")
+
                 #print(f"{str(user_input['character'])}")
                 #print(f"{str(user_input['is_radical'])}")
                 break
@@ -290,11 +338,10 @@ for kanji in kanji_data:
             print(f"Definition of heisig relations for {kanji_char} complete.")
             relations_data.append(heisig_relation)
             break
+    """
 
-    relation_window.destroy()
-
-    s = input("what do you think?")
-    print(s)
+    #s = input("what do you think?")
+exit()
 
 
 
