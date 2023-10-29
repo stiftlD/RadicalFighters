@@ -126,6 +126,10 @@ class HeisigRelationsWindow(Tk):
         # Bind the Enter key press event to the display_character function
         self.entry.bind('<Return>', self.publish_user_input)
 
+        # Button to end the application
+        self.exit_button = Button(self, text="Exit application", command=exit)
+        self.exit_button.pack()
+
     def add_composition(self):
         print("adding composition")
         if self.current_composition is not None:
@@ -149,7 +153,9 @@ class HeisigRelationsWindow(Tk):
     def save_relation(self):
         print("saving relation")
         relations_data.append(self.relation.to_dict())
-        print("gui: " + str(self.relation.get_compositions()))
+        #print("gui: " + str(self.relation.get_compositions()))
+        with open(heisig_relation_data_path, "w") as relations_file:
+            json.dump(relations_data, relations_file)
         self.destroy()
         return
 
@@ -168,6 +174,8 @@ class HeisigRelationsWindow(Tk):
         for composition in self.relation.get_compositions():
             for c in composition.get_components():
                 s = s + f"{c.get_character()}; Radical : {str(c.is_radical)}" + ','
+            if not composition.get_components():
+                s = s + "[]"
             s = s + '\n'
         self.compositions_label.config(text=s)
 
@@ -181,7 +189,7 @@ class HeisigRelationsWindow(Tk):
         user_input['is_radical'] = self.is_radical.get() is True
         entry_text = self.get_input()
         user_input['character'] = entry_text
-        print(user_input)
+        #print(user_input)
         self.entry.delete(0, len(entry_text))
         
         # use user input to search for component in data
@@ -217,7 +225,7 @@ class HeisigRelationsWindow(Tk):
         # show the updated components
         self.display_components()
 
-        print(str(relations_data))
+        #print(str(relations_data))
 
         #print(f"size in gui: {self.queue.qsize()}")
         #self.queue.put(user_input)
@@ -242,7 +250,7 @@ parser.add_argument('filename', help="file to write to", default="heisig_relatio
 args = parser.parse_args()
 
 heisig_relation_data_path = f"{os.getcwd()}/{args.filename}"
-print(heisig_relation_data_path)
+#print(heisig_relation_data_path)
 
 if not os.path.exists(heisig_relation_data_path):
     print(f"no such file as {heisig_relation_data_path}, creating anew")
@@ -278,7 +286,7 @@ for kanji in kanji_data:
     kanji_char = kanji['kanji']
     heisig_relation = HeisigRelation(kanji_char)
     
-    print(str(kanji))
+    #print(str(kanji))
     print("--- Moving on to next kanji ---")
     print(f"{kanji_char}")
     print(f"{str(kanji['meanings'])}")
@@ -297,52 +305,10 @@ for kanji in kanji_data:
 
     # ask the user to add compositions as long as they see more
     relation_window.mainloop()
-    print("main: " + str(heisig_relation.get_compositions()))
+    #print("main: " + str(heisig_relation.get_compositions()))
 
-    with open(heisig_relation_data_path, "w") as relations_file:
-        json.dump(relations_data, relations_file)
-    """
-    # TODO give the user the option to add compositions, remove compositions, or save relations.
-    while True:
-        print(f"Current possible decompositions for {kanji_char}:")
-        print(str(heisig_relation.compositions))
 
-        s = ""
-        while s != "y" and s != "n":
-            s = str.lower(input("Do you see another and want to add it? y/n\n"))
-        if s == "y":
-            # TODO have the user define a new composition and then add it to the dictionary
-            print(f"Creating new composition for {kanji_char}")
-
-            composition = HeisigComposition()
-            composition.add_component(HeisigComponent(False, 'B'))
-            composition.add_component(HeisigComponent(True, 'A'))
-            print(str(composition.get_components()))
-
-            # ask the user to add components as long as they see more
-            while True:
-                user_input = None
-
-                print("displaying")
-                relation_window.display_components(composition.get_components())
-                print("waiting for input")
-                exit_flag = False
-                print(f"size in main: {update_queue.qsize()}")
-                input_available.wait()
-
-                #print(f"{str(user_input['character'])}")
-                #print(f"{str(user_input['is_radical'])}")
-                break
-
-        elif s == "n":
-            print(f"Definition of heisig relations for {kanji_char} complete.")
-            relations_data.append(heisig_relation)
-            break
-    """
-
-    #s = input("what do you think?")
 exit()
-
 
 
 #main()
