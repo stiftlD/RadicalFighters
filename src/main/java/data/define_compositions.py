@@ -6,7 +6,7 @@ from tkinter import BooleanVar, Button, Checkbutton, IntVar, Tk, Label, Entry
 from threading import Thread, Event
 
 kanji_data_path = f"{os.getcwd()}/kanjis.json"
-radical_data_path = f"{os.getcwd()}/radicals.json"
+radical_data_path = f"{os.getcwd()}/radicals.csv"
 heisig_relation_data_path = ""
 
 # this script goes through kanjis and radical json and writes a new file
@@ -274,8 +274,14 @@ with open(kanji_data_path, "r", encoding='utf-8') as kanji_file:
     # for now we only use the kanji from jlpt 5,4,3
     kanji_data = [kanji for kanji in kanji_data if kanji['jlpt'] is not None and kanji['jlpt'] > 2]
     #print("kanji data:" + str(kanji_data))
-with open(radical_data_path, "r") as radical_file:
-    radical_data = json.load(radical_file)
+with open(radical_data_path, "r", encoding='utf-8') as radical_file:
+    #dont bother with pandas, just parse csv
+    radical_lines = radical_file.readlines()[1:]
+    radical_data = []
+    for l in radical_lines:
+        s = l.split(',')
+        radical_data.append({'id': int(s[0]), 'unicode': s[1]})
+    print(str(radical_data))
     #print("radical data:" + str(radical_data))
 
 # Create a queue for communication between threads
