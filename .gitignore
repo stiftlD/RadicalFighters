@@ -22,8 +22,11 @@ bin/
 /nbdist/
 /.nb-gradle/
 
+.idea/
 .idea/misc.xml
 .idea/workspace.xml
+
+target/
 
 database/
 ### VS Code ###
