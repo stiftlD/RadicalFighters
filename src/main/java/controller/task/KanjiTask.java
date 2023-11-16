@@ -5,6 +5,7 @@ import model.kanji.Kanji;
 import view.BattleWindow;
 import view.task.TaskUI;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 // a kanji task holds logic for revising a certain property for one or more kanjis
@@ -23,6 +24,14 @@ public abstract class KanjiTask {
     }
 
     public abstract boolean performTask();
+
+    // this is a mandatory step so perhaps above should not be abstract?
+    public void logResults(Timestamp start_time, Timestamp finish_time, boolean success) {
+
+        kanjis.forEach(k -> {
+            controller.getDB().appendStudyLog(k.getId(), "ABCD", "Meaning", start_time, finish_time, success);
+        });
+    }
 
     public List<Kanji> getKanjis() {return kanjis;}
 

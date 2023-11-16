@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import controller.task.KanjiSubject;
 import controller.task.KanjiTask;
 import controller.task.MultipleChoiceTask;
+import controller.battleaction.Attack;
 import model.kanji.Kanji;
 import model.kanji.KanjiScheduler;
 import model.radicals.Radical;
@@ -91,49 +92,37 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent>, Runnable {
         // TODO we still need to handle radical effects, maybe implement kanjiction and do it all at once
         Attack chosenAttack = (Attack) chooseKanjiAction(true); //proficientKanji.get(chosenIndex)
         //System.out.println("Chose: " + chosenAttackKanji.getCharacter());
-        // TODO have the scheduler select tasks
-        KanjiTask task = new MultipleChoiceTask(parent, chosenAttack.getKanjis(), KanjiSubject.MEANING, this, 4);
+        List<Kanji> chosenAttackKanjis = chosenAttack.getKanjis();
 
-        boolean attackSuccessful = task.performTask();
+        // TODO have the scheduler select tasks
+        KanjiTask attackTask = new MultipleChoiceTask(parent, chosenAttackKanjis, KanjiSubject.MEANING, battleWindow, 4);
+
+        boolean attackSuccessful = attackTask.performTask();
 
         //System.out.println(attackSuccessful ? "That's right!" : "Wrong, it's " + expectedMeaning);
-        int damage = chosenAttackKanji.getPower() * 10;
-        // apply radicals effects on attack
-        for (int i = 0; i < chosenRadicals.size(); i++) {
-            damage += chosenRadicals.get(i).getBoost().getAttack();
-        }
-        if (attackSuccessful) damage *= 2;
-        team2[0].takeDamage(damage);
-        // log task result in DB
-        parent.getDB().appendStudyLog(chosenAttackKanji.getId(), "ABCD", "Meaning", start_time, finish_time, attackSuccessful);
+        int damageDealt = chosenAttack.getBaseDamage();
+
+        if (attackSuccessful) damageDealt *= 2;
+
+        team2[0].takeDamage(damageDealt);
 
         //battleWindow.waitContinueCommand();
 
-        //System.out.println(chosenAttackKanji);
+        Defense chosenDefense = (Defense) chooseKanjiAction(false); //inproficientKanji.get(chosenIndex);
+        List<Kanji> chosenDefenseKanjis = chosenDefense.getKanjis();
 
-        Kanji chosenDefenseKanji = chooseKanjiAction(false); //inproficientKanji.get(chosenIndex);
-        chosenRadicals = radicals.get(chosenIndex);
-        //battleWindow.waitContinueCommand();
-        meanings = inproficientKanji.stream().map(k -> String.join(",", k.getTranslations())).toArray(String[]::new);
-        expectedMeaning = meanings[chosenIndex];
-        Collections.shuffle(Arrays.asList(meanings));
-        start_time = Timestamp.from(Instant.now());
-        chosenIndex = battleWindow.choose1OutOf4(meanings, "What is the meaning of " + chosenDefenseKanji.getCharacter());
-        answer = meanings[chosenIndex];
+        // TODO have the scheduler select tasks
+        KanjiTask defenseTask = new MultipleChoiceTask(parent, chosenDefenseKanjis, KanjiSubject.MEANING, battleWindow, 4);
 
-        finish_time = Timestamp.from(Instant.now());
-        boolean defenseSuccessful = expectedMeaning.equals(answer);
-        damage = chosenDefenseKanji.getPower() * 10;
-        // apply radicals effects on defense
-        for (int i = 0; i < chosenRadicals.size(); i++) {
-            damage -= chosenRadicals.get(i).getBoost().getAttack();
-            damage = Math.max(0, damage);
-        }
-        if (defenseSuccessful) damage /= 2;
-        team1[0].takeDamage(damage);
-        // log task results in db
-        parent.getDB().appendStudyLog(chosenDefenseKanji.getId(), "ABCD", "Meaning", start_time, finish_time, defenseSuccessful);
+        boolean defenseSuccessful = defenseTask.performTask();
 
+        int damageTaken = chosenDefense.getBaseDamage();
+
+        if (defenseSuccessful) damageTaken /= 2;
+
+        team1[0].takeDamage(damageTaken);
+
+        // turn is over, start some update jobs etc
         publish(new FighterUpdateEvent(team1[0], team2[0]));
 
         // to test at the end of every round update kanjidex and then print current stats
@@ -202,12 +191,14 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent>, Runnable {
         List<Kanji> chosenKanjiList = new ArrayList<Kanji>();
         chosenKanjiList.add(chosenKanji);
 
-        Attack chosenAttack = new Attack(chosenKanjiList);
+        BattleAction chosenAction = attack ? new Attack(chosenKanjiList) : new Defense(chosenKanjiList);
         for (int i = 0; i < chosenRadicals.size(); i++) {
-            chosenAttack.addBoost(chosenRadicals.get(0).getBoost());
+            chosenAction.addBoost(chosenRadicals.get(i).getBoost());
         }
 
-        return chosenAttack;
+        chosenAction.applyBoosts();
+
+        return chosenAction;
     }
 
     // TODO when we implement multiple fighters this should either be constant or based on speed stat

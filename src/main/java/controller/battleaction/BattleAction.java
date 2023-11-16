@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BattleAction {
-    private List<Kanji> kanjis;
-    private List<RadicalBoost> radicalBoosts;
+    protected List<Kanji> kanjis;
+    protected List<RadicalBoost> radicalBoosts;
 
     public BattleAction(List<Kanji> kanjis) {
         this.kanjis = kanjis;

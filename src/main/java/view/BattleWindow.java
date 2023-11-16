@@ -174,7 +174,10 @@ public class BattleWindow extends JPanel implements Subscriber<UpdateEvent>, Key
     }
 
     public int choose1OutOf4(String[] choices, String message) {
-        if (choices.length != 4) return -1;
+        if (choices.length != 4) {
+            System.out.println("expected 4 choices, was " + choices.length);
+            return -1;
+        }
 
         latch = new CountDownLatch(1);
         writeToOutput(message);

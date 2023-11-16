@@ -50,6 +50,7 @@ public class DexHandler<T> {
             gradeList.add(grade);
             proficiencyList.add(prof);
         });
+        System.out.println("size: " + gradeList.size());
         window.setBarPlot("AVG proficiency by grade", gradeList, proficiencyList, "grades", "avg proficiency");
     }
 }

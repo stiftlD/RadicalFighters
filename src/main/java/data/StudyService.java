@@ -28,9 +28,9 @@ public class StudyService {
 
     public Map<Integer, Double> getAverageProficencyByGrade() {
         String getAverageProficiencyByGradeSQL =
-                "select AVG(Proficiency) as avg_proficiency, grade\n" +
+                "select AVG(Proficiency) as avg_proficiency, Grade\n" +
                         "from viable_kanji\n" +
-                        "group by grade";
+                        "group by Grade";
 
         try (Connection connection = SqliteHelper.getConn()) {
 
@@ -38,7 +38,7 @@ public class StudyService {
                 ResultSet resultSet = statement.executeQuery(getAverageProficiencyByGradeSQL);
                 Map<Integer, Double> resultMap = new HashMap<Integer, Double>();
                 while(resultSet.next()) {
-                    resultMap.put(resultSet.getInt("grade"), resultSet.getDouble("avg_proficiency"));
+                    resultMap.put(resultSet.getInt("Grade"), resultSet.getDouble("avg_proficiency"));
                 }
                 return resultMap;
             } catch (SQLException e) { e.printStackTrace(); } finally {
@@ -65,7 +65,7 @@ public class StudyService {
         public Y getY() {return y;}
     }
 
-    public List<Kanji> getRandomKanjiInProfInterval(int maxGrade, double start, double end) throws SQLException, IllegalArgumentException {
+    public List<Kanji> getRandomKanjiInProfInterval(int maxGrade, double start, double end) throws IllegalArgumentException {
         if (maxGrade < 0 || start < 0.0 || end > 1.0 || start > end)
             throw new IllegalArgumentException("start and end within [0, 1]");
 
@@ -185,7 +185,7 @@ public class StudyService {
                             TODO use a derived proficiency value instead of success_rate and then DESC
                             also probably do secondary ordering by #encounters or sth
                              */
-                            "SELECT k.*, sp.success_rate, ROW_NUMBER() OVER (ORDER BY success_rate DESC, grade ASC) as prof_rank\n" +
+                            "SELECT k.*, sp.success_rate, ROW_NUMBER() OVER (ORDER BY success_rate DESC, k.grade ASC) as prof_rank\n" +
                             "FROM kanji k LEFT OUTER JOIN study_performance sp ON k.id == sp.kanji_id, player_details p\n" +
                             "WHERE k.Grade > 0 AND k.Grade <= p.Grade;";
 
@@ -240,9 +240,9 @@ public class StudyService {
     public void updateKanjiProficiency() {
         String updateKanjiProficiencySQL =
                 "UPDATE kanji SET proficiency = \n" +
-                        "(SELECT sp.success_delta * 5\n" +
-                        "FROM study_performance sp \n" +
-                        "WHERE proficiency != sp.success_delta AND sp.kanji_id == id)"; // TODO get some more stats
+                        "                        (SELECT sp.success_delta * 5\n" +
+                        "                        FROM study_performance sp\n" +
+                        "                        WHERE sp.kanji_id == id)"; // TODO get some more stats
 
         try (Connection connection = SqliteHelper.getConn()) {
 
@@ -258,7 +258,7 @@ public class StudyService {
                 }
             }
         } catch (SQLException e) { e.printStackTrace(); }
-
+        System.out.println("updated");
     }
 
     // Other methods for filtering, custom views, and additional statistics can be added here

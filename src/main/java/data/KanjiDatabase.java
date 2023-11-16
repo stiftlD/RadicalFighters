@@ -163,36 +163,27 @@ public class KanjiDatabase {
     }
 
     private class JsonRadical {
+        private int ID;
         //@Expose
-        private String character;
+        private String Character;
         //@Expose
-        private String meaning;
-        //@Expose
-        private String image;
-        //@Expose
-        private int level;
+        private String Meaning;
 
-        public JsonRadical(String character, String meaning, String image, int level) {
-            this.character = character;
-            this.meaning = meaning;
-            this.level = level;
-            this.image = image;
+
+        public JsonRadical(int id, String character, String meaning) {
+            this.ID = id;
+            this.Character = character;
+            this.Meaning = meaning;
         }
+
+        public int getID() { return ID; }
 
         public String getMeaning() {
-            return meaning;
-        }
-
-        public int getLevel() {
-            return level;
-        }
-
-        public String getImage() {
-            return image;
+            return Meaning;
         }
 
         public String getCharacter() {
-            return character;
+            return Character;
         }
     };
 
@@ -532,12 +523,11 @@ public class KanjiDatabase {
         try {
             //Read JSON file
             //Path jsonPath = Path.of(rootDir + "src\\main\\java\\data\\radicals.json");
-            Path jsonPath = Path.of(rootDir + "/src/java/main/data/radicals.json");
+            Path jsonPath = Path.of(rootDir + "/src/main/java/data/radicals.json");
             System.out.println(jsonPath);
             FileInputStream fis = new FileInputStream(jsonPath.toString());
             String jsonString = IOUtils.toString(fis, "UTF-8");
-            System.out.println(jsonString);
-            //System.out.println(jsonString);
+
             Gson gson = new GsonBuilder().serializeNulls().create();
             radicalArray = gson.fromJson(jsonString, JsonRadical[].class);
             System.out.println("found " + radicalArray.length + " rads");

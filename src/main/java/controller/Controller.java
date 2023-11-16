@@ -66,6 +66,7 @@ public class Controller {
         // Pass the ranked kanji list to the KanjiDex
         System.out.println("updating");
         studyService.updateKanjiProficiency();
+        // TODO streaming kanji over there would be cool
         kanjiDex.updateKanjiListAndNotify(
                 studyService.getKanjiRankedByProficiency().stream().collect(Collectors.toList()));
         if (dexHandler != null) dexHandler.displayStudyStatisticChart();
