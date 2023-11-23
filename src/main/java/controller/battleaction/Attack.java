@@ -3,6 +3,7 @@ package controller.battleaction;
 import model.kanji.Kanji;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 // TODO write unit tests!
@@ -12,8 +13,13 @@ public class Attack extends BattleAction {
     public Attack(List<Kanji> kanjis) {
         super(kanjis);
         // base damage is kanjis power * 10 for now
-        this.baseDamage = kanjis.stream().map(k -> k.getPower())
-                .reduce(Integer::sum).get() * 10;
+        try {
+            this.baseDamage = kanjis.stream().map(k -> k.getPower())
+                    .reduce(Integer::sum).get() * 10;
+        } catch (NoSuchElementException e) {
+            // case no kanji in attack
+            this.baseDamage = 0;
+        }
         applyBoosts();
     }
 
