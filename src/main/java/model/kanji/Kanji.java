@@ -18,6 +18,7 @@ public class Kanji {
     private boolean encountered;
     private Map<String, Integer> radicals;
 
+    // TODO more of these params could probably be set later
     public Kanji(int id, String character, int grade, int strokes, List<String> kunyomi, List<String> onyomi, List<String> translations, String unicode, int proficiency, boolean encountered) {
         this.id = id;
         this.proficiency = proficiency;

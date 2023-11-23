@@ -27,7 +27,7 @@ public class MultipleChoiceTask extends KanjiTask {
         // TODO pull more of this into TaskUI
 
         Kanji exerciseKanji = kanjis.get(0);
-        for (int i = 0; i < exerciseKanji.getTranslations().size(); i++) System.out.println(exerciseKanji.getTranslations().get(i));
+        //for (int i = 0; i < exerciseKanji.getTranslations().size(); i++) System.out.println(exerciseKanji.getTranslations().get(i));
         //List<Radical> chosenRadicals = radicals.get(chosenIndex);
 
         // get some random kanji as wrong options TODO implement some selection logic
@@ -49,7 +49,7 @@ public class MultipleChoiceTask extends KanjiTask {
         Timestamp finish_time = Timestamp.from(Instant.now());
         //System.out.println("chosenIndex: " + chosenIndex);
         //for (int i = 0; i < 4; i++) System.out.println(meanings[i]);
-        System.out.println(chosenIndex);
+        //System.out.println(chosenIndex);
         String answer = meanings[chosenIndex];
         //System.out.println("Choices afterwards: ");
         /*for (int i = 0; i < 4; i++) {
@@ -63,5 +63,12 @@ public class MultipleChoiceTask extends KanjiTask {
         logResults(start_time, finish_time, attackSuccessful);
 
         return attackSuccessful;
+    }
+
+    @Override
+    public void logResults(Timestamp start_time, Timestamp finish_time, boolean success) {
+        kanjis.forEach(k -> {
+            controller.getStudyService().appendStudyLog(k.getId(), "ABCD", "Meaning", start_time, finish_time, success);
+        });
     }
 }

@@ -323,4 +323,38 @@ public class StudyService {
 
     }
 
+    // to be called after completing kanji tasks
+    public void appendStudyLog(int kanji_id, String type, String subject, Timestamp start_time, Timestamp finish_time, boolean result) {
+        String insertStudyLogSQL = "INSERT INTO study_log ("
+                + "kanji_id,"
+                + "type,"
+                + "subject,"
+                + "start_time,"
+                + "finish_time,"
+                + "result"
+                + ") VALUES ("
+                + "?, "
+                + "?, "
+                + "?, "
+                + "?, "
+                + "?, "
+                + "?);";
+
+        try (Connection connection = SqliteHelper.getConn()) {
+            try (PreparedStatement statement = connection.prepareStatement(insertStudyLogSQL)) {
+
+                statement.setInt(1, kanji_id);
+                statement.setString(2, type);
+                statement.setString(3, subject);
+                statement.setTimestamp(4, start_time);
+                statement.setTimestamp(5, finish_time);
+                statement.setBoolean(6, result);
+
+                statement.executeUpdate();
+                connection.close();
+            } catch (SQLException e) { e.printStackTrace(); }
+
+        } catch (SQLException e) { e.printStackTrace(); }
+    }
+
 }

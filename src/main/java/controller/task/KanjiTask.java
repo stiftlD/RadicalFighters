@@ -9,7 +9,6 @@ import java.sql.Timestamp;
 import java.util.List;
 
 // a kanji task holds logic for revising a certain property for one or more kanjis
-// TODO maybe it should r
 public abstract class KanjiTask {
     protected Controller controller;
     protected List<Kanji> kanjis;
@@ -26,12 +25,7 @@ public abstract class KanjiTask {
     public abstract boolean performTask();
 
     // this is a mandatory step so perhaps above should not be abstract?
-    public void logResults(Timestamp start_time, Timestamp finish_time, boolean success) {
-
-        kanjis.forEach(k -> {
-            controller.getDB().appendStudyLog(k.getId(), "ABCD", "Meaning", start_time, finish_time, success);
-        });
-    }
+    public abstract void logResults(Timestamp start_time, Timestamp finish_time, boolean success);
 
     public List<Kanji> getKanjis() {return kanjis;}
 
