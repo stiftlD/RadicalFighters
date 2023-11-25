@@ -1375,5 +1375,1502 @@
                 ]
             }
         ]
+    },
+    {
+        "kanji": "\u60aa",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u5fc3"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u4e9c"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u5b89",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u5b80"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u5973"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u4ee5",
+        "kanji_id": null,
+        "compositions": []
+    },
+    {
+        "kanji": "\u610f",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u97f3"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u5fc3"
+                    }
+                ]
+            },
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u7acb"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u65e5"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u5fc3"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u6697",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u65e5"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u97f3"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u533b",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u531a"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u77e2"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u4e00",
+        "kanji_id": null,
+        "compositions": []
+    },
+    {
+        "kanji": "\u54e1",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u8c9d"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u53e3"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u5f15",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u5f13"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u98f2",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u98df"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u6b20"
+                    }
+                ]
+            },
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u98df"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u6b20"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u53f3",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u53e3"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u9662",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u5143"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u961d"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u5b80"
+                    }
+                ]
+            },
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u5b8c"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u961d"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u96e8",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u96e8"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u904b",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u2ecc"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u8ecd"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u6620",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u65e5"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u592e"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u82f1",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u8279"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u592e"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u99c5",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u99ac"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u5c3a"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u5186",
+        "kanji_id": null,
+        "compositions": []
+    },
+    {
+        "kanji": "\u9060",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u2ecc"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u8881"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u5c4b",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u5c38"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u81f3"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u97f3",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u7acb"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u65e5"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u4e0b",
+        "kanji_id": null,
+        "compositions": []
+    },
+    {
+        "kanji": "\u4f55",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\uff72"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u53ef"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u590f",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u81ea"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u5902"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u4e00"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u5bb6",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u5b80"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u8c55"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u6b4c",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u53ef"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u6b20"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u706b",
+        "kanji_id": null,
+        "compositions": []
+    },
+    {
+        "kanji": "\u82b1",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u8279"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u5316"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u753b",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u51f5"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u7531"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u4f1a",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u4eba"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u4e91"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u56de",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u53e3"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u56d7"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u6d77",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u6c35"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u6bce"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u754c",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u7530"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u4ecb"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u958b",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u5f00"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u9580"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u5916",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u5915"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u30c8"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u5b66",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u5c0f"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u5196"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u5b50"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u697d",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u6728"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u767d"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u5bd2",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u5b80"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u6f22",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u6c35"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u592b"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u8279"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u53e3"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u9593",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u9580"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u65e5"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u9928",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u98df"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u5b98"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u9854",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u5f66"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u9801 "
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u5e30",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u5dfe"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u5202"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u30e8"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u6c17",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u6c14"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u8d77",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u5df1"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u8d70"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u4f11",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\uff72"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u6728"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u6025",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u5fc3"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u30e8"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u7a76",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u4e5d"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u7a74"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u725b",
+        "kanji_id": null,
+        "compositions": []
+    },
+    {
+        "kanji": "\u53bb",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u30e0"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u571f"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u9b5a",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u7530"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u706b"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u4eac",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u4ea0"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u5c0f"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u53e3"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u5f37",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u5f13"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u866b"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u30e0"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u6559",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u5b5d"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u6535"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u696d",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u672a"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u4e26"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u8fd1",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u65a4"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u2ecc"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u91d1",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\ud840\udda2"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u738b"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u9280",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u91d1"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u826f"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u4e5d",
+        "kanji_id": null,
+        "compositions": []
+    },
+    {
+        "kanji": "\u533a",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u531a"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u30e1"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u7a7a",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u7a74"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u5de5"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u5144",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u5144"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u8a08",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u8a00"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u5341"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u8efd",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u8eca"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u571f"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u53c8"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u6708",
+        "kanji_id": null,
+        "compositions": []
+    },
+    {
+        "kanji": "\u5efa",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u5ef4"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u807f"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u72ac",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u5927"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u7814",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u77f3"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u5f00"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u770c",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u76ee"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u5c0f"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u898b",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u76ee"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u513f"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u9a13",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u99ac"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u3452"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u5143",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u4e8c"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u513f"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u8a00",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u53e3"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u53e4",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u5341"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u53e3"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u4e94",
+        "kanji_id": null,
+        "compositions": []
+    },
+    {
+        "kanji": "\u5348",
+        "kanji_id": null,
+        "compositions": []
+    },
+    {
+        "kanji": "\u5f8c",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u5f73"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u5902"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u5e7a"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u8a9e",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u8a00"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u4e94"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u53e3"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u5149",
+        "kanji_id": null,
+        "compositions": []
+    },
+    {
+        "kanji": "\u53e3",
+        "kanji_id": null,
+        "compositions": []
+    },
+    {
+        "kanji": "\u597d",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": false,
+                        "character": "\u5973"
+                    },
+                    {
+                        "is_radical": false,
+                        "character": "\u5b50"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u5de5",
+        "kanji_id": null,
+        "compositions": []
+    },
+    {
+        "kanji": "\u5e83",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u5e7f"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u30e0"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u8003",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u571f"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u4e02"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u611b",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u2ea4"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u5196"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u5fc3"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u5902"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u5727",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u571f"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u5382"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u6848",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u5b80"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u5973"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u6728"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u4f4d",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\uff72"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u7acb"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "kanji": "\u56f2",
+        "kanji_id": null,
+        "compositions": [
+            {
+                "components": [
+                    {
+                        "is_radical": true,
+                        "character": "\u56d7"
+                    },
+                    {
+                        "is_radical": true,
+                        "character": "\u4e95"
+                    }
+                ]
+            }
+        ]
     }
 ]
