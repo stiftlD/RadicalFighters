@@ -14,8 +14,7 @@ import data.KanjiDatabase;
 public class Main {
     public static void main(String[] args) throws SQLException {
 
-        //KanjiDatabase db = new KanjiDatabase();
-        //db.initialize(); //TODO static init?
+        KanjiDatabase.initialize();
         Controller controller = new Controller();
         controller.start();
 

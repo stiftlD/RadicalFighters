@@ -7,6 +7,7 @@ import model.radicals.Radical;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 
 import java.sql.Timestamp;
@@ -17,19 +18,19 @@ import java.util.stream.Collectors;
 
 public class KanjiDatabase {
 
-    private String rootDir = System.getProperty("user.dir"); //TODO config file for this
-    private String kanjiDBURL = "jdbc:sqlite:" + Path.of(rootDir + "/database/kanji.db").toString();
-    private Path kanjiPath = Path.of(rootDir + "/src/main/java/data/kanjis.json");
+    private static String rootDir = System.getProperty("user.dir"); //TODO config file for this
+    private static String kanjiDBURL = "jdbc:sqlite:" + Path.of(rootDir + "/database/kanji.db").toString();
+    private static Path kanjiPath = Path.of(rootDir + "/src/main/java/data/kanjis.json");
 
-    int currRadID = 0;
+    static int currRadID = 0;
 
-    private int generateRadID() {
+    private static int generateRadID() {
         return currRadID++;
     }
 
-    int currKanjiID = 0;
+    static int currKanjiID = 0;
 
-    private int generateKanjiID() {
+    private static int generateKanjiID() {
         return currKanjiID++;
     }
 
@@ -40,7 +41,15 @@ public class KanjiDatabase {
 
     // setup the kanji database from kanji.json if it doesn't exist
     // TODO obviously refactor. call different table creation methods and then set the data on them
-    public void initialize() throws SQLException {
+    public static void initialize() throws SQLException {
+
+        // if database file exists we assume everything is set up
+        String dbPath = rootDir + "/database/kanji.db";
+        File f = new File(dbPath);
+        if (f.exists()) {
+            System.out.println(dbPath + " already exists. Skipping initialization.");
+            return;
+        }
 
         try (Connection connection = SqliteHelper.getConn()) {
             createKanjiTable(connection);
@@ -49,7 +58,10 @@ public class KanjiDatabase {
             createStudyLogTable(connection);
 
             connection.close();
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            // could not get connection. may be because database file exists already
+            e.printStackTrace();
+        }
 
         try (Connection connection = SqliteHelper.getConn()) {
             // TODO right now we HAVE to init radicals first
@@ -259,7 +271,7 @@ public class KanjiDatabase {
         }
     }
 
-    private void createKanjiTable(Connection connection) {
+    private static void createKanjiTable(Connection connection) {
         String createTableSql = "CREATE TABLE IF NOT EXISTS kanji ("
                 + "ID INTEGER PRIMARY KEY,"
                 + "Kanji TEXT,"
@@ -314,7 +326,7 @@ public class KanjiDatabase {
         }
     }
 
-    public void initializeKanjiTable(Connection connection) {
+    public static void initializeKanjiTable(Connection connection) {
         String insertDataSql = "INSERT INTO kanji ("
                 + "ID,"
                 + "Kanji,"
@@ -498,7 +510,7 @@ public class KanjiDatabase {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    public void createRadicalTable(Connection connection) {
+    public static void createRadicalTable(Connection connection) {
         String createRadicalTableSql = "CREATE TABLE IF NOT EXISTS radicals ("
                 //+ "Name TEXT,"
                 + "ID INTEGER PRIMARY KEY,"
@@ -515,7 +527,7 @@ public class KanjiDatabase {
         System.out.println("Radical Table created");
     }
 
-    public void initializeRadicalTable(Connection connection) throws SQLException {
+    public static void initializeRadicalTable(Connection connection) throws SQLException {
         //Setup radical table
         JsonRadical radicalArray[] = {};
 
@@ -589,7 +601,7 @@ public class KanjiDatabase {
         }
     }
 
-    public void createKanjiComponentRelationsTable(Connection connection) throws SQLException {
+    public static void createKanjiComponentRelationsTable(Connection connection) throws SQLException {
 
         // create kanji component relation table
         //TODO acually just initialize along with kanji since they hold components in json rn
@@ -611,7 +623,7 @@ public class KanjiDatabase {
     }
 
     // table where we save the results of completed tasks and we build statistics from
-    public void createStudyLogTable(Connection connection) throws SQLException {
+    public static void createStudyLogTable(Connection connection) throws SQLException {
         String createStudyLogTableSQL = "CREATE TABLE IF NOT EXISTS study_log ("
                 + "kanji_id INTEGER, "
                 + "type TEXT, " // probably enum for task type or other proficiency checks

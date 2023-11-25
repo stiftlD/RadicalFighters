@@ -30,7 +30,7 @@ public class Controller {
         this.view = new KanjiGUI(this);
         this.db = new KanjiDatabase();
         this.studyService = new StudyService();
-        this.kanjiScheduler = new KanjiScheduler(studyService); // TODO access through controller
+        this.kanjiScheduler = new KanjiScheduler(studyService);
         this.kanjiDex = new KanjiDex(this);
         this.dexHandler = new DexHandler(this);
         dexHandler.setDex(kanjiDex);
