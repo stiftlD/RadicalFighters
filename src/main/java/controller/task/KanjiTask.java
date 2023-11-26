@@ -1,6 +1,8 @@
 package controller.task;
 
+import controller.BattleController;
 import controller.Controller;
+import controller.IBattleController;
 import model.kanji.Kanji;
 import view.BattleWindow;
 import view.task.TaskUI;
@@ -10,12 +12,12 @@ import java.util.List;
 
 // a kanji task holds logic for revising a certain property for one or more kanjis
 public abstract class KanjiTask {
-    protected Controller controller;
+    protected IBattleController controller;
     protected List<Kanji> kanjis;
     protected KanjiSubject subject;
     protected TaskUI ui;
 
-    public KanjiTask(Controller controller, List<Kanji> kanjis, KanjiSubject subject, BattleWindow window) {
+    public KanjiTask(IBattleController controller, List<Kanji> kanjis, KanjiSubject subject, BattleWindow window) {
         this.controller = controller;
         this.kanjis = kanjis;
         this.subject = subject;

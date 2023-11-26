@@ -1,10 +1,18 @@
 package controller.task;
 
+import controller.BattleController;
 import controller.Controller;
+import controller.ServiceLocator;
 import data.KanjiDatabase;
 import data.StudyService;
 import model.kanji.Kanji;
-import org.junit.jupiter.api.Test;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.modules.junit4.rule.PowerMockRule;
 import org.sqlite.core.DB;
 import view.BattleWindow;
 
@@ -15,6 +23,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
+
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({ServiceLocator.class})
 public class MultipleChoiceTaskTest {
 
     // TODO more tests! especially regarding gui (leads to refactoring into taskUI)
@@ -44,17 +55,20 @@ public class MultipleChoiceTaskTest {
             false);
 
     // TODO extract common setup
-
     @Test
     public void testPerformTaskQueriesKanjiDB() {
         // Arrange
+        PowerMockito.mockStatic(ServiceLocator.class);
+        ServiceLocator mockLocator = mock(ServiceLocator.class);
         Controller mockController = mock(Controller.class);
         StudyService mockDB = mock(StudyService.class);
 
-        // record
-        when(mockController.getStudyService()).thenReturn(mockDB);
+        // record mock behaviour
+        when(mockController.getServiceLocator()).thenReturn(mockLocator);
+        when(ServiceLocator.getStudyService()).thenReturn(mockDB);
+        // TODO these dots smell
         when(mockDB.getRandomKanjiInProfInterval(anyInt(), anyDouble(), anyDouble()))
-                .thenReturn(new ArrayList<Kanji>(Arrays.asList(testKanjiB)));
+                .thenReturn(new ArrayList(Arrays.asList(testKanjiB)));
 
         List<Kanji> mockKanjis = new ArrayList<Kanji>(Arrays.asList(testKanjiA));
         KanjiSubject mockSubject = KanjiSubject.MEANING;
@@ -65,6 +79,7 @@ public class MultipleChoiceTaskTest {
         MultipleChoiceTask multipleChoiceTask = new MultipleChoiceTask(mockController, mockKanjis, mockSubject, mockWindow, choiceCount);
 
         // run
+        PowerMockito.verifyStatic(ServiceLocator.class);
         boolean result = multipleChoiceTask.performTask();
 
         verify(mockDB, times(choiceCount - 1)).getRandomKanjiInProfInterval(
@@ -77,11 +92,14 @@ public class MultipleChoiceTaskTest {
     @Test
     public void testPerformTaskLogsResults() {
         // Arrange
+        PowerMockito.mockStatic(ServiceLocator.class);
+        ServiceLocator mockLocator = mock(ServiceLocator.class);
         Controller mockController = mock(Controller.class);
         StudyService mockDB = mock(StudyService.class);
 
         // record mock behaviour
-        when(mockController.getStudyService()).thenReturn(mockDB);
+        when(mockController.getServiceLocator()).thenReturn(mockLocator);
+        when(ServiceLocator.getStudyService()).thenReturn(mockDB);
         // TODO these dots smell
         when(mockDB.getRandomKanjiInProfInterval(anyInt(), anyDouble(), anyDouble()))
                 .thenReturn(new ArrayList(Arrays.asList(testKanjiB)));
@@ -96,6 +114,7 @@ public class MultipleChoiceTaskTest {
         MultipleChoiceTask multipleChoiceTask = new MultipleChoiceTask(mockController, mockKanjis, mockSubject, mockWindow, choiceCount);
 
         // Act
+        PowerMockito.verifyStatic(ServiceLocator.class);
         boolean result = multipleChoiceTask.performTask();
 
         // Verify that the appendStudyLog method is called with the expected arguments

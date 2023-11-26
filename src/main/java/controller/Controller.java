@@ -1,5 +1,6 @@
 package controller;
 
+import controller.task.IGameController;
 import view.BattleWindow;
 import view.DexWindow;
 import view.KanjiGUI;
@@ -17,7 +18,13 @@ import controller.KanjiBattle;
 import data.KanjiDatabase;
 import data.StudyService;
 
-public class Controller {
+public class Controller implements IBattleController {
+
+    private IGameController gameController; // this should be common between all controller interfaces
+    private IBattleController battleController;
+    // TODO seperate dex concern
+
+    private ServiceLocator serviceLocator; // we inject it so we can mock services
     private KanjiGUI view;
     private KanjiScheduler kanjiScheduler;
     private KanjiDatabase db;
@@ -26,11 +33,15 @@ public class Controller {
     private DexHandler dexHandler;
     //private KanjiBattle kanjiBattle;
 
-    public Controller() {
+    public Controller(ServiceLocator serviceLocator, IBattleController battleController) {
+        this.battleController = battleController;
+
+        // get serviceLocator from one of the interfaces
+        this.serviceLocator = battleController.getServiceLocator();
         this.view = new KanjiGUI(this);
-        this.db = new KanjiDatabase();
-        this.studyService = new StudyService();
-        this.kanjiScheduler = new KanjiScheduler(studyService);
+        this.db = serviceLocator.getDB();
+        this.studyService = serviceLocator.getStudyService();
+        this.kanjiScheduler = serviceLocator.getKanjiScheduler();
         this.kanjiDex = new KanjiDex(this);
         this.dexHandler = new DexHandler(this);
         dexHandler.setDex(kanjiDex);
@@ -42,24 +53,8 @@ public class Controller {
     }
 
     public void startBattle(BattleWindow window) {
-        RadicalFighter playerFighter = new RadicalFighter(
-                "iiko",
-                new Radical(0, "iiko", "uiiko", "test player rad", null),
-                100,
-                50,
-                50
-        );
-        RadicalFighter opponentFighter = new RadicalFighter(
-                "waruiko",
-                new Radical(1, "waruiko", "uwaruiko", "test opponent rad", null),
-                100,
-                50,
-                50
-        );
-        KanjiBattle battle = new KanjiBattle(window, this, kanjiScheduler, new RadicalFighter[]{playerFighter}, new RadicalFighter[]{opponentFighter});
-        Thread battleThread = new Thread(battle);
-        battleThread.start();
-
+        updateKanjiDex();
+        battleController.startBattle(window);
     }
 
     public void updateKanjiDex() {
@@ -82,10 +77,9 @@ public class Controller {
         subscribeToDex(window);
     }
 
-    // TODO these should be injected
-    public KanjiDatabase getDB() {
+    /*public KanjiDatabase getDB() {
         return db;
-    }
+    }*/
 
     public KanjiDex getKanjiDex() { return kanjiDex; }
 
@@ -93,6 +87,8 @@ public class Controller {
 
     public void endBattle() {
         view.closeBattleWindow();
+        battleController.endBattle();
+        updateKanjiDex();
     }
 
     public void subscribeToDex(DexWindow dexWindow) {
@@ -101,7 +97,9 @@ public class Controller {
         kanjiDex.subscribe(dexWindow);
     }
 
-    public StudyService getStudyService() {
+    /*public StudyService getStudyService() {
         return this.studyService;
-    }
+    }*/
+
+    public ServiceLocator getServiceLocator() { return serviceLocator; }
 }

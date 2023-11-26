@@ -44,6 +44,7 @@ public class KanjiDatabase {
     public static void initialize() throws SQLException {
 
         // if database file exists we assume everything is set up
+        // TODO set up StudyService views here too
         String dbPath = rootDir + "/database/kanji.db";
         File f = new File(dbPath);
         if (f.exists()) {

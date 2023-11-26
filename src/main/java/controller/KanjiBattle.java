@@ -1,11 +1,9 @@
 package controller;
 
-import java.sql.Timestamp;
-import java.time.Instant;
+import java.security.Provider;
 import java.util.*;
 import java.util.concurrent.Flow.*;
 import java.util.concurrent.Flow.Publisher;
-import java.util.stream.Collectors;
 
 
 import controller.task.KanjiSubject;
@@ -43,17 +41,17 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent>, Runnable {
 
     private BattleWindow battleWindow;
     private KanjiScheduler kanjiScheduler;
-    private Controller parent;
+    private IBattleController parent;
 
     private List<Subscriber<FighterUpdateEvent>> subscribers;
 
-    public KanjiBattle(BattleWindow battleWindow, Controller parent, KanjiScheduler kanjiScheduler, RadicalFighter[] team1, RadicalFighter[] team2) {
+    public KanjiBattle(BattleWindow battleWindow, IBattleController parent, RadicalFighter[] team1, RadicalFighter[] team2) {
         this.team1 = team1;
         this.team2 = team2;
         this.currentTurn = 0;
         this.parent = parent;
         this.battleWindow = battleWindow;
-        this.kanjiScheduler = kanjiScheduler;
+        this.kanjiScheduler = parent.getServiceLocator().getKanjiScheduler();
         this.subscribers = new ArrayList<Subscriber<FighterUpdateEvent>>();
     }
 
@@ -84,10 +82,7 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent>, Runnable {
 
     private void performTurn() {
 
-        parent.updateKanjiDex();
         //System.out.println(subscribers.size());
-
-
         // TODO implement different tasks in view, have them scheduled here and pass them what they need
         // TODO we still need to handle radical effects, maybe implement kanjiction and do it all at once
         Attack chosenAttack = (Attack) chooseKanjiAction(true); //proficientKanji.get(chosenIndex)
@@ -126,7 +121,7 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent>, Runnable {
         publish(new FighterUpdateEvent(team1[0], team2[0]));
 
         // to test at the end of every round update kanjidex and then print current stats
-        parent.updateKanjiDex();
+        //parent.updateKanjiDex();
 
         //battleWindow.waitContinueCommand();
     }
@@ -149,7 +144,7 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent>, Runnable {
         // the components boost is applied to attack and displayed to the player
         List<List<Radical>> radicals = (List<List<Radical>>) kanjiChoices.stream().map(k -> {
             List<Radical> result = new ArrayList<Radical>();
-            List<Radical> components = parent.getDB().getRadicalComponents(k.getId());
+            List<Radical> components = parent.getServiceLocator().getDB().getRadicalComponents(k.getId());
             if (components == null || components.size() < 1) return result;
             int effectCount = k.getStrokes() / 10 + 1;
             for (int i = 0; i < effectCount; i++) {

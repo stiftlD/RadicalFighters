@@ -1,10 +1,12 @@
 package controller.task;
 
-import controller.Controller;
+import controller.BattleController;
+import controller.IBattleController;
+import controller.ServiceLocator;
 import model.kanji.Kanji;
-import model.radicals.Radical;
 import view.BattleWindow;
 
+import java.security.Provider;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ public class MultipleChoiceTask extends KanjiTask {
 
     // TODO define MC tasks with multiple Kanji (if it makes sense)
 
-    public MultipleChoiceTask(Controller controller, List<Kanji> kanjis, KanjiSubject subject, BattleWindow window, int count) {
+    public MultipleChoiceTask(IBattleController controller, List<Kanji> kanjis, KanjiSubject subject, BattleWindow window, int count) {
         super(controller, kanjis, subject, window);
         this.choiceCount = count;
     }
@@ -33,7 +35,7 @@ public class MultipleChoiceTask extends KanjiTask {
         // get some random kanji as wrong options TODO implement some selection logic
         List<Kanji> kanjiOptions = new ArrayList<Kanji>();
         for (int i = 0; i < choiceCount -1; i++) { // count -1 bc 1 will be our correct option
-            kanjiOptions.add(controller.getStudyService().getRandomKanjiInProfInterval(exerciseKanji.getGrade(), 0f, 1f).get(0));
+            kanjiOptions.add(controller.getServiceLocator().getStudyService().getRandomKanjiInProfInterval(exerciseKanji.getGrade(), 0f, 1f).get(0));
         }
         kanjiOptions.add(exerciseKanji);
 
@@ -68,7 +70,7 @@ public class MultipleChoiceTask extends KanjiTask {
     @Override
     public void logResults(Timestamp start_time, Timestamp finish_time, boolean success) {
         kanjis.forEach(k -> {
-            controller.getStudyService().appendStudyLog(k.getId(), "ABCD", "Meaning", start_time, finish_time, success);
+            controller.getServiceLocator().getStudyService().appendStudyLog(k.getId(), "ABCD", "Meaning", start_time, finish_time, success);
         });
     }
 }

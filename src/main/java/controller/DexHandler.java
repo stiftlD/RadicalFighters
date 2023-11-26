@@ -16,8 +16,11 @@ public class DexHandler<T> {
     private DexWindow window;
     private KanjiDex dex;
 
+    private ServiceLocator serviceLocator;
+
     public DexHandler(Controller parent) {
         this.parent = parent;
+        this.serviceLocator = parent.getServiceLocator();
     }
 
     public void setDex(KanjiDex dex) {
@@ -35,7 +38,8 @@ public class DexHandler<T> {
         // TODO need to implement and use other methods in dex
         System.out.println("list length: " + dex.getKanjiRanking().size());
         dex.printRankedKanjiList();
-        Kanji k = parent.getDB().getKanjiByID(id); //TODO look it up in the dex who already has that data instead
+
+        Kanji k = serviceLocator.getDB().getKanjiByID(id); //TODO look it up in the dex who already has that data instead
         window.showKanjiEntry(k.getCharacter(), k.getOnyomi().get(0), k.getKunyomi().get(0), k.getTranslations().get(0),
                 k.getGrade(), k.getStrokes(), k.getProficiency());
     }
@@ -43,7 +47,7 @@ public class DexHandler<T> {
     // get some statistic regarding study history from dex, and display as a chart in battlewindow
     // TODO also refactor
     public void displayStudyStatisticChart() {
-        Map<Integer, Double> map = parent.getStudyService().getAverageProficencyByGrade();
+        Map<Integer, Double> map = serviceLocator.getStudyService().getAverageProficencyByGrade();
         List<Integer> gradeList = new ArrayList<Integer>();
         List<Double> proficiencyList = new ArrayList<Double>();
         map.forEach((grade, prof) -> {

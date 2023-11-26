@@ -115,6 +115,7 @@ public class KanjiGUI {
 
     public void closeBattleWindow() {
         if (battleWindow != null) {
+            battleWindow.removeAll();
             topPanel.remove(battleWindow);
             topPanel.revalidate();
             topPanel.repaint();

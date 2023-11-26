@@ -1,5 +1,7 @@
 import controller.Controller;
 import controller.KanjiBattle;
+import controller.task.GameController;
+import controller.task.IGameController;
 import model.radicals.RadicalFighter;
 import controller.*;
 import javax.imageio.ImageIO;
@@ -15,7 +17,9 @@ public class Main {
     public static void main(String[] args) throws SQLException {
 
         KanjiDatabase.initialize();
-        Controller controller = new Controller();
+        ServiceLocator serviceLocator = new ServiceLocator();
+        IGameController gameController = new GameController(serviceLocator);
+        Controller controller = new Controller(serviceLocator, new BattleController(gameController));
         controller.start();
 
         // Mock fighters
