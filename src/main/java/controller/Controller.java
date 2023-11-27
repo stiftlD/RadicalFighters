@@ -27,7 +27,6 @@ public class Controller {
     //private KanjiBattle kanjiBattle;
 
     public Controller() {
-        this.view = new KanjiGUI(this);
         this.db = new KanjiDatabase();
         this.studyService = new StudyService();
         this.kanjiScheduler = new KanjiScheduler(studyService);
@@ -35,6 +34,7 @@ public class Controller {
         this.dexHandler = new DexHandler(this);
         dexHandler.setDex(kanjiDex);
         //this.kanjiBattle = new KanjiBattle();
+        this.view = new KanjiGUI(this);
     }
 
     public void start() {

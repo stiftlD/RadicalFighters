@@ -2,6 +2,7 @@ package view;
 
 import controller.Controller;
 import view.BattleWindow;
+import view.DexWindow;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,6 +64,13 @@ public class KanjiGUI {
         // Add task and button panels to frame
         frame.add(topPanel, BorderLayout.CENTER);
         frame.add(buttonPanel, BorderLayout.SOUTH);
+
+
+        // add dex UI to display stats
+        if (dexWindow == null) {
+            dexWindow = new DexWindow(frame); // Pass the parent frame.
+            controller.addDexWindow(dexWindow);
+        }
 
         // Show frame
         frame.setVisible(true);
