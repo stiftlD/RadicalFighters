@@ -52,6 +52,112 @@ public class BattleWindow extends JPanel implements Subscriber<UpdateEvent>, Key
         super();
         this.parent = parent;
 
+        initializeUI();
+
+    }
+
+    public int choose1OutOf4(String[] choices, String message) {
+        if (choices.length != 4) {
+            System.out.println("expected 4 choices, was " + choices.length);
+            return -1;
+        }
+
+        latch = new CountDownLatch(1);
+        writeToOutput(message);
+        for (int i = 0; i < 4; i++) {
+            UniqueButton button = new UniqueButton(i);
+            button.setText(choices[i]);
+            button.addActionListener(e -> {
+                latch.countDown();
+                writeToOutput("You chose " + choices[button.getId()]);
+                chosenIndex = button.getId();
+            });
+            buttonPanel.addButton(button);
+        }
+        try {
+            latch.await();
+            buttonPanel.removeAll();
+            return chosenIndex;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return -1;
+    }
+
+    private void handleOptionChosen(String option) {
+        selectedOption = option;
+        synchronized (this) {
+            notify(); // Notify waiting thread
+        }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        userInput = e.getKeyChar();
+        System.out.println("User input: " + userInput);
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        // This method is called when a key is pressed down
+        int keyCode = e.getKeyCode();
+        System.out.println("Key pressed: " + keyCode);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // This method is called when a key is released after being pressed
+        int keyCode = e.getKeyCode();
+        System.out.println("Key released: " + keyCode);
+    }
+
+    public char getUserInput() {
+        return userInput;
+    }
+
+    // have the user press ENTER once in order to advance
+    public void waitContinueCommand() {
+        CountDownLatch latch = new CountDownLatch(1);
+
+        // Create a separate thread to wait for Enter
+        Thread enterThread = new Thread(() -> {
+            Scanner scanner = new Scanner(System.in);
+            writeToOutput("Press Enter to continue...");
+
+            scanner.nextLine(); // wait for newline
+            latch.countDown();
+            scanner.close();
+        });
+
+        enterThread.start();
+
+        System.out.println("Thread waiting for Enter command has been started");
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        writeToOutput("Continuing...");
+
+        try {
+            enterThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void writeToOutput(String message) {
+        SwingUtilities.invokeLater(() -> {
+            outputLabel.setText(message);
+            parent.repaint();
+        });
+    }
+
+    private void initializeUI() {
         //setTitle("Battle Window");
         setSize(800, 600);
         // Add the KeyListener to the JFrame
@@ -170,108 +276,6 @@ public class BattleWindow extends JPanel implements Subscriber<UpdateEvent>, Key
         constraints.gridheight = 2;
         layout.setConstraints(bottomPanel, constraints);
         add(bottomPanel);
-
-    }
-
-    public int choose1OutOf4(String[] choices, String message) {
-        if (choices.length != 4) {
-            System.out.println("expected 4 choices, was " + choices.length);
-            return -1;
-        }
-
-        latch = new CountDownLatch(1);
-        writeToOutput(message);
-        for (int i = 0; i < 4; i++) {
-            UniqueButton button = new UniqueButton(i);
-            button.setText(choices[i]);
-            button.addActionListener(e -> {
-                latch.countDown();
-                writeToOutput("You chose " + choices[button.getId()]);
-                chosenIndex = button.getId();
-            });
-            buttonPanel.addButton(button);
-        }
-        try {
-            latch.await();
-            buttonPanel.removeAll();
-            return chosenIndex;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        return -1;
-    }
-
-    private void handleOptionChosen(String option) {
-        selectedOption = option;
-        synchronized (this) {
-            notify(); // Notify waiting thread
-        }
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        userInput = e.getKeyChar();
-        System.out.println("User input: " + userInput);
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-        // This method is called when a key is pressed down
-        int keyCode = e.getKeyCode();
-        System.out.println("Key pressed: " + keyCode);
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        // This method is called when a key is released after being pressed
-        int keyCode = e.getKeyCode();
-        System.out.println("Key released: " + keyCode);
-    }
-
-    public char getUserInput() {
-        return userInput;
-    }
-
-    // have the user press ENTER once in order to advance
-    public void waitContinueCommand() {
-        CountDownLatch latch = new CountDownLatch(1);
-
-        // Create a separate thread to wait for Enter
-        Thread enterThread = new Thread(() -> {
-            Scanner scanner = new Scanner(System.in);
-            writeToOutput("Press Enter to continue...");
-
-            scanner.nextLine(); // wait for newline
-            latch.countDown();
-            scanner.close();
-        });
-
-        enterThread.start();
-
-        System.out.println("Thread waiting for Enter command has been started");
-
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        writeToOutput("Continuing...");
-
-        try {
-            enterThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    public void writeToOutput(String message) {
-        SwingUtilities.invokeLater(() -> {
-            outputLabel.setText(message);
-            parent.repaint();
-        });
     }
 
     @Override
