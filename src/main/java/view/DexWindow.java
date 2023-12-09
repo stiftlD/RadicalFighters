@@ -1,8 +1,7 @@
 package view;
 
 import controller.DexHandler;
-import data.StudyService.Tuple;
-import utils.UpdateEvent;
+import model.kanji.Kanji;
 
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -14,8 +13,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.util.Map;
-import java.util.concurrent.Flow.*;
-import model.kanji.DexData;
 
 // for plots
 import org.jfree.chart.ChartFactory;
@@ -24,7 +21,7 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-public class DexWindow extends JPanel implements Subscriber<DexData>  {
+public class DexWindow extends JPanel {
     private JFrame parent;
     // TODO mb by using sth more versatile than a list like SoAs so we can reduce data traffic
     private JList<JPanel> kanjiRiderList;
@@ -32,8 +29,6 @@ public class DexWindow extends JPanel implements Subscriber<DexData>  {
     private KanjiInfoPanel kanjiInfoPanel;
     private JPanel plotPanel;
     private DexHandler dexHandler;
-    // TODO dexhandler should probably be subscriber instead of this class
-    private Subscription subscription;
     private Map<Integer, Integer> riderIndexToKanjiIdMap;
 
     public DexWindow(JFrame parent) {
@@ -92,49 +87,28 @@ public class DexWindow extends JPanel implements Subscriber<DexData>  {
 
     }
 
-    @Override
-    public void onSubscribe(Subscription subscription) {
-        this.subscription = subscription;
-        System.out.println("Dexwindow subscribed");
-        subscription.request(1);
-    }
-
-    // TODO since we already set a lot of stuff from the dexhandler let them be subscriber and call this as setters
-    @Override
-    public void onNext(DexData item) {
+    public void updateKanjiRiderList(List<Kanji> kanjiList) {
         System.out.println("updating list");
         riderIndexToKanjiIdMap.clear();
         listModel.removeAllElements();
         // TODO dont use index, prepare a better hook so we get kanji id
         int index = 0;
-         for (Tuple<String, Double> tuple : (List<Tuple<String, Double>>) item.getKanjiProfRanking()) {
-             riderIndexToKanjiIdMap.put(index, item.getKanjiEntries().get(index).getId());
-             JPanel listElementPanel = new JPanel();
-             JLabel characterLabel = new JLabel();
-             characterLabel.setText(tuple.getX());
-             characterLabel.setFont(new Font("Gothic", Font.PLAIN , 20));
-             JLabel proficiencyLabel = new JLabel();
-             proficiencyLabel.setText(Double.toString(tuple.getY()));
-             proficiencyLabel.setFont(new Font("Gothic", Font.PLAIN , 20));
-             listElementPanel.add(characterLabel, BorderLayout.WEST);
-             listElementPanel.add(proficiencyLabel, BorderLayout.EAST);
-             listModel.addElement(listElementPanel);
-             index++;
-         }
-         kanjiRiderList.setModel(listModel);
+        for (Kanji kanji : kanjiList) {
+            riderIndexToKanjiIdMap.put(index, kanji.getId());
+            JPanel listElementPanel = new JPanel();
+            JLabel characterLabel = new JLabel();
+            characterLabel.setText(kanji.getCharacter());
+            characterLabel.setFont(new Font("Gothic", Font.PLAIN , 20));
+            JLabel proficiencyLabel = new JLabel();
+            proficiencyLabel.setText(Double.toString(kanji.getProficiency()));
+            proficiencyLabel.setFont(new Font("Gothic", Font.PLAIN , 20));
+            listElementPanel.add(characterLabel, BorderLayout.WEST);
+            listElementPanel.add(proficiencyLabel, BorderLayout.EAST);
+            listModel.addElement(listElementPanel);
+            index++;
+        }
+        kanjiRiderList.setModel(listModel);
         System.out.println("upated size: " + listModel.getSize());
-        if (subscription != null) subscription.request(1);
-    }
-
-    @Override
-    public void onError(Throwable throwable) {
-        System.out.println("Error in DexWindow");
-        throwable.printStackTrace();
-    }
-
-    @Override
-    public void onComplete() {
-        System.out.println("DexUpdate completed");
     }
 
     private class KanjiCharacterAndProficiencyPanelListCellRenderer extends JPanel implements ListCellRenderer<JPanel> {

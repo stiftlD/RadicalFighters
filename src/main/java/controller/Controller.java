@@ -98,7 +98,7 @@ public class Controller {
     public void subscribeToDex(DexWindow dexWindow) {
         System.out.println("subbing");
         updateKanjiDex();
-        kanjiDex.subscribe(dexWindow);
+        kanjiDex.subscribe(dexHandler);
     }
 
     public StudyService getStudyService() {
