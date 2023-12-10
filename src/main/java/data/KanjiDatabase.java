@@ -76,20 +76,31 @@ public class KanjiDatabase {
 
     // TODO move some of these specific query methods to studyhelper etc.
 
-    public Kanji getKanjiByID(int kanjiID){
+    public List<Kanji> getKanjisByID(int[] ids) {
+        StringBuilder s = new StringBuilder();
+        s.append("(");
+        Iterator<Integer> it = Arrays.stream(ids).iterator();
+        while (it.hasNext()) {
+            s.append(it.next());
+            if (it.hasNext()) s.append(",");
+        }
+        s.append(")");
+
+        String idVector = s.toString();
+
         String selectKanjiWithID =
                 "SELECT * FROM kanji " +
-                        "WHERE kanji.id == " + kanjiID;
+                        "WHERE kanji.id IN " + idVector + ";";
 
         try (Connection connection = SqliteHelper.getConn()) {
             try (Statement statement = connection.createStatement()) {
 
-                Kanji result = null;
+                List<Kanji> result = null;
                 ResultSet resultSet = statement.executeQuery(selectKanjiWithID);
 
                 if (resultSet == null) return result;
                 else {
-                    result = dataToKanji(resultSet).get(0);
+                    result = dataToKanji(resultSet);
                 }
                 connection.close();
                 return result;

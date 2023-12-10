@@ -134,7 +134,7 @@ public class StudyService {
                 // turn our query results into kanji objects to be used within the model
                 // TODO we should do this conversion in bulk, also right now we do not keep the statistics data
                 while (resultSet.next()) {
-                    Kanji kanji = kanjiDatabase.getKanjiByID(resultSet.getInt("id"));
+                    Kanji kanji = kanjiDatabase.getKanjisByID(new int[] {resultSet.getInt("id")}).get(0);
                     kanji.setProficiency((int) (resultSet.getDouble("success_rate") * 100.0));
                     resultList.add(kanji);
                 }
