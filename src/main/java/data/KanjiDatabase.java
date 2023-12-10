@@ -441,6 +441,7 @@ public class KanjiDatabase {
 
                         if (kanji.getComponents() == null) return;
                         // get the ids of the radicals that are components of this kanji
+                        // TODO change the components in kanji data json from char to id, then we dont need the map at all
                         // TODO this assumes radical table to exist
                         // TODO also way better ways to do this probably
                         Map<String, Integer> radToIdMap = new HashMap<String, Integer>();
@@ -448,7 +449,9 @@ public class KanjiDatabase {
 
                             ResultSet resultSet = null;
                             int radicalID = 0;
+
                             if (radToIdMap.get(component) == null) {
+                                // TODO prepared statement
                                 try (Statement statement = connection.createStatement()) {
                                     String query = "SELECT ID FROM radicals "
                                             + "WHERE character == '" + component + "';";
@@ -464,6 +467,7 @@ public class KanjiDatabase {
                             } else {
                                     radicalID = radToIdMap.get(component);
                             }
+
 
                             //System.out.println("Radical: " + component);
                             //System.out.println("ID: " + radicalID);

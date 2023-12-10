@@ -77,7 +77,8 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent>, Runnable {
 
             currentTurn++;
         }
-    }
+        parent.endBattle();
+}
 
     // TODO inject progress data gathering
     // TODO extract Task logic and write different tasks
@@ -226,42 +227,18 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent>, Runnable {
         System.out.println();
     }
 
+    private boolean isTeamDefeated(List<RadicalFighter> fighters) {
+        return fighters.stream().noneMatch(r -> r.getHP() > 0);
+    }
+
     private boolean isBattleOver() {
-        for (RadicalFighter fighter : team1) {
-            if (fighter.getHP() > 0) {
-                boolean allAlliesDefeated = true;
-                for (RadicalFighter opponent : team2) {
-                    if (opponent.getHP() > 0) {
-                        allAlliesDefeated = false;
-                        break;
-                    }
-                }
-                if (allAlliesDefeated) {
-                    System.out.println("Team 1 wins!");
-                    parent.endBattle();
-                    return true;
-                } else {
-                    break;
-                }
-            }
-        }
-        for (RadicalFighter fighter : team2) {
-            if (fighter.getHP() > 0) {
-                boolean allOpponentsDefeated = true;
-                for (RadicalFighter opponent : team1) {
-                    if (opponent.getHP() > 0) {
-                        allOpponentsDefeated = false;
-                        break;
-                    }
-                }
-                if (allOpponentsDefeated) {
-                    System.out.println("Team 2 wins!");
-                    parent.endBattle();
-                    return true;
-                } else {
-                    break;
-                }
-            }
+        // TODO add winnings etc
+        if (isTeamDefeated(Arrays.asList(team1))) {
+            System.out.println("Player was defeated");
+            return true;
+        } else if (isTeamDefeated(Arrays.asList(team2))) {
+            System.out.println("Enemy was defeated");
+            return true;
         }
         return false;
     }
