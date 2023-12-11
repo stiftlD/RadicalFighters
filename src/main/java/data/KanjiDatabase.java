@@ -7,6 +7,7 @@ import model.radicals.Radical;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 
 import java.sql.Timestamp;
@@ -17,19 +18,19 @@ import java.util.stream.Collectors;
 
 public class KanjiDatabase {
 
-    private String rootDir = System.getProperty("user.dir"); //TODO config file for this
-    private String kanjiDBURL = "jdbc:sqlite:" + Path.of(rootDir + "/database/kanji.db").toString();
-    private Path kanjiPath = Path.of(rootDir + "/src/main/java/data/kanjis.json");
+    private static String rootDir = System.getProperty("user.dir"); //TODO config file for this
+    private static String kanjiDBURL = "jdbc:sqlite:" + Path.of(rootDir + "/database/kanji.db").toString();
+    private static Path kanjiPath = Path.of(rootDir + "/src/main/java/data/kanjis.json");
 
-    int currRadID = 0;
+    static int currRadID = 0;
 
-    private int generateRadID() {
+    private static int generateRadID() {
         return currRadID++;
     }
 
-    int currKanjiID = 0;
+    static int currKanjiID = 0;
 
-    private int generateKanjiID() {
+    private static int generateKanjiID() {
         return currKanjiID++;
     }
 
@@ -40,7 +41,15 @@ public class KanjiDatabase {
 
     // setup the kanji database from kanji.json if it doesn't exist
     // TODO obviously refactor. call different table creation methods and then set the data on them
-    public void initialize() throws SQLException {
+    public static void initialize() throws SQLException {
+
+        // if database file exists we assume everything is set up
+        String dbPath = rootDir + "/database/kanji.db";
+        File f = new File(dbPath);
+        if (f.exists()) {
+            System.out.println(dbPath + " already exists. Skipping initialization.");
+            return;
+        }
 
         try (Connection connection = SqliteHelper.getConn()) {
             createKanjiTable(connection);
@@ -49,7 +58,10 @@ public class KanjiDatabase {
             createStudyLogTable(connection);
 
             connection.close();
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            // could not get connection. may be because database file exists already
+            e.printStackTrace();
+        }
 
         try (Connection connection = SqliteHelper.getConn()) {
             // TODO right now we HAVE to init radicals first
@@ -64,20 +76,31 @@ public class KanjiDatabase {
 
     // TODO move some of these specific query methods to studyhelper etc.
 
-    public Kanji getKanjiByID(int kanjiID){
+    public List<Kanji> getKanjisByID(int[] ids) {
+        StringBuilder s = new StringBuilder();
+        s.append("(");
+        Iterator<Integer> it = Arrays.stream(ids).iterator();
+        while (it.hasNext()) {
+            s.append(it.next());
+            if (it.hasNext()) s.append(",");
+        }
+        s.append(")");
+
+        String idVector = s.toString();
+
         String selectKanjiWithID =
                 "SELECT * FROM kanji " +
-                        "WHERE kanji.id == " + kanjiID;
+                        "WHERE kanji.id IN " + idVector + ";";
 
         try (Connection connection = SqliteHelper.getConn()) {
             try (Statement statement = connection.createStatement()) {
 
-                Kanji result = null;
+                List<Kanji> result = null;
                 ResultSet resultSet = statement.executeQuery(selectKanjiWithID);
 
                 if (resultSet == null) return result;
                 else {
-                    result = dataToKanji(resultSet).get(0);
+                    result = dataToKanji(resultSet);
                 }
                 connection.close();
                 return result;
@@ -163,36 +186,27 @@ public class KanjiDatabase {
     }
 
     private class JsonRadical {
+        private int ID;
         //@Expose
-        private String character;
+        private String Character;
         //@Expose
-        private String meaning;
-        //@Expose
-        private String image;
-        //@Expose
-        private int level;
+        private String Meaning;
 
-        public JsonRadical(String character, String meaning, String image, int level) {
-            this.character = character;
-            this.meaning = meaning;
-            this.level = level;
-            this.image = image;
+
+        public JsonRadical(int id, String character, String meaning) {
+            this.ID = id;
+            this.Character = character;
+            this.Meaning = meaning;
         }
+
+        public int getID() { return ID; }
 
         public String getMeaning() {
-            return meaning;
-        }
-
-        public int getLevel() {
-            return level;
-        }
-
-        public String getImage() {
-            return image;
+            return Meaning;
         }
 
         public String getCharacter() {
-            return character;
+            return Character;
         }
     };
 
@@ -268,7 +282,7 @@ public class KanjiDatabase {
         }
     }
 
-    private void createKanjiTable(Connection connection) {
+    private static void createKanjiTable(Connection connection) {
         String createTableSql = "CREATE TABLE IF NOT EXISTS kanji ("
                 + "ID INTEGER PRIMARY KEY,"
                 + "Kanji TEXT,"
@@ -323,7 +337,7 @@ public class KanjiDatabase {
         }
     }
 
-    public void initializeKanjiTable(Connection connection) {
+    public static void initializeKanjiTable(Connection connection) {
         String insertDataSql = "INSERT INTO kanji ("
                 + "ID,"
                 + "Kanji,"
@@ -438,6 +452,7 @@ public class KanjiDatabase {
 
                         if (kanji.getComponents() == null) return;
                         // get the ids of the radicals that are components of this kanji
+                        // TODO change the components in kanji data json from char to id, then we dont need the map at all
                         // TODO this assumes radical table to exist
                         // TODO also way better ways to do this probably
                         Map<String, Integer> radToIdMap = new HashMap<String, Integer>();
@@ -445,7 +460,9 @@ public class KanjiDatabase {
 
                             ResultSet resultSet = null;
                             int radicalID = 0;
+
                             if (radToIdMap.get(component) == null) {
+                                // TODO prepared statement
                                 try (Statement statement = connection.createStatement()) {
                                     String query = "SELECT ID FROM radicals "
                                             + "WHERE character == '" + component + "';";
@@ -461,6 +478,7 @@ public class KanjiDatabase {
                             } else {
                                     radicalID = radToIdMap.get(component);
                             }
+
 
                             //System.out.println("Radical: " + component);
                             //System.out.println("ID: " + radicalID);
@@ -507,7 +525,7 @@ public class KanjiDatabase {
         } catch (SQLException e) { e.printStackTrace(); }
     }
 
-    public void createRadicalTable(Connection connection) {
+    public static void createRadicalTable(Connection connection) {
         String createRadicalTableSql = "CREATE TABLE IF NOT EXISTS radicals ("
                 //+ "Name TEXT,"
                 + "ID INTEGER PRIMARY KEY,"
@@ -524,7 +542,7 @@ public class KanjiDatabase {
         System.out.println("Radical Table created");
     }
 
-    public void initializeRadicalTable(Connection connection) throws SQLException {
+    public static void initializeRadicalTable(Connection connection) throws SQLException {
         //Setup radical table
         JsonRadical radicalArray[] = {};
 
@@ -532,12 +550,11 @@ public class KanjiDatabase {
         try {
             //Read JSON file
             //Path jsonPath = Path.of(rootDir + "src\\main\\java\\data\\radicals.json");
-            Path jsonPath = Path.of(rootDir + "/src/java/main/data/radicals.json");
+            Path jsonPath = Path.of(rootDir + "/src/main/java/data/radicals.json");
             System.out.println(jsonPath);
             FileInputStream fis = new FileInputStream(jsonPath.toString());
             String jsonString = IOUtils.toString(fis, "UTF-8");
-            System.out.println(jsonString);
-            //System.out.println(jsonString);
+
             Gson gson = new GsonBuilder().serializeNulls().create();
             radicalArray = gson.fromJson(jsonString, JsonRadical[].class);
             System.out.println("found " + radicalArray.length + " rads");
@@ -599,7 +616,7 @@ public class KanjiDatabase {
         }
     }
 
-    public void createKanjiComponentRelationsTable(Connection connection) throws SQLException {
+    public static void createKanjiComponentRelationsTable(Connection connection) throws SQLException {
 
         // create kanji component relation table
         //TODO acually just initialize along with kanji since they hold components in json rn
@@ -621,7 +638,7 @@ public class KanjiDatabase {
     }
 
     // table where we save the results of completed tasks and we build statistics from
-    public void createStudyLogTable(Connection connection) throws SQLException {
+    public static void createStudyLogTable(Connection connection) throws SQLException {
         String createStudyLogTableSQL = "CREATE TABLE IF NOT EXISTS study_log ("
                 + "kanji_id INTEGER, "
                 + "type TEXT, " // probably enum for task type or other proficiency checks
@@ -639,39 +656,6 @@ public class KanjiDatabase {
             e.printStackTrace();
         }
         System.out.println("Study Log Table created");
-    }
-
-    public void appendStudyLog(int kanji_id, String type, String subject, Timestamp start_time, Timestamp finish_time, boolean result) {
-        String insertStudyLogSQL = "INSERT INTO study_log ("
-                + "kanji_id,"
-                + "type,"
-                + "subject,"
-                + "start_time,"
-                + "finish_time,"
-                + "result"
-                + ") VALUES ("
-                + "?, "
-                + "?, "
-                + "?, "
-                + "?, "
-                + "?, "
-                + "?);";
-
-        try (Connection connection = SqliteHelper.getConn()) {
-            try (PreparedStatement statement = connection.prepareStatement(insertStudyLogSQL)) {
-
-                statement.setInt(1, kanji_id);
-                statement.setString(2, type);
-                statement.setString(3, subject);
-                statement.setTimestamp(4, start_time);
-                statement.setTimestamp(5, finish_time);
-                statement.setBoolean(6, result);
-
-                statement.executeUpdate();
-                connection.close();
-            } catch (SQLException e) { e.printStackTrace(); }
-
-        } catch (SQLException e) { e.printStackTrace(); }
     }
 
     public void saveStudyLog(String fileName) {

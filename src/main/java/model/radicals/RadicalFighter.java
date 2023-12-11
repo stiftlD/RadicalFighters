@@ -49,7 +49,7 @@ public class RadicalFighter {
     }
 
     public void takeDamage(int damage) {
-        this.hp -= damage;
+        this.hp = Math.max(0, this.hp - damage);
     }
 
     public void heal(int heal) {

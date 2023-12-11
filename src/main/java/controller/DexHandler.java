@@ -1,5 +1,6 @@
 package controller;
 
+import data.StudyService;
 import model.kanji.Kanji;
 import view.DexWindow;
 import model.kanji.KanjiDex;
@@ -7,14 +8,19 @@ import model.kanji.KanjiDex;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Flow;
 import java.util.stream.Collectors;
+import java.util.concurrent.Flow.*;
+import model.kanji.DexData;
+import data.StudyService.Tuple; // TODO should be in dexdata
 
 // this class is supposed to handle on the kanjiDex,
 // as well as displaying kanji data from the dex in dexwindow
-public class DexHandler<T> {
+public class DexHandler<T> implements Subscriber<DexData> {
     private Controller parent;
     private DexWindow window;
     private KanjiDex dex;
+    private Subscription subscription;
 
     public DexHandler(Controller parent) {
         this.parent = parent;
@@ -35,7 +41,7 @@ public class DexHandler<T> {
         // TODO need to implement and use other methods in dex
         System.out.println("list length: " + dex.getKanjiRanking().size());
         dex.printRankedKanjiList();
-        Kanji k = parent.getDB().getKanjiByID(id); //TODO look it up in the dex who already has that data instead
+        Kanji k = parent.getDB().getKanjisByID(new int[] {id}).get(0); //TODO look it up in the dex who already has that data instead
         window.showKanjiEntry(k.getCharacter(), k.getOnyomi().get(0), k.getKunyomi().get(0), k.getTranslations().get(0),
                 k.getGrade(), k.getStrokes(), k.getProficiency());
     }
@@ -50,6 +56,31 @@ public class DexHandler<T> {
             gradeList.add(grade);
             proficiencyList.add(prof);
         });
+        System.out.println("size: " + gradeList.size());
         window.setBarPlot("AVG proficiency by grade", gradeList, proficiencyList, "grades", "avg proficiency");
+    }
+
+    @Override
+    public void onSubscribe(Subscription subscription) {
+        this.subscription = subscription;
+        System.out.println("Dexwindow subscribed");
+        subscription.request(1);
+    }
+
+    @Override
+    public void onNext(DexData item) {
+        //TODO move and add more data processing here
+        window.updateKanjiRiderList(item.getKanjiEntries());
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+        System.out.println("Error in DexHandler");
+        throwable.printStackTrace();
+    }
+
+    @Override
+    public void onComplete() {
+        System.out.println("DexUpdate completed");
     }
 }

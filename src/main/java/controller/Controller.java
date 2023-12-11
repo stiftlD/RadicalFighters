@@ -27,14 +27,14 @@ public class Controller {
     //private KanjiBattle kanjiBattle;
 
     public Controller() {
-        this.view = new KanjiGUI(this);
         this.db = new KanjiDatabase();
         this.studyService = new StudyService();
-        this.kanjiScheduler = new KanjiScheduler(studyService); // TODO access through controller
+        this.kanjiScheduler = new KanjiScheduler(studyService);
         this.kanjiDex = new KanjiDex(this);
         this.dexHandler = new DexHandler(this);
         dexHandler.setDex(kanjiDex);
         //this.kanjiBattle = new KanjiBattle();
+        this.view = new KanjiGUI(this);
     }
 
     public void start() {
@@ -66,6 +66,7 @@ public class Controller {
         // Pass the ranked kanji list to the KanjiDex
         System.out.println("updating");
         studyService.updateKanjiProficiency();
+        // TODO streaming kanji over there would be cool
         kanjiDex.updateKanjiListAndNotify(
                 studyService.getKanjiRankedByProficiency().stream().collect(Collectors.toList()));
         if (dexHandler != null) dexHandler.displayStudyStatisticChart();
@@ -97,7 +98,7 @@ public class Controller {
     public void subscribeToDex(DexWindow dexWindow) {
         System.out.println("subbing");
         updateKanjiDex();
-        kanjiDex.subscribe(dexWindow);
+        kanjiDex.subscribe(dexHandler);
     }
 
     public StudyService getStudyService() {

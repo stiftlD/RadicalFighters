@@ -17,22 +17,12 @@ public class KanjiScheduler {
     public Kanji getProficientKanji() {
         // TODO track player max grade
         // Implement scheduling and querying logic for proficient Kanji here using studyservice
-        try {
-            return db.getRandomKanjiInProfInterval(5, 0.0, 0.5).get(0);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return db.getRandomKanjiInProfInterval(5, 0.0, 0.5).get(0);
     }
 
     public Kanji getInproficientKanji() {
         // Implement scheduling and querying logic for less proficient Kanji here using db wrapper
-        try {
-            return db.getRandomKanjiInProfInterval(5, 0.5, 1.0).get(0);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return db.getRandomKanjiInProfInterval(5, 0.5, 1.0).get(0);
     }
 
     // Add other scheduling methods as needed

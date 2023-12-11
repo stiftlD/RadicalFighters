@@ -8,11 +8,15 @@ import java.util.concurrent.Flow.Publisher;
 import java.util.stream.Collectors;
 
 
+import controller.task.KanjiSubject;
+import controller.task.KanjiTask;
+import controller.task.MultipleChoiceTask;
+import controller.battleaction.Attack;
 import model.kanji.Kanji;
 import model.kanji.KanjiScheduler;
 import model.radicals.Radical;
 import model.radicals.RadicalFighter;
-import model.battleaction.*;
+import controller.battleaction.*;
 
 import utils.UpdateEvent;
 import view.BattleWindow; //TODO access via controller
@@ -73,7 +77,8 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent>, Runnable {
 
             currentTurn++;
         }
-    }
+        parent.endBattle();
+}
 
     // TODO inject progress data gathering
     // TODO extract Task logic and write different tasks
@@ -82,21 +87,68 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent>, Runnable {
 
         parent.updateKanjiDex();
         //System.out.println(subscribers.size());
-        // select 4 players the player is proficient with as possible attacks and 4 they are not proficient with as enemy attacks
-        List<Kanji> proficientKanji = new ArrayList<Kanji>();
-        List<Kanji> inproficientKanji = new ArrayList<Kanji>();
-        for (int i = 0; i < 4; i++) {
-            proficientKanji.add(kanjiScheduler.getProficientKanji());
-            inproficientKanji.add(kanjiScheduler.getProficientKanji());
-        }
+
 
         // TODO implement different tasks in view, have them scheduled here and pass them what they need
+        // TODO we still need to handle radical effects, maybe implement kanjiction and do it all at once
+        Attack chosenAttack = (Attack) chooseKanjiAction(true); //proficientKanji.get(chosenIndex)
+        //System.out.println("Chose: " + chosenAttackKanji.getCharacter());
+        List<Kanji> chosenAttackKanjis = chosenAttack.getKanjis();
+
+        // TODO have the scheduler select tasks
+        KanjiTask attackTask = new MultipleChoiceTask(parent, chosenAttackKanjis, KanjiSubject.MEANING, battleWindow, 4);
+
+        boolean attackSuccessful = attackTask.performTask();
+
+        //System.out.println(attackSuccessful ? "That's right!" : "Wrong, it's " + expectedMeaning);
+        int damageDealt = chosenAttack.getBaseDamage();
+
+        if (attackSuccessful) damageDealt *= 2;
+
+        team2[0].takeDamage(damageDealt);
+
+        //battleWindow.waitContinueCommand();
+
+        Defense chosenDefense = (Defense) chooseKanjiAction(false); //inproficientKanji.get(chosenIndex);
+        List<Kanji> chosenDefenseKanjis = chosenDefense.getKanjis();
+
+        // TODO have the scheduler select tasks
+        KanjiTask defenseTask = new MultipleChoiceTask(parent, chosenDefenseKanjis, KanjiSubject.MEANING, battleWindow, 4);
+
+        boolean defenseSuccessful = defenseTask.performTask();
+
+        int damageTaken = chosenDefense.getBaseDamage();
+
+        if (defenseSuccessful) damageTaken /= 2;
+
+        team1[0].takeDamage(damageTaken);
+
+        // turn is over, start some update jobs etc
+        publish(new FighterUpdateEvent(team1[0], team2[0]));
+
+        // to test at the end of every round update kanjidex and then print current stats
+        parent.updateKanjiDex();
+
+        //battleWindow.waitContinueCommand();
+    }
+
+    // TODO implement kanji actions (attack, defense with modifiers etc) and return one here
+    // @param: attack or defense
+    private BattleAction chooseKanjiAction(boolean attack) {
+
         // TODO prepare kanji/radical/action data to display to the player
         // TODO for example query kanji based on different criteria as wrong answers
 
+        // select 4 kanji the player is proficient with as possible attacks
+        // or 4 they are not proficient with as enemy attacks
+        List<Kanji> kanjiChoices = new ArrayList<Kanji>();
+        for (int i = 0; i < 4; i++) {
+            kanjiChoices.add(attack ? kanjiScheduler.getProficientKanji() : kanjiScheduler.getInproficientKanji());
+        }
+
         // starting with 1, for every 10 strokes in a kanji we select one of its components.
         // the components boost is applied to attack and displayed to the player
-        List<List<Radical>> radicals = (List<List<Radical>>) proficientKanji.stream().map(k -> {
+        List<List<Radical>> radicals = (List<List<Radical>>) kanjiChoices.stream().map(k -> {
             List<Radical> result = new ArrayList<Radical>();
             List<Radical> components = parent.getDB().getRadicalComponents(k.getId());
             if (components == null || components.size() < 1) return result;
@@ -114,7 +166,7 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent>, Runnable {
             List<String> resultStrings = new ArrayList<String>();
             rads.stream().forEach(r -> {
                 // effect is the attack value of the radicals boost for now
-                resultStrings.add(r.getBoost().getBoostStrings()[0]);
+                resultStrings.add(r.getBoost().getBoostStrings()[attack ? 0 : 1]);
             });
 
             return String.join(";", resultStrings);
@@ -122,119 +174,35 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent>, Runnable {
 
         // display kanji's power before the effects
         for (int i = 0; i < radicalEffects.length; i++) {
-            radicalEffects[i] = Integer.toString(proficientKanji.get(i).getPower()) + "\n" + radicalEffects[i];
+            radicalEffects[i] = Integer.toString(kanjiChoices.get(i).getPower()) + "\n" + radicalEffects[i];
         }
 
         // have player choose a kanji as attack, set task and then perform attack with updated dmg
         //int rightAnswer = (int) (Math.random() * 4.0); // select random kanji to be the right one
         // choose1 just returns the index
         //String chosenAttackKanji = battleWindow.choose1OutOf4((String[]) proficientKanji.stream().map(Kanji::getCharacter).toArray(String[]::new), "Choose a kanji action:", "Attack selection");
-        int chosenIndex = battleWindow.choose1OutOf4(radicalEffects, "Choose a kanji attack:");
-        String chosenAttackEffect = radicalEffects[chosenIndex];
-        Kanji chosenAttackKanji = proficientKanji.get(chosenIndex);
-        //System.out.println("Chose: " + chosenAttackKanji.getCharacter());
-        for (int i = 0; i < chosenAttackKanji.getTranslations().size(); i++) System.out.println(chosenAttackKanji.getTranslations().get(i));
+        int chosenIndex = battleWindow.choose1OutOf4(radicalEffects, attack ? "Choose a kanji attack:" : "Choose a kanji defense:");
+
+        // TODO use RadicalBoosts
+        //String chosenActionEffect = radicalEffects[chosenIndex];
+        Kanji chosenKanji = kanjiChoices.get(chosenIndex);
         List<Radical> chosenRadicals = radicals.get(chosenIndex);
 
-        //battleWindow.waitContinueCommand();
-        String[] meanings = proficientKanji.stream().map(k -> String.join(",", k.getTranslations())).toArray(String[]::new);
-        String expectedMeaning = meanings[chosenIndex];
-        //System.out.println("Expected answer: " + expectedMeaning);
-        Collections.shuffle(Arrays.asList(meanings));
+        // just one kanji for now
+        List<Kanji> chosenKanjiList = new ArrayList<Kanji>();
+        chosenKanjiList.add(chosenKanji);
 
-        Timestamp start_time = Timestamp.from(Instant.now());
-        chosenIndex = battleWindow.choose1OutOf4(meanings, "What is the meaning of " + chosenAttackKanji.getCharacter());
-        Timestamp finish_time = Timestamp.from(Instant.now());
-        //System.out.println("chosenIndex: " + chosenIndex);
-        //for (int i = 0; i < 4; i++) System.out.println(meanings[i]);
-        String answer = meanings[chosenIndex];
-        //System.out.println("Choices afterwards: ");
-        /*for (int i = 0; i < 4; i++) {
-            System.out.println(meanings[i]);
-        }*/
-        //System.out.println("Answer given: " + answer);
-
-        boolean attackSuccessful = expectedMeaning.equals(answer);
-        battleWindow.writeToOutput(attackSuccessful ? "That's right!" : "Wrong, it's " + expectedMeaning);
-        //System.out.println(attackSuccessful ? "That's right!" : "Wrong, it's " + expectedMeaning);
-        int damage = chosenAttackKanji.getPower() * 10;
-        // apply radicals effects on attack
+        BattleAction chosenAction = attack ? new Attack(chosenKanjiList) : new Defense(chosenKanjiList);
         for (int i = 0; i < chosenRadicals.size(); i++) {
-            damage += chosenRadicals.get(i).getBoost().getAttack();
-        }
-        if (attackSuccessful) damage *= 2;
-        team2[0].takeDamage(damage);
-        // log task result in DB
-        parent.getDB().appendStudyLog(chosenAttackKanji.getId(), "ABCD", "Meaning", start_time, finish_time, attackSuccessful);
-
-        //battleWindow.waitContinueCommand();
-
-        //System.out.println(chosenAttackKanji);
-        // TODO code is duplicated from above, refactor
-        // honestly just do querying kanji etc in function with parameter bool attack|defense
-        radicals = (List<List<Radical>>) inproficientKanji.stream().map(k -> {
-            List<Radical> result = new ArrayList<Radical>();
-            List<Radical> components = parent.getDB().getRadicalComponents(k.getId());
-            if (components == null || components.size() < 1) return result;
-            int effectCount = k.getStrokes() / 10 + 1;
-            for (int i = 0; i < effectCount; i++) {
-                int randomIndex = (int) (Math.random() * (double) effectCount);
-
-                result.add(components.get(randomIndex % components.size()));//.getBoost().getBoostStrings()[0];
-            }
-
-            return result;
-        }).toList();
-
-        radicalEffects = (String[]) radicals.stream().map(rads -> {
-            List<String> resultStrings = new ArrayList<String>();
-            rads.stream().forEach(r -> {
-                // effect is the defense value of the radicals boost for now
-                resultStrings.add(r.getBoost().getBoostStrings()[1]);
-            });
-
-            return String.join(";", resultStrings);
-        }).toArray(String[]::new);
-
-        // display kanji's power before the effects
-        for (int i = 0; i < radicalEffects.length; i++) {
-            radicalEffects[i] = Integer.toString(inproficientKanji.get(i).getPower()) + "\n" + radicalEffects[i];
+            chosenAction.addBoost(chosenRadicals.get(i).getBoost());
         }
 
-        chosenIndex = battleWindow.choose1OutOf4(radicalEffects, "Choose a kanji defense:");
+        chosenAction.applyBoosts();
 
-        String chosenDefenseEffect = radicalEffects[chosenIndex];
-        Kanji chosenDefenseKanji = inproficientKanji.get(chosenIndex);
-        chosenRadicals = radicals.get(chosenIndex);
-        //battleWindow.waitContinueCommand();
-        meanings = inproficientKanji.stream().map(k -> String.join(",", k.getTranslations())).toArray(String[]::new);
-        expectedMeaning = meanings[chosenIndex];
-        Collections.shuffle(Arrays.asList(meanings));
-        start_time = Timestamp.from(Instant.now());
-        chosenIndex = battleWindow.choose1OutOf4(meanings, "What is the meaning of " + chosenDefenseKanji.getCharacter());
-        answer = meanings[chosenIndex];
-
-        finish_time = Timestamp.from(Instant.now());
-        boolean defenseSuccessful = expectedMeaning.equals(answer);
-        damage = chosenDefenseKanji.getPower() * 10;
-        // apply radicals effects on defense
-        for (int i = 0; i < chosenRadicals.size(); i++) {
-            damage -= chosenRadicals.get(i).getBoost().getAttack();
-            damage = Math.max(0, damage);
-        }
-        if (defenseSuccessful) damage /= 2;
-        team1[0].takeDamage(damage);
-        // log task results in db
-        parent.getDB().appendStudyLog(chosenDefenseKanji.getId(), "ABCD", "Meaning", start_time, finish_time, defenseSuccessful);
-
-        publish(new FighterUpdateEvent(team1[0], team2[0]));
-
-        // to test at the end of every round update kanjidex and then print current stats
-        parent.updateKanjiDex();
-
-        //battleWindow.waitContinueCommand();
+        return chosenAction;
     }
 
+    // TODO when we implement multiple fighters this should either be constant or based on speed stat
     private RadicalFighter getNextAttacker() {
         return currentTurn % 2 == 0 ? team1[currentTurn / 2] : team2[currentTurn / 2];
     }
@@ -259,42 +227,18 @@ public class KanjiBattle implements Publisher<FighterUpdateEvent>, Runnable {
         System.out.println();
     }
 
+    private boolean isTeamDefeated(List<RadicalFighter> fighters) {
+        return fighters.stream().noneMatch(r -> r.getHP() > 0);
+    }
+
     private boolean isBattleOver() {
-        for (RadicalFighter fighter : team1) {
-            if (fighter.getHP() > 0) {
-                boolean allAlliesDefeated = true;
-                for (RadicalFighter opponent : team2) {
-                    if (opponent.getHP() > 0) {
-                        allAlliesDefeated = false;
-                        break;
-                    }
-                }
-                if (allAlliesDefeated) {
-                    System.out.println("Team 1 wins!");
-                    parent.endBattle();
-                    return true;
-                } else {
-                    break;
-                }
-            }
-        }
-        for (RadicalFighter fighter : team2) {
-            if (fighter.getHP() > 0) {
-                boolean allOpponentsDefeated = true;
-                for (RadicalFighter opponent : team1) {
-                    if (opponent.getHP() > 0) {
-                        allOpponentsDefeated = false;
-                        break;
-                    }
-                }
-                if (allOpponentsDefeated) {
-                    System.out.println("Team 2 wins!");
-                    parent.endBattle();
-                    return true;
-                } else {
-                    break;
-                }
-            }
+        // TODO add winnings etc
+        if (isTeamDefeated(Arrays.asList(team1))) {
+            System.out.println("Player was defeated");
+            return true;
+        } else if (isTeamDefeated(Arrays.asList(team2))) {
+            System.out.println("Enemy was defeated");
+            return true;
         }
         return false;
     }

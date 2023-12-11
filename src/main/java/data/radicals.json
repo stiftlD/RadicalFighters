@@ -1,82 +1,1962 @@
 [
-  {
-    "id": 1,
-    "name": "ichi",
-    "unicode": "\u4e00",
-    "boost": {
-      "attack": 1,
-      "defense": 0
+    {
+        "ID": 3,
+        "Character": "一",
+        "Meaning": "ground"
     },
-    "description": "one"
-  },
-  {
-    "id": 72,
-    "name": "hi",
-    "unicode": "\u65e5",
-    "boost": {
-      "attack": 1,
-      "defense": 0
+    {
+        "ID": 4,
+        "Character": "ハ",
+        "Meaning": "fins"
     },
-    "description": "span"
-  },
-  {
-    "id": 30,
-    "name": "kuchi",
-    "unicode": "\u53e3",
-    "boost": {
-      "attack": 1,
-      "defense": 0
+    {
+        "ID": 5,
+        "Character": "丶",
+        "Meaning": "drop"
     },
-    "description": "mouth"
-  },
-  {
-    "id": 60,
-    "name": "kihen",
-    "unicode": "\u5f73",
-    "boost": {
-      "attack": 1,
-      "defense": 0
+    {
+        "ID": 6,
+        "Character": "七",
+        "Meaning": "seven"
     },
-    "description": "going man"
-  },
-  {
-    "id": 39,
-    "name": "ko",
-    "unicode": "\u5b50",
-    "boost": {
-      "attack": 1,
-      "defense": 0
+    {
+        "ID": 7,
+        "Character": "丿",
+        "Meaning": "slide"
     },
-    "description": "child"
-  },
-  {
-    "id": 75,
-    "name": "ki",
-    "unicode": "\u6728",
-    "boost": {
-      "attack": 1,
-      "defense": 0
+    {
+        "ID": 8,
+        "Character": "亅",
+        "Meaning": "barb"
     },
-    "description": "wood"
-  },
-  {
-    "id": 24,
-    "name": "juu",
-    "unicode": "\u5341",
-    "boost": {
-      "attack": 1,
-      "defense": 0
+    {
+        "ID": 9,
+        "Character": "二",
+        "Meaning": "two"
     },
-    "description": "ten"
-  },
-  {
-    "id": 140,
-    "name": "kusa",
-    "unicode": "\u2ebe",
-    "boost": {
-      "attack": 1,
-      "defense": 0
+    {
+        "ID": 10,
+        "Character": "亠",
+        "Meaning": "lid"
     },
-    "description": "grass"
-  }
+    {
+        "ID": 11,
+        "Character": "人",
+        "Meaning": "person"
+    },
+    {
+        "ID": 12,
+        "Character": "入",
+        "Meaning": "enter"
+    },
+    {
+        "ID": 13,
+        "Character": "十",
+        "Meaning": "cross"
+    },
+    {
+        "ID": 14,
+        "Character": "力",
+        "Meaning": "power"
+    },
+    {
+        "ID": 15,
+        "Character": "勹",
+        "Meaning": "enclosure"
+    },
+    {
+        "ID": 16,
+        "Character": "口",
+        "Meaning": "mouth"
+    },
+    {
+        "ID": 17,
+        "Character": "大",
+        "Meaning": "big"
+    },
+    {
+        "ID": 18,
+        "Character": "女",
+        "Meaning": "woman"
+    },
+    {
+        "ID": 19,
+        "Character": "山",
+        "Meaning": "mountain"
+    },
+    {
+        "ID": 20,
+        "Character": "川",
+        "Meaning": "river"
+    },
+    {
+        "ID": 21,
+        "Character": "木",
+        "Meaning": "tree"
+    },
+    {
+        "ID": 22,
+        "Character": "工",
+        "Meaning": "construction"
+    },
+    {
+        "ID": 23,
+        "Character": "九",
+        "Meaning": "nine"
+    },
+    {
+        "ID": 24,
+        "Character": "日",
+        "Meaning": "sun"
+    },
+    {
+        "ID": 25,
+        "Character": "ト",
+        "Meaning": "toe"
+    },
+    {
+        "ID": 26,
+        "Character": "土",
+        "Meaning": "grave"
+    },
+    {
+        "ID": 27,
+        "Character": "刀",
+        "Meaning": "sword"
+    },
+    {
+        "ID": 28,
+        "Character": "ナ",
+        "Meaning": "narwhal"
+    },
+    {
+        "ID": 29,
+        "Character": "丁",
+        "Meaning": "nail"
+    },
+    {
+        "ID": 30,
+        "Character": "儿",
+        "Meaning": "legs"
+    },
+    {
+        "ID": 31,
+        "Character": "冂",
+        "Meaning": "head"
+    },
+    {
+        "ID": 32,
+        "Character": "又",
+        "Meaning": "stool"
+    },
+    {
+        "ID": 33,
+        "Character": "千",
+        "Meaning": "thousand"
+    },
+    {
+        "ID": 34,
+        "Character": "夕",
+        "Meaning": "evening"
+    },
+    {
+        "ID": 35,
+        "Character": "子",
+        "Meaning": "child"
+    },
+    {
+        "ID": 36,
+        "Character": "小",
+        "Meaning": "small"
+    },
+    {
+        "ID": 37,
+        "Character": "弓",
+        "Meaning": "spring"
+    },
+    {
+        "ID": 38,
+        "Character": "尸",
+        "Meaning": "flag"
+    },
+    {
+        "ID": 39,
+        "Character": "彡",
+        "Meaning": "hair"
+    },
+    {
+        "ID": 40,
+        "Character": "五",
+        "Meaning": "five"
+    },
+    {
+        "ID": 41,
+        "Character": "天",
+        "Meaning": "heaven"
+    },
+    {
+        "ID": 42,
+        "Character": "手",
+        "Meaning": "hand"
+    },
+    {
+        "ID": 43,
+        "Character": "文",
+        "Meaning": "doll"
+    },
+    {
+        "ID": 44,
+        "Character": "月",
+        "Meaning": "moon"
+    },
+    {
+        "ID": 45,
+        "Character": "止",
+        "Meaning": "stop"
+    },
+    {
+        "ID": 46,
+        "Character": "水",
+        "Meaning": "water"
+    },
+    {
+        "ID": 47,
+        "Character": "火",
+        "Meaning": "fire"
+    },
+    {
+        "ID": 48,
+        "Character": "犬",
+        "Meaning": "dog"
+    },
+    {
+        "ID": 49,
+        "Character": "王",
+        "Meaning": "king"
+    },
+    {
+        "ID": 50,
+        "Character": "中",
+        "Meaning": "middle"
+    },
+    {
+        "ID": 51,
+        "Character": "本",
+        "Meaning": "real"
+    },
+    {
+        "ID": 52,
+        "Character": "田",
+        "Meaning": "rice-paddy"
+    },
+    {
+        "ID": 53,
+        "Character": "白",
+        "Meaning": "white"
+    },
+    {
+        "ID": 54,
+        "Character": "目",
+        "Meaning": "eye"
+    },
+    {
+        "ID": 55,
+        "Character": "石",
+        "Meaning": "stone"
+    },
+    {
+        "ID": 56,
+        "Character": "立",
+        "Meaning": "stand"
+    },
+    {
+        "ID": 57,
+        "Character": "L",
+        "Meaning": "lion"
+    },
+    {
+        "ID": 58,
+        "Character": "牛",
+        "Meaning": "cow"
+    },
+    {
+        "ID": 59,
+        "Character": "ム",
+        "Meaning": "pile"
+    },
+    {
+        "ID": 60,
+        "Character": "メ",
+        "Meaning": "treasure"
+    },
+    {
+        "ID": 61,
+        "Character": "用",
+        "Meaning": "elephant"
+    },
+    {
+        "ID": 64,
+        "Character": "广",
+        "Meaning": "mullet"
+    },
+    {
+        "ID": 65,
+        "Character": "ヒ",
+        "Meaning": "spoon"
+    },
+    {
+        "ID": 66,
+        "Character": "ラ",
+        "Meaning": "ra"
+    },
+    {
+        "ID": 67,
+        "Character": "久",
+        "Meaning": "raptor-cage"
+    },
+    {
+        "ID": 68,
+        "Character": "夂",
+        "Meaning": "winter"
+    },
+    {
+        "ID": 69,
+        "Character": "干",
+        "Meaning": "antennae"
+    },
+    {
+        "ID": 71,
+        "Character": "元",
+        "Meaning": "origin"
+    },
+    {
+        "ID": 72,
+        "Character": "心",
+        "Meaning": "heart"
+    },
+    {
+        "ID": 73,
+        "Character": "方",
+        "Meaning": "direction"
+    },
+    {
+        "ID": 74,
+        "Character": "毛",
+        "Meaning": "fur"
+    },
+    {
+        "ID": 75,
+        "Character": "父",
+        "Meaning": "father"
+    },
+    {
+        "ID": 76,
+        "Character": "古",
+        "Meaning": "old"
+    },
+    {
+        "ID": 77,
+        "Character": "母",
+        "Meaning": "drawer"
+    },
+    {
+        "ID": 78,
+        "Character": "矢",
+        "Meaning": "arrow"
+    },
+    {
+        "ID": 79,
+        "Character": "戸",
+        "Meaning": "door"
+    },
+    {
+        "ID": 80,
+        "Character": "幺",
+        "Meaning": "poop"
+    },
+    {
+        "ID": 81,
+        "Character": "生",
+        "Meaning": "life"
+    },
+    {
+        "ID": 85,
+        "Character": "寸",
+        "Meaning": "measurement"
+    },
+    {
+        "ID": 86,
+        "Character": "ｲ",
+        "Meaning": "leader"
+    },
+    {
+        "ID": 87,
+        "Character": "冖",
+        "Meaning": "forehead"
+    },
+    {
+        "ID": 89,
+        "Character": "也",
+        "Meaning": "alligator"
+    },
+    {
+        "ID": 90,
+        "Character": "宀",
+        "Meaning": "helmet"
+    },
+    {
+        "ID": 91,
+        "Character": "弋",
+        "Meaning": "ceremony"
+    },
+    {
+        "ID": 92,
+        "Character": "ネ",
+        "Meaning": "pelican"
+    },
+    {
+        "ID": 93,
+        "Character": "支",
+        "Meaning": "frog"
+    },
+    {
+        "ID": 94,
+        "Character": "世",
+        "Meaning": "generation"
+    },
+    {
+        "ID": 95,
+        "Character": "皿",
+        "Meaning": "plate"
+    },
+    {
+        "ID": 96,
+        "Character": "竹",
+        "Meaning": "bamboo"
+    },
+    {
+        "ID": 97,
+        "Character": "糸",
+        "Meaning": "thread"
+    },
+    {
+        "ID": 98,
+        "Character": "耳",
+        "Meaning": "ear"
+    },
+    {
+        "ID": 99,
+        "Character": "虫",
+        "Meaning": "insect"
+    },
+    {
+        "ID": 100,
+        "Character": "見",
+        "Meaning": "see"
+    },
+    {
+        "ID": 101,
+        "Character": "赤",
+        "Meaning": "red"
+    },
+    {
+        "ID": 102,
+        "Character": "車",
+        "Meaning": "car"
+    },
+    {
+        "ID": 103,
+        "Character": "貝",
+        "Meaning": "clam"
+    },
+    {
+        "ID": 104,
+        "Character": "足",
+        "Meaning": "foot"
+    },
+    {
+        "ID": 105,
+        "Character": "不",
+        "Meaning": "not"
+    },
+    {
+        "ID": 106,
+        "Character": "士",
+        "Meaning": "samurai"
+    },
+    {
+        "ID": 107,
+        "Character": "米",
+        "Meaning": "rice"
+    },
+    {
+        "ID": 108,
+        "Character": "彳",
+        "Meaning": "loiter"
+    },
+    {
+        "ID": 109,
+        "Character": "巴",
+        "Meaning": "bed"
+    },
+    {
+        "ID": 111,
+        "Character": "巾",
+        "Meaning": "two-face"
+    },
+    {
+        "ID": 112,
+        "Character": "气",
+        "Meaning": "energy"
+    },
+    {
+        "ID": 113,
+        "Character": "厂",
+        "Meaning": "cliff"
+    },
+    {
+        "ID": 114,
+        "Character": "主",
+        "Meaning": "master"
+    },
+    {
+        "ID": 117,
+        "Character": "言",
+        "Meaning": "say"
+    },
+    {
+        "ID": 119,
+        "Character": "ヨ",
+        "Meaning": "wolverine"
+    },
+    {
+        "ID": 120,
+        "Character": "廾",
+        "Meaning": "twenty"
+    },
+    {
+        "ID": 121,
+        "Character": "毋",
+        "Meaning": "window"
+    },
+    {
+        "ID": 122,
+        "Character": "肉",
+        "Meaning": "meat"
+    },
+    {
+        "ID": 123,
+        "Character": "自",
+        "Meaning": "self"
+    },
+    {
+        "ID": 124,
+        "Character": "色",
+        "Meaning": "color"
+    },
+    {
+        "ID": 125,
+        "Character": "行",
+        "Meaning": "go"
+    },
+    {
+        "ID": 126,
+        "Character": "西",
+        "Meaning": "west"
+    },
+    {
+        "ID": 127,
+        "Character": "可",
+        "Meaning": "lip-ring"
+    },
+    {
+        "ID": 128,
+        "Character": "斤",
+        "Meaning": "axe"
+    },
+    {
+        "ID": 129,
+        "Character": "金",
+        "Meaning": "gold"
+    },
+    {
+        "ID": 130,
+        "Character": "青",
+        "Meaning": "blue"
+    },
+    {
+        "ID": 133,
+        "Character": "冫",
+        "Meaning": "ice"
+    },
+    {
+        "ID": 134,
+        "Character": "走",
+        "Meaning": "run"
+    },
+    {
+        "ID": 135,
+        "Character": "里",
+        "Meaning": "sunflower"
+    },
+    {
+        "ID": 138,
+        "Character": "会",
+        "Meaning": "meet"
+    },
+    {
+        "ID": 141,
+        "Character": "羽",
+        "Meaning": "feathers"
+    },
+    {
+        "ID": 142,
+        "Character": "雨",
+        "Meaning": "rain"
+    },
+    {
+        "ID": 144,
+        "Character": "凵",
+        "Meaning": "box"
+    },
+    {
+        "ID": 145,
+        "Character": "斗",
+        "Meaning": "chopsticks"
+    },
+    {
+        "ID": 146,
+        "Character": "ホ",
+        "Meaning": "angel"
+    },
+    {
+        "ID": 147,
+        "Character": "歹",
+        "Meaning": "bad"
+    },
+    {
+        "ID": 148,
+        "Character": "向",
+        "Meaning": "cyclops"
+    },
+    {
+        "ID": 149,
+        "Character": "未",
+        "Meaning": "jet"
+    },
+    {
+        "ID": 150,
+        "Character": "禾",
+        "Meaning": "pine"
+    },
+    {
+        "ID": 151,
+        "Character": "羊",
+        "Meaning": "sheep"
+    },
+    {
+        "ID": 152,
+        "Character": "長",
+        "Meaning": "long"
+    },
+    {
+        "ID": 153,
+        "Character": "血",
+        "Meaning": "blood"
+    },
+    {
+        "ID": 154,
+        "Character": "食",
+        "Meaning": "eat"
+    },
+    {
+        "ID": 155,
+        "Character": "マ",
+        "Meaning": "mama"
+    },
+    {
+        "ID": 157,
+        "Character": "占",
+        "Meaning": "fortune"
+    },
+    {
+        "ID": 159,
+        "Character": "欠",
+        "Meaning": "lack"
+    },
+    {
+        "ID": 160,
+        "Character": "首",
+        "Meaning": "neck"
+    },
+    {
+        "ID": 161,
+        "Character": "亡",
+        "Meaning": "death"
+    },
+    {
+        "ID": 162,
+        "Character": "己",
+        "Meaning": "cobra"
+    },
+    {
+        "ID": 163,
+        "Character": "鳥",
+        "Meaning": "bird"
+    },
+    {
+        "ID": 164,
+        "Character": "卩",
+        "Meaning": "stamp"
+    },
+    {
+        "ID": 165,
+        "Character": "氏",
+        "Meaning": "duck"
+    },
+    {
+        "ID": 166,
+        "Character": "矛",
+        "Meaning": "soldier"
+    },
+    {
+        "ID": 167,
+        "Character": "舟",
+        "Meaning": "sail"
+    },
+    {
+        "ID": 168,
+        "Character": "魚",
+        "Meaning": "fish"
+    },
+    {
+        "ID": 169,
+        "Character": "夫",
+        "Meaning": "husband"
+    },
+    {
+        "ID": 170,
+        "Character": "黄",
+        "Meaning": "yellow"
+    },
+    {
+        "ID": 171,
+        "Character": "黒",
+        "Meaning": "black"
+    },
+    {
+        "ID": 172,
+        "Character": "周",
+        "Meaning": "ghost"
+    },
+    {
+        "ID": 173,
+        "Character": "勿",
+        "Meaning": "wing"
+    },
+    {
+        "ID": 174,
+        "Character": "几",
+        "Meaning": "table"
+    },
+    {
+        "ID": 175,
+        "Character": "門",
+        "Meaning": "gate"
+    },
+    {
+        "ID": 176,
+        "Character": "豕",
+        "Meaning": "pig"
+    },
+    {
+        "ID": 178,
+        "Character": "合",
+        "Meaning": "suit"
+    },
+    {
+        "ID": 179,
+        "Character": "ユ",
+        "Meaning": "hook"
+    },
+    {
+        "ID": 180,
+        "Character": "巳",
+        "Meaning": "snake"
+    },
+    {
+        "ID": 181,
+        "Character": "云",
+        "Meaning": "boobs"
+    },
+    {
+        "ID": 182,
+        "Character": "殳",
+        "Meaning": "ikea"
+    },
+    {
+        "ID": 183,
+        "Character": "比",
+        "Meaning": "compare"
+    },
+    {
+        "ID": 184,
+        "Character": "片",
+        "Meaning": "waiter"
+    },
+    {
+        "ID": 185,
+        "Character": "釆",
+        "Meaning": "sickle"
+    },
+    {
+        "ID": 186,
+        "Character": "馬",
+        "Meaning": "horse"
+    },
+    {
+        "ID": 187,
+        "Character": "穴",
+        "Meaning": "hole"
+    },
+    {
+        "ID": 188,
+        "Character": "舌",
+        "Meaning": "tongue"
+    },
+    {
+        "ID": 189,
+        "Character": "易",
+        "Meaning": "gravity"
+    },
+    {
+        "ID": 191,
+        "Character": "匚",
+        "Meaning": "cage"
+    },
+    {
+        "ID": 195,
+        "Character": "介",
+        "Meaning": "hut"
+    },
+    {
+        "ID": 196,
+        "Character": "史",
+        "Meaning": "history"
+    },
+    {
+        "ID": 197,
+        "Character": "癶",
+        "Meaning": "tent"
+    },
+    {
+        "ID": 198,
+        "Character": "辛",
+        "Meaning": "spicy"
+    },
+    {
+        "ID": 201,
+        "Character": "重",
+        "Meaning": "heavy"
+    },
+    {
+        "ID": 202,
+        "Character": "反",
+        "Meaning": "devil"
+    },
+    {
+        "ID": 204,
+        "Character": "聿",
+        "Meaning": "brush"
+    },
+    {
+        "ID": 207,
+        "Character": "漢",
+        "Meaning": "chinese"
+    },
+    {
+        "ID": 209,
+        "Character": "各",
+        "Meaning": "kiss"
+    },
+    {
+        "ID": 210,
+        "Character": "豆",
+        "Meaning": "beans"
+    },
+    {
+        "ID": 211,
+        "Character": "酉",
+        "Meaning": "alcohol"
+    },
+    {
+        "ID": 213,
+        "Character": "曲",
+        "Meaning": "music"
+    },
+    {
+        "ID": 214,
+        "Character": "丙",
+        "Meaning": "dynamite"
+    },
+    {
+        "ID": 215,
+        "Character": "乃",
+        "Meaning": "stairs"
+    },
+    {
+        "ID": 216,
+        "Character": "束",
+        "Meaning": "ent"
+    },
+    {
+        "ID": 217,
+        "Character": "失",
+        "Meaning": "fault"
+    },
+    {
+        "ID": 218,
+        "Character": "隹",
+        "Meaning": "turkey"
+    },
+    {
+        "ID": 220,
+        "Character": "令",
+        "Meaning": "orders"
+    },
+    {
+        "ID": 222,
+        "Character": "戈",
+        "Meaning": "drunkard"
+    },
+    {
+        "ID": 224,
+        "Character": "兄",
+        "Meaning": "older-brother"
+    },
+    {
+        "ID": 225,
+        "Character": "及",
+        "Meaning": "escalator"
+    },
+    {
+        "ID": 226,
+        "Character": "艮",
+        "Meaning": "good"
+    },
+    {
+        "ID": 227,
+        "Character": "音",
+        "Meaning": "sound"
+    },
+    {
+        "ID": 228,
+        "Character": "少",
+        "Meaning": "few"
+    },
+    {
+        "ID": 229,
+        "Character": "単",
+        "Meaning": "witch-doctor"
+    },
+    {
+        "ID": 230,
+        "Character": "寺",
+        "Meaning": "temple"
+    },
+    {
+        "ID": 231,
+        "Character": "申",
+        "Meaning": "say-humbly"
+    },
+    {
+        "ID": 232,
+        "Character": "皮",
+        "Meaning": "skin"
+    },
+    {
+        "ID": 233,
+        "Character": "予",
+        "Meaning": "beforehand"
+    },
+    {
+        "ID": 234,
+        "Character": "者",
+        "Meaning": "someone"
+    },
+    {
+        "ID": 235,
+        "Character": "",
+        "Meaning": "tofu"
+    },
+    {
+        "ID": 236,
+        "Character": "早",
+        "Meaning": "early"
+    },
+    {
+        "ID": 237,
+        "Character": "亜",
+        "Meaning": "tie-fighter"
+    },
+    {
+        "ID": 238,
+        "Character": "其",
+        "Meaning": "crab"
+    },
+    {
+        "ID": 239,
+        "Character": "廴",
+        "Meaning": "big-bird"
+    },
+    {
+        "ID": 240,
+        "Character": "示",
+        "Meaning": "jackhammer"
+    },
+    {
+        "ID": 241,
+        "Character": "免",
+        "Meaning": "excuse"
+    },
+    {
+        "ID": 242,
+        "Character": "非",
+        "Meaning": "injustice"
+    },
+    {
+        "ID": 243,
+        "Character": "弟",
+        "Meaning": "younger-brother"
+    },
+    {
+        "ID": 244,
+        "Character": "",
+        "Meaning": "creeper"
+    },
+    {
+        "ID": 245,
+        "Character": "冊",
+        "Meaning": "books"
+    },
+    {
+        "ID": 246,
+        "Character": "央",
+        "Meaning": "central"
+    },
+    {
+        "ID": 247,
+        "Character": "正",
+        "Meaning": "correct"
+    },
+    {
+        "ID": 248,
+        "Character": "品",
+        "Meaning": "products"
+    },
+    {
+        "ID": 249,
+        "Character": "尺",
+        "Meaning": "shrimp"
+    },
+    {
+        "ID": 250,
+        "Character": "意",
+        "Meaning": "idea"
+    },
+    {
+        "ID": 251,
+        "Character": "𠆢",
+        "Meaning": "roof"
+    },
+    {
+        "ID": 252,
+        "Character": "東",
+        "Meaning": "east"
+    },
+    {
+        "ID": 253,
+        "Character": "丸",
+        "Meaning": "circle"
+    },
+    {
+        "ID": 254,
+        "Character": "果",
+        "Meaning": "fruit"
+    },
+    {
+        "ID": 255,
+        "Character": "",
+        "Meaning": "fish-stick"
+    },
+    {
+        "ID": 256,
+        "Character": "百",
+        "Meaning": "hundred"
+    },
+    {
+        "ID": 257,
+        "Character": "身",
+        "Meaning": "somebody"
+    },
+    {
+        "ID": 258,
+        "Character": "原",
+        "Meaning": "diamond"
+    },
+    {
+        "ID": 259,
+        "Character": "",
+        "Meaning": "womb"
+    },
+    {
+        "ID": 260,
+        "Character": "",
+        "Meaning": "pool"
+    },
+    {
+        "ID": 261,
+        "Character": "分",
+        "Meaning": "part"
+    },
+    {
+        "ID": 262,
+        "Character": "",
+        "Meaning": "bar"
+    },
+    {
+        "ID": 263,
+        "Character": "井",
+        "Meaning": "well"
+    },
+    {
+        "ID": 264,
+        "Character": "今",
+        "Meaning": "now"
+    },
+    {
+        "ID": 265,
+        "Character": "公",
+        "Meaning": "public"
+    },
+    {
+        "ID": 266,
+        "Character": "",
+        "Meaning": "saw"
+    },
+    {
+        "ID": 267,
+        "Character": "丈",
+        "Meaning": "height"
+    },
+    {
+        "ID": 268,
+        "Character": "歩",
+        "Meaning": "walk"
+    },
+    {
+        "ID": 269,
+        "Character": "男",
+        "Meaning": "man"
+    },
+    {
+        "ID": 270,
+        "Character": "句",
+        "Meaning": "paragraph"
+    },
+    {
+        "ID": 272,
+        "Character": "去",
+        "Meaning": "cemetery"
+    },
+    {
+        "ID": 273,
+        "Character": "面",
+        "Meaning": "robot"
+    },
+    {
+        "ID": 275,
+        "Character": "谷",
+        "Meaning": "valley"
+    },
+    {
+        "ID": 276,
+        "Character": "付",
+        "Meaning": "glue"
+    },
+    {
+        "ID": 278,
+        "Character": "無",
+        "Meaning": "nothing"
+    },
+    {
+        "ID": 282,
+        "Character": "吉",
+        "Meaning": "longcat"
+    },
+    {
+        "ID": 283,
+        "Character": "虍",
+        "Meaning": "tiger"
+    },
+    {
+        "ID": 284,
+        "Character": "楽",
+        "Meaning": "comfort"
+    },
+    {
+        "ID": 285,
+        "Character": "午",
+        "Meaning": "noon"
+    },
+    {
+        "ID": 286,
+        "Character": "曽",
+        "Meaning": "mask"
+    },
+    {
+        "ID": 287,
+        "Character": "凶",
+        "Meaning": "treasure-chest"
+    },
+    {
+        "ID": 288,
+        "Character": "昔",
+        "Meaning": "long-ago"
+    },
+    {
+        "ID": 289,
+        "Character": "先",
+        "Meaning": "previous"
+    },
+    {
+        "ID": 290,
+        "Character": "幸",
+        "Meaning": "happiness"
+    },
+    {
+        "ID": 291,
+        "Character": "焼",
+        "Meaning": "gambler"
+    },
+    {
+        "ID": 292,
+        "Character": "争",
+        "Meaning": "conflict"
+    },
+    {
+        "ID": 293,
+        "Character": "複",
+        "Meaning": "black-hole"
+    },
+    {
+        "ID": 294,
+        "Character": "我",
+        "Meaning": "ego"
+    },
+    {
+        "ID": 295,
+        "Character": "市",
+        "Meaning": "city"
+    },
+    {
+        "ID": 296,
+        "Character": "共",
+        "Meaning": "together"
+    },
+    {
+        "ID": 297,
+        "Character": "司",
+        "Meaning": "flasher"
+    },
+    {
+        "ID": 298,
+        "Character": "才",
+        "Meaning": "genius"
+    },
+    {
+        "ID": 299,
+        "Character": "成",
+        "Meaning": "become"
+    },
+    {
+        "ID": 300,
+        "Character": "由",
+        "Meaning": "reason"
+    },
+    {
+        "ID": 301,
+        "Character": "義",
+        "Meaning": "righteousness"
+    },
+    {
+        "ID": 302,
+        "Character": "至",
+        "Meaning": "boob-grave"
+    },
+    {
+        "ID": 303,
+        "Character": "兼",
+        "Meaning": "mona-lisa"
+    },
+    {
+        "ID": 304,
+        "Character": "飛",
+        "Meaning": "fly"
+    },
+    {
+        "ID": 307,
+        "Character": "半",
+        "Meaning": "half"
+    },
+    {
+        "ID": 308,
+        "Character": "斉",
+        "Meaning": "stilts"
+    },
+    {
+        "ID": 309,
+        "Character": "角",
+        "Meaning": "angle"
+    },
+    {
+        "ID": 310,
+        "Character": "番",
+        "Meaning": "number"
+    },
+    {
+        "ID": 311,
+        "Character": "平",
+        "Meaning": "peace"
+    },
+    {
+        "ID": 312,
+        "Character": "次",
+        "Meaning": "next"
+    },
+    {
+        "ID": 314,
+        "Character": "能",
+        "Meaning": "ability"
+    },
+    {
+        "ID": 315,
+        "Character": "充",
+        "Meaning": "outhouse"
+    },
+    {
+        "ID": 317,
+        "Character": "呂",
+        "Meaning": "bathtub"
+    },
+    {
+        "ID": 318,
+        "Character": "安",
+        "Meaning": "cheap"
+    },
+    {
+        "ID": 321,
+        "Character": "道",
+        "Meaning": "road"
+    },
+    {
+        "ID": 322,
+        "Character": "革",
+        "Meaning": "leather"
+    },
+    {
+        "ID": 324,
+        "Character": "鬼",
+        "Meaning": "demon"
+    },
+    {
+        "ID": 325,
+        "Character": "亭",
+        "Meaning": "nailgun"
+    },
+    {
+        "ID": 326,
+        "Character": "衣",
+        "Meaning": "clothes"
+    },
+    {
+        "ID": 327,
+        "Character": "然",
+        "Meaning": "nature"
+    },
+    {
+        "ID": 328,
+        "Character": "制",
+        "Meaning": "control"
+    },
+    {
+        "ID": 329,
+        "Character": "旦",
+        "Meaning": "sunrise"
+    },
+    {
+        "ID": 330,
+        "Character": "受",
+        "Meaning": "accept"
+    },
+    {
+        "ID": 331,
+        "Character": "客",
+        "Meaning": "guest"
+    },
+    {
+        "ID": 334,
+        "Character": "甫",
+        "Meaning": "wedding"
+    },
+    {
+        "ID": 335,
+        "Character": "両",
+        "Meaning": "both"
+    },
+    {
+        "ID": 336,
+        "Character": "友",
+        "Meaning": "friend"
+    },
+    {
+        "ID": 337,
+        "Character": "京",
+        "Meaning": "capital"
+    },
+    {
+        "ID": 338,
+        "Character": "交",
+        "Meaning": "mix"
+    },
+    {
+        "ID": 342,
+        "Character": "万",
+        "Meaning": "ten-thousand"
+    },
+    {
+        "ID": 343,
+        "Character": "告",
+        "Meaning": "announce"
+    },
+    {
+        "ID": 344,
+        "Character": "余",
+        "Meaning": "surplus"
+    },
+    {
+        "ID": 345,
+        "Character": "民",
+        "Meaning": "peoples"
+    },
+    {
+        "ID": 346,
+        "Character": "代",
+        "Meaning": "substitute"
+    },
+    {
+        "ID": 347,
+        "Character": "農",
+        "Meaning": "farming"
+    },
+    {
+        "ID": 349,
+        "Character": "化",
+        "Meaning": "change"
+    },
+    {
+        "ID": 350,
+        "Character": "而",
+        "Meaning": "rake"
+    },
+    {
+        "ID": 351,
+        "Character": "出",
+        "Meaning": "exit"
+    },
+    {
+        "ID": 352,
+        "Character": "喫",
+        "Meaning": "hercules"
+    },
+    {
+        "ID": 353,
+        "Character": "麗",
+        "Meaning": "lovely"
+    },
+    {
+        "ID": 354,
+        "Character": "専",
+        "Meaning": "specialty"
+    },
+    {
+        "ID": 355,
+        "Character": "屯",
+        "Meaning": "thorn"
+    },
+    {
+        "ID": 356,
+        "Character": "巨",
+        "Meaning": "giant"
+    },
+    {
+        "ID": 358,
+        "Character": "区",
+        "Meaning": "district"
+    },
+    {
+        "ID": 359,
+        "Character": "責",
+        "Meaning": "blame"
+    },
+    {
+        "ID": 360,
+        "Character": "奇",
+        "Meaning": "odd"
+    },
+    {
+        "ID": 361,
+        "Character": "上",
+        "Meaning": "above"
+    },
+    {
+        "ID": 362,
+        "Character": "乙",
+        "Meaning": "nose"
+    },
+    {
+        "ID": 363,
+        "Character": "臣",
+        "Meaning": "servant"
+    },
+    {
+        "ID": 365,
+        "Character": "系",
+        "Meaning": "lineage"
+    },
+    {
+        "ID": 366,
+        "Character": "召",
+        "Meaning": "joker"
+    },
+    {
+        "ID": 367,
+        "Character": "甲",
+        "Meaning": "turtle-shell"
+    },
+    {
+        "ID": 368,
+        "Character": "監",
+        "Meaning": "oversee"
+    },
+    {
+        "ID": 369,
+        "Character": "北",
+        "Meaning": "north"
+    },
+    {
+        "ID": 370,
+        "Character": "求",
+        "Meaning": "request"
+    },
+    {
+        "ID": 371,
+        "Character": "牙",
+        "Meaning": "fang"
+    },
+    {
+        "ID": 372,
+        "Character": "並",
+        "Meaning": "line-up"
+    },
+    {
+        "ID": 373,
+        "Character": "華",
+        "Meaning": "potato"
+    },
+    {
+        "ID": 374,
+        "Character": "融",
+        "Meaning": "chester"
+    },
+    {
+        "ID": 377,
+        "Character": "必",
+        "Meaning": "certain"
+    },
+    {
+        "ID": 378,
+        "Character": "同",
+        "Meaning": "same"
+    },
+    {
+        "ID": 379,
+        "Character": "夜",
+        "Meaning": "night"
+    },
+    {
+        "ID": 382,
+        "Character": "間",
+        "Meaning": "interval"
+    },
+    {
+        "ID": 383,
+        "Character": "内",
+        "Meaning": "inside"
+    },
+    {
+        "ID": 385,
+        "Character": "蔵",
+        "Meaning": "storehouse"
+    },
+    {
+        "ID": 386,
+        "Character": "呉",
+        "Meaning": "catapult"
+    },
+    {
+        "ID": 387,
+        "Character": "員",
+        "Meaning": "member"
+    },
+    {
+        "ID": 388,
+        "Character": "爪",
+        "Meaning": "claw"
+    },
+    {
+        "ID": 389,
+        "Character": "刻",
+        "Meaning": "slice"
+    },
+    {
+        "ID": 390,
+        "Character": "帯",
+        "Meaning": "belt"
+    },
+    {
+        "ID": 391,
+        "Character": "亀",
+        "Meaning": "turtle"
+    },
+    {
+        "ID": 392,
+        "Character": "彑",
+        "Meaning": "shuriken"
+    },
+    {
+        "ID": 393,
+        "Character": "為",
+        "Meaning": "sake"
+    },
+    {
+        "ID": 394,
+        "Character": "明",
+        "Meaning": "bright"
+    },
+    {
+        "ID": 395,
+        "Character": "貴",
+        "Meaning": "valuable"
+    },
+    {
+        "ID": 396,
+        "Character": "発",
+        "Meaning": "departure"
+    },
+    {
+        "ID": 397,
+        "Character": "南",
+        "Meaning": "south"
+    },
+    {
+        "ID": 398,
+        "Character": "甘",
+        "Meaning": "sweet"
+    },
+    {
+        "ID": 399,
+        "Character": "右",
+        "Meaning": "right"
+    },
+    {
+        "ID": 400,
+        "Character": "兆",
+        "Meaning": "omen"
+    },
+    {
+        "ID": 401,
+        "Character": "賞",
+        "Meaning": "prize"
+    },
+    {
+        "ID": 402,
+        "Character": "串",
+        "Meaning": "skewer"
+    },
+    {
+        "ID": 403,
+        "Character": "暴",
+        "Meaning": "violence"
+    },
+    {
+        "ID": 405,
+        "Character": "思",
+        "Meaning": "think"
+    },
+    {
+        "ID": 406,
+        "Character": "県",
+        "Meaning": "prefecture"
+    },
+    {
+        "ID": 407,
+        "Character": "空",
+        "Meaning": "sky"
+    },
+    {
+        "ID": 408,
+        "Character": "有",
+        "Meaning": "have"
+    },
+    {
+        "ID": 409,
+        "Character": "歯",
+        "Meaning": "tooth"
+    },
+    {
+        "ID": 410,
+        "Character": "巻",
+        "Meaning": "scroll"
+    },
+    {
+        "ID": 411,
+        "Character": "真",
+        "Meaning": "reality"
+    },
+    {
+        "ID": 412,
+        "Character": "君",
+        "Meaning": "buddy"
+    },
+    {
+        "ID": 413,
+        "Character": "旧",
+        "Meaning": "former"
+    },
+    {
+        "ID": 414,
+        "Character": "六",
+        "Meaning": "six"
+    },
+    {
+        "ID": 415,
+        "Character": "岡",
+        "Meaning": "hill"
+    },
+    {
+        "ID": 416,
+        "Character": "三",
+        "Meaning": "three"
+    },
+    {
+        "ID": 417,
+        "Character": "雇",
+        "Meaning": "employ"
+    },
+    {
+        "ID": 418,
+        "Character": "毎",
+        "Meaning": "every"
+    },
+    {
+        "ID": 419,
+        "Character": "保",
+        "Meaning": "preserve"
+    },
+    {
+        "ID": 423,
+        "Character": "広",
+        "Meaning": "wide"
+    },
+    {
+        "ID": 424,
+        "Character": "瓜",
+        "Meaning": "melon"
+    },
+    {
+        "ID": 425,
+        "Character": "骨",
+        "Meaning": "bone"
+    },
+    {
+        "ID": 426,
+        "Character": "臼",
+        "Meaning": "grenade"
+    },
+    {
+        "ID": 427,
+        "Character": "屋",
+        "Meaning": "shop"
+    },
+    {
+        "ID": 428,
+        "Character": "豸",
+        "Meaning": "badger"
+    },
+    {
+        "ID": 429,
+        "Character": "耒",
+        "Meaning": "redwood"
+    },
+    {
+        "ID": 430,
+        "Character": "龍",
+        "Meaning": "imperial"
+    },
+    {
+        "ID": 431,
+        "Character": "業",
+        "Meaning": "business"
+    },
+    {
+        "ID": 432,
+        "Character": "尢",
+        "Meaning": "pirate"
+    },
+    {
+        "ID": 433,
+        "Character": "風",
+        "Meaning": "wind"
+    },
+    {
+        "ID": 434,
+        "Character": "缶",
+        "Meaning": "can"
+    },
+    {
+        "ID": 435,
+        "Character": "刃",
+        "Meaning": "blade"
+    },
+    {
+        "ID": 436,
+        "Character": "竜",
+        "Meaning": "dragon"
+    },
+    {
+        "ID": 437,
+        "Character": "包",
+        "Meaning": "wrap"
+    },
+    {
+        "ID": 438,
+        "Character": "守",
+        "Meaning": "protect"
+    },
+    {
+        "ID": 439,
+        "Character": "更",
+        "Meaning": "again"
+    },
+    {
+        "ID": 440,
+        "Character": "家",
+        "Meaning": "house"
+    },
+    {
+        "ID": 441,
+        "Character": "太",
+        "Meaning": "fat"
+    },
+    {
+        "ID": 442,
+        "Character": "恵",
+        "Meaning": "favor"
+    },
+    {
+        "ID": 443,
+        "Character": "務",
+        "Meaning": "task"
+    },
+    {
+        "ID": 444,
+        "Character": "波",
+        "Meaning": "wave"
+    },
+    {
+        "ID": 445,
+        "Character": "玄",
+        "Meaning": "mysterious"
+    },
+    {
+        "ID": 446,
+        "Character": "容",
+        "Meaning": "form"
+    },
+    {
+        "ID": 447,
+        "Character": "光",
+        "Meaning": "sunlight"
+    },
+    {
+        "ID": 448,
+        "Character": "回",
+        "Meaning": "times"
+    },
+    {
+        "ID": 449,
+        "Character": "鬲",
+        "Meaning": "tights"
+    },
+    {
+        "ID": 450,
+        "Character": "甚",
+        "Meaning": "crab-trap"
+    },
+    {
+        "ID": 451,
+        "Character": "名",
+        "Meaning": "name"
+    },
+    {
+        "ID": 454,
+        "Character": "阝",
+        "Meaning": "building"
+    },
+    {
+        "ID": 455,
+        "Character": "⻌",
+        "Meaning": "move"
+    },
+    {
+        "ID": 456,
+        "Character": "艹",
+        "Meaning": "grass"
+    },
+    {
+        "ID": 457,
+        "Character": "尸",
+        "Meaning": "corpse"
+    },
+    {
+        "ID": 458,
+        "Character": "囗",
+        "Meaning": "bigbox"
+    },
+    {
+        "ID": 459,
+        "Character": "氵",
+        "Meaning": "waterdrop"
+    },
+    {
+        "ID": 460,
+        "Character": "开",
+        "Meaning": "initiate"
+    },
+    {
+        "ID": 461,
+        "Character": "刂",
+        "Meaning": "katana"
+    }
 ]
